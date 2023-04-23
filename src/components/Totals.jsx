@@ -141,9 +141,7 @@ function Totals({ events, people, checkedPeople, setCheckedPeople }) {
                 }
                 return (
                   <Box key={event.name} sx={{ width: "100%" }}>
-                    <Typography variant="h6" fontSize={16}>
-                      {event.name}
-                    </Typography>
+                    <Typography variant="h6">{event.name}</Typography>
                     <Divider sx={{ my: 1 }} />
                     {itemsByPersonInEvent.map((item) => {
                       if (!item.who.includes(person)) {

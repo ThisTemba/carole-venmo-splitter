@@ -15,7 +15,7 @@ function EventItemData({ index, people, itemData, onDelete, setItemData }) {
         <ListItemText primary={`${index + 1}. ${what}`} />
       </Grid>
       <Grid item xs={2} onClick={onClickField}>
-        <ListItemText>${howMuch}</ListItemText>
+        <ListItemText>${howMuch.toFixed(2)}</ListItemText>
       </Grid>
       <Grid item xs={4} onClick={onClickField}>
         <Box

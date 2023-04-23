@@ -75,90 +75,103 @@ function EventList({ events, setEvents, people }) {
         setEvents={setEvents}
       />
       <List>
-        {events.map((event, eventIdx) => (
-          <div key={eventIdx}>
-            <ListItem key={eventIdx}>
-              {editingIndex === eventIdx ? (
-                <>
-                  <TextField
-                    value={editingValue}
-                    onChange={(e) => setEditingValue(e.target.value)}
-                    onKeyDown={(e) => handleEditKeyDown(e, eventIdx)}
-                    inputRef={inputRef}
-                    onBlur={() => handleSaveEdit(eventIdx)}
-                    size="small"
+        {events.map((event, eventIdx) => {
+          let eventTotal = event.items
+            .reduce((total, item) => {
+              return total + item.howMuch;
+            }, 0)
+            .toFixed(2);
+          return (
+            <div key={eventIdx}>
+              <ListItem key={eventIdx}>
+                {editingIndex === eventIdx ? (
+                  <>
+                    <TextField
+                      value={editingValue}
+                      onChange={(e) => setEditingValue(e.target.value)}
+                      onKeyDown={(e) => handleEditKeyDown(e, eventIdx)}
+                      inputRef={inputRef}
+                      onBlur={() => handleSaveEdit(eventIdx)}
+                      size="small"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <ListItemText
+                      primary={
+                        <>
+                          <span>{eventIdx + 1}. </span>
+                          <strong>
+                            {event.name} --- Event Total: ${eventTotal}
+                          </strong>
+                        </>
+                      }
+                      onClick={() => handleEdit(eventIdx)}
+                      className="list-item"
+                    />
+                  </>
+                )}
+                <ListItemSecondaryAction>
+                  <Button
+                    onClick={() => handleDelete(eventIdx)}
+                    color="error"
+                    variant="outlined"
+                    tabIndex={-1}
+                  >
+                    Delete Event
+                  </Button>
+                </ListItemSecondaryAction>
+              </ListItem>
+              <Box sx={{ pl: 5 }}>
+                {event.items.map((itemData, itemIdx) => (
+                  <EventItem
+                    key={itemIdx}
+                    index={itemIdx}
+                    people={people}
+                    itemData={itemData}
+                    setItemData={(itemData) => {
+                      setEvents((events) => {
+                        const newEvents = [...events];
+                        newEvents[eventIdx].items[itemIdx] = itemData;
+                        return newEvents;
+                      });
+                    }}
+                    onDelete={() => {
+                      setEvents((events) => {
+                        const newEvents = [...events];
+                        newEvents[eventIdx].items = newEvents[
+                          eventIdx
+                        ].items.filter((item, i) => i !== itemIdx);
+                        return newEvents;
+                      });
+                    }}
                   />
-                </>
-              ) : (
-                <>
-                  <ListItemText
-                    primary={`${eventIdx + 1}. ${event.name}`}
-                    onClick={() => handleEdit(eventIdx)}
-                    className="list-item"
-                  />
-                </>
-              )}
-              <ListItemSecondaryAction>
+                ))}
                 <Button
-                  onClick={() => handleDelete(eventIdx)}
-                  color="error"
+                  startIcon={<AddIcon />}
                   variant="outlined"
-                  // size="small"
-                  tabIndex={-1}
+                  // set color to green 500
+                  // sx={{ m: 1, width: "100%" }}
+                  size="small"
+                  onClick={() => {
+                    setEvents((events) => {
+                      const newEvents = [...events];
+                      newEvents[eventIdx].items.push({
+                        who: [],
+                        howMuch: 0,
+                        what: "",
+                        editing: true,
+                      });
+                      return newEvents;
+                    });
+                  }}
                 >
-                  Delete Event
+                  Add event item
                 </Button>
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Box sx={{ pl: 5 }}>
-              {event.items.map((itemData, itemIdx) => (
-                <EventItem
-                  key={itemIdx}
-                  index={itemIdx}
-                  people={people}
-                  itemData={itemData}
-                  setItemData={(itemData) => {
-                    setEvents((events) => {
-                      const newEvents = [...events];
-                      newEvents[eventIdx].items[itemIdx] = itemData;
-                      return newEvents;
-                    });
-                  }}
-                  onDelete={() => {
-                    setEvents((events) => {
-                      const newEvents = [...events];
-                      newEvents[eventIdx].items = newEvents[
-                        eventIdx
-                      ].items.filter((item, i) => i !== itemIdx);
-                      return newEvents;
-                    });
-                  }}
-                />
-              ))}
-              <Button
-                startIcon={<AddIcon />}
-                variant="outlined"
-                // set color to green 500
-                // sx={{ m: 1, width: "100%" }}
-                size="small"
-                onClick={() => {
-                  setEvents((events) => {
-                    const newEvents = [...events];
-                    newEvents[eventIdx].items.push({
-                      who: [],
-                      howMuch: 0,
-                      what: "",
-                      editing: true,
-                    });
-                    return newEvents;
-                  });
-                }}
-              >
-                Add event item
-              </Button>
-            </Box>
-          </div>
-        ))}
+              </Box>
+            </div>
+          );
+        })}
       </List>
     </>
   );

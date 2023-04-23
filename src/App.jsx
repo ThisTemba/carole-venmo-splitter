@@ -13,9 +13,11 @@ function App() {
   const [checkedPeople, setCheckedPeople] = useLocalStorage("cp", []);
 
   const onClear = () => {
-    setEvents([]);
-    setPeople([]);
-    setCheckedPeople([]);
+    if (window.confirm("Are you sure you want to clear all data?")) {
+      setEvents([]);
+      setPeople([]);
+      setCheckedPeople([]);
+    }
   };
 
   const getTotalsAvailable = (events, people) => {
@@ -111,6 +113,16 @@ function App() {
     input.click();
   };
 
+  const onExample = () => {
+    if (
+      window.confirm(
+        "This will replace your current data with example data. Are you sure?"
+      )
+    ) {
+      setEvents(eventsInit);
+      setPeople(peopleInit);
+    }
+  };
   return (
     <>
       <h1>Carole Venmo Splitter</h1>
@@ -122,10 +134,7 @@ function App() {
       </Button>
       <Button
         variant="contained"
-        onClick={() => {
-          setEvents(eventsInit);
-          setPeople(peopleInit);
-        }}
+        onClick={onExample}
         sx={{ m: 1 }}
         color="secondary"
       >
