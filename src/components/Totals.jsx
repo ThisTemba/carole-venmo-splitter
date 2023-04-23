@@ -11,6 +11,7 @@ import {
   ListItemText,
   Typography,
   Checkbox,
+  Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -22,43 +23,74 @@ function Totals({ events, people, checkedPeople, setCheckedPeople }) {
   };
 
   // Calculate how much each person owes per item
-  const itemsByPerson = {};
-  events.forEach((event) => {
-    event.items.forEach((item) => {
-      item.who.forEach((person) => {
-        const itemCostPerPerson = item.howMuch / item.who.length;
-        if (!itemsByPerson[person]) {
-          itemsByPerson[person] = {};
+  function getTotalForPerson(person) {
+    const totalsByPerson = {};
+
+    events.forEach((event) => {
+      event.items.forEach((item) => {
+        if (item.who.includes(person)) {
+          const itemCostPerPerson = item.howMuch / item.who.length;
+          totalsByPerson[person] =
+            (totalsByPerson[person] || 0) + itemCostPerPerson;
         }
-        if (!itemsByPerson[person][item.what]) {
-          itemsByPerson[person][item.what] = 0;
-        }
-        itemsByPerson[person][item.what] += itemCostPerPerson;
       });
     });
-  });
 
-  // Calculate total for each person
-  const totalsByPerson = {};
-  Object.keys(itemsByPerson).forEach((person) => {
-    const items = itemsByPerson[person];
-    let total = 0;
-    Object.values(items).forEach((itemCost) => {
-      total += itemCost;
-    });
-    totalsByPerson[person] = total;
-  });
-
-  function getTotalForPerson(person) {
-    if (!totalsByPerson[person]) {
-      return 0;
-    } else {
-      return totalsByPerson[person].toFixed(2);
-    }
+    return (totalsByPerson[person] || 0).toFixed(2);
   }
+
+  function generateReceipts(people, events) {
+    const receipts = {};
+    for (const person of people) {
+      const itemsByPerson = [];
+      for (const event of events) {
+        for (const item of event.items) {
+          if (item.who.includes(person)) {
+            const itemCostPerPerson = item.howMuch / item.who.length;
+            const itemName = event.name + " - " + item.what;
+            itemsByPerson.push({ [itemName]: itemCostPerPerson.toFixed(2) });
+          }
+        }
+      }
+      receipts[person] = {
+        items: itemsByPerson,
+        total: getTotalForPerson(person),
+      };
+    }
+    return receipts;
+  }
+
+  const receipts = generateReceipts(people, events);
+  console.log(receipts);
+  const onExport = () => {
+    // convert receipts into a nicely formatted text file
+    const receipts = generateReceipts(people, events);
+    const text = Object.keys(receipts)
+      .map((person) => {
+        const items = receipts[person].items
+          .map((item) => {
+            const itemName = Object.keys(item)[0];
+            const itemCost = item[itemName];
+            return `$${itemCost} - ${itemName}`;
+          })
+          .join("\n");
+        const personTotal = receipts[person].total;
+        return `${person} - Total: $${personTotal}\n${items}\n`;
+      })
+      .join("\n");
+    const element = document.createElement("a");
+    const file = new Blob([text], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = "receipts.txt";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
+      <Button variant="contained" onClick={onExport} sx={{ mb: 1 }}>
+        Export
+      </Button>
       {people.map((person) => (
         <Accordion
           key={person}

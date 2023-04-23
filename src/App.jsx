@@ -77,11 +77,48 @@ function App() {
     // if fewer people, remove them from events
   };
 
+  const saveToFile = () => {
+    const data = JSON.stringify({ people, events, checkedPeople });
+    const date = new Date();
+    const dateString = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    const filename = prompt("Filename", `venmo-splitter-${dateString}`);
+    if (!filename) return;
+    const blob = new Blob([data], { type: "text/json" });
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = href;
+    link.download = filename + ".json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const loadFromFile = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = JSON.parse(e.target.result);
+        setPeople(data.people);
+        setEvents(data.events);
+        setCheckedPeople(data.checkedPeople);
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  };
+
   return (
     <>
       <h1>Carole Venmo Splitter</h1>
-      <Button variant="contained" onClick={onClear} sx={{ m: 1 }}>
-        Clear
+      <Button variant="contained" sx={{ m: 1 }} onClick={saveToFile}>
+        Save
+      </Button>
+      <Button variant="contained" sx={{ m: 1 }} onClick={loadFromFile}>
+        Load
       </Button>
       <Button
         variant="contained"
@@ -93,6 +130,9 @@ function App() {
         color="secondary"
       >
         Example
+      </Button>
+      <Button variant="contained" onClick={onClear} sx={{ m: 1 }} color="error">
+        Clear
       </Button>
       <Grid container spacing={2}>
         <Grid item xs={3}>
