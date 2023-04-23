@@ -83,7 +83,7 @@ function App() {
     const data = JSON.stringify({ people, events, checkedPeople });
     const date = new Date();
     const dateString = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-    const filename = prompt("Filename", `venmo-splitter-${dateString}`);
+    const filename = prompt("Save as", `venmo-splitter-${dateString}`);
     if (!filename) return;
     const blob = new Blob([data], { type: "text/json" });
     const href = URL.createObjectURL(blob);
@@ -123,26 +123,116 @@ function App() {
       setPeople(peopleInit);
     }
   };
+
+  function getTotalForPerson(person) {
+    const totalsByPerson = {};
+    events.forEach((event) => {
+      event.items.forEach((item) => {
+        if (item.who.includes(person)) {
+          const itemCostPerPerson = item.howMuch / item.who.length;
+          totalsByPerson[person] =
+            (totalsByPerson[person] || 0) + itemCostPerPerson;
+        }
+      });
+    });
+    return (totalsByPerson[person] || 0).toFixed(2);
+  }
+
+  function generateReceipts(people, events) {
+    const receipts = {};
+    for (const person of people) {
+      const itemsByPerson = [];
+      for (const event of events) {
+        for (const item of event.items) {
+          if (item.who.includes(person)) {
+            const itemCostPerPerson = item.howMuch / item.who.length;
+            const itemName = event.name + " - " + item.what;
+            itemsByPerson.push({ [itemName]: itemCostPerPerson.toFixed(2) });
+          }
+        }
+      }
+      receipts[person] = {
+        items: itemsByPerson,
+        total: getTotalForPerson(person),
+      };
+    }
+    return receipts;
+  }
+
+  const onExport = () => {
+    // convert receipts into a nicely formatted text file
+    const receipts = generateReceipts(people, events);
+    const text = Object.keys(receipts)
+      .map((person) => {
+        const items = receipts[person].items
+          .map((item) => {
+            const itemName = Object.keys(item)[0];
+            const itemCost = item[itemName];
+            return `$${itemCost} - ${itemName}`;
+          })
+          .join("\n");
+        const personTotal = receipts[person].total;
+        return `${person} - Total: $${personTotal}\n${items}\n`;
+      })
+      .join("\n");
+
+    const element = document.createElement("a");
+    const file = new Blob([text], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    // create an alert to confirm the filename
+    const date = new Date();
+    const dateString = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    const filename = prompt("Export as", `receipts-${dateString}`);
+    if (!filename) return;
+    element.download = filename + ".txt";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  };
+
+  const Buttons = () => {
+    return (
+      <>
+        <Button variant="contained" sx={{ m: 1 }} onClick={saveToFile}>
+          Save
+        </Button>
+        t
+        <Button variant="contained" sx={{ m: 1 }} onClick={loadFromFile}>
+          Load
+        </Button>
+        <Button
+          variant="contained"
+          onClick={onClear}
+          sx={{ m: 1 }}
+          color="error"
+        >
+          Clear
+        </Button>
+        <Button
+          variant="contained"
+          onClick={onExample}
+          sx={{ m: 1 }}
+          color="secondary"
+        >
+          Example
+        </Button>
+        <Button
+          variant="contained"
+          onClick={onExport}
+          sx={{ m: 1 }}
+          color="success"
+          disabled={!getTotalsAvailable(events, people)}
+        >
+          Export Totals
+        </Button>
+      </>
+    );
+  };
+
   return (
     <>
       <h1>Carole Venmo Splitter</h1>
-      <Button variant="contained" sx={{ m: 1 }} onClick={saveToFile}>
-        Save
-      </Button>
-      <Button variant="contained" sx={{ m: 1 }} onClick={loadFromFile}>
-        Load
-      </Button>
-      <Button
-        variant="contained"
-        onClick={onExample}
-        sx={{ m: 1 }}
-        color="secondary"
-      >
-        Example
-      </Button>
-      <Button variant="contained" onClick={onClear} sx={{ m: 1 }} color="error">
-        Clear
-      </Button>
+      <Buttons />
+
       <Grid container spacing={2}>
         <Grid item xs={3}>
           <div className="card">
@@ -165,6 +255,7 @@ function App() {
             people={people}
             checkedPeople={checkedPeople}
             setCheckedPeople={setCheckedPeople}
+            onExport={onExport}
           />
         ) : (
           <p>Enter some events and people to see totals</p>
