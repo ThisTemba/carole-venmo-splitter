@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-function Totals({ events, people, checkedPeople, setCheckedPeople }) {
+function Totals({ events, people, checkedPeople, setCheckedPeople, onExport }) {
   const [expandedPerson, setExpandedPerson] = useState(null);
 
   const handleAccordionChange = (person) => {
@@ -25,7 +25,6 @@ function Totals({ events, people, checkedPeople, setCheckedPeople }) {
   // Calculate how much each person owes per item
   function getTotalForPerson(person) {
     const totalsByPerson = {};
-
     events.forEach((event) => {
       event.items.forEach((item) => {
         if (item.who.includes(person)) {
@@ -35,61 +34,18 @@ function Totals({ events, people, checkedPeople, setCheckedPeople }) {
         }
       });
     });
-
     return (totalsByPerson[person] || 0).toFixed(2);
   }
 
-  function generateReceipts(people, events) {
-    const receipts = {};
-    for (const person of people) {
-      const itemsByPerson = [];
-      for (const event of events) {
-        for (const item of event.items) {
-          if (item.who.includes(person)) {
-            const itemCostPerPerson = item.howMuch / item.who.length;
-            const itemName = event.name + " - " + item.what;
-            itemsByPerson.push({ [itemName]: itemCostPerPerson.toFixed(2) });
-          }
-        }
-      }
-      receipts[person] = {
-        items: itemsByPerson,
-        total: getTotalForPerson(person),
-      };
-    }
-    return receipts;
-  }
-
-  const receipts = generateReceipts(people, events);
-  console.log(receipts);
-  const onExport = () => {
-    // convert receipts into a nicely formatted text file
-    const receipts = generateReceipts(people, events);
-    const text = Object.keys(receipts)
-      .map((person) => {
-        const items = receipts[person].items
-          .map((item) => {
-            const itemName = Object.keys(item)[0];
-            const itemCost = item[itemName];
-            return `$${itemCost} - ${itemName}`;
-          })
-          .join("\n");
-        const personTotal = receipts[person].total;
-        return `${person} - Total: $${personTotal}\n${items}\n`;
-      })
-      .join("\n");
-    const element = document.createElement("a");
-    const file = new Blob([text], { type: "text/plain" });
-    element.href = URL.createObjectURL(file);
-    element.download = "receipts.txt";
-    document.body.appendChild(element); // Required for this to work in FireFox
-    element.click();
-  };
-
   return (
     <Box sx={{ width: "100%" }}>
-      <Button variant="contained" onClick={onExport} sx={{ mb: 1 }}>
-        Export
+      <Button
+        variant="contained"
+        onClick={onExport}
+        sx={{ mb: 1 }}
+        color="success"
+      >
+        Export Totals
       </Button>
       {people.map((person) => (
         <Accordion
@@ -185,6 +141,7 @@ Totals.propTypes = {
   people: PropTypes.arrayOf(PropTypes.string).isRequired,
   checkedPeople: PropTypes.arrayOf(PropTypes.string).isRequired,
   setCheckedPeople: PropTypes.func.isRequired,
+  onExport: PropTypes.func.isRequired,
 };
 
 export default Totals;
