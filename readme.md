@@ -4,10 +4,8 @@ A simple app to help Carole calculate how much we owe her.
 
 # TODO:
 
-MVP:
-
-- Add people
-- Add events
-- Add items under events
-- Assign people to items (who paid)
-- Calculate total
+- Delete event items
+- Click to edit clicked field
+- Add "Add Event" button below add event item
+- Show breakdown of each person's individual expenses
+- Combine payments (for couples)

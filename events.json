@@ -1,0 +1,180 @@
+[
+  {
+    "name": "Don Barriga",
+    "items": [
+      {
+        "what": "E",
+        "howMuch": 17,
+        "who": ["Richard"]
+      },
+      {
+        "what": "C",
+        "howMuch": 18,
+        "who": ["Nick"]
+      },
+      {
+        "what": "H",
+        "howMuch": 24,
+        "who": ["Richard", "Nick", "Peter", "Najla"]
+      },
+      {
+        "what": "G",
+        "howMuch": 14,
+        "who": ["Carole"]
+      },
+      {
+        "what": "T",
+        "howMuch": 32.86,
+        "who": ["Richard", "Najla", "Nick", "Carole", "Peter"]
+      },
+      {
+        "what": "SMS",
+        "howMuch": 206.43,
+        "who": ["Hriju", "Temba", "Peter", "Najla", "Nick", "Richard", "Carole"]
+      },
+      {
+        "what": "B",
+        "howMuch": 38,
+        "who": ["Peter", "Najla"]
+      }
+    ]
+  },
+  {
+    "name": "Wakanda Forever",
+    "items": [
+      {
+        "what": "Movie",
+        "howMuch": 62.2,
+        "who": ["Hriju", "Temba", "Peter", "Carole", "Shantan"]
+      },
+      {
+        "what": "",
+        "howMuch": 0,
+        "who": []
+      }
+    ]
+  },
+  {
+    "name": "Giorgio on Pine",
+    "items": [
+      {
+        "what": "Bucatini",
+        "howMuch": 18.5,
+        "who": ["Peter"]
+      },
+      {
+        "what": "Spagetti A la Vodka (2)",
+        "howMuch": 37,
+        "who": ["Carole"]
+      },
+      {
+        "what": "Linguine & Clams",
+        "howMuch": 19,
+        "who": ["Hriju"]
+      },
+      {
+        "what": "Rigatoni",
+        "howMuch": 18.5,
+        "who": ["Temba"]
+      },
+      {
+        "what": "Pesto Pizza",
+        "howMuch": 18,
+        "who": ["Shantan"]
+      },
+      {
+        "what": "GF Fusili",
+        "howMuch": 20,
+        "who": ["Caity"]
+      },
+      {
+        "what": "Parmesan Crusted Chicken",
+        "howMuch": 22.75,
+        "who": ["Andrew"]
+      },
+      {
+        "what": "Gnocchi",
+        "howMuch": 19,
+        "who": ["Alex"]
+      },
+      {
+        "what": "Espresso",
+        "howMuch": 3,
+        "who": ["Peter"]
+      },
+      {
+        "what": "Cappuccino (2)",
+        "howMuch": 8,
+        "who": ["Hriju", "Shantan"]
+      },
+      {
+        "what": "Cake Fee",
+        "howMuch": 20,
+        "who": [
+          "Hriju",
+          "Temba",
+          "Peter",
+          "Carole",
+          "Shantan",
+          "Andrew",
+          "Caity",
+          "Alex",
+          "Chey"
+        ]
+      },
+      {
+        "what": "Tax + Tip",
+        "howMuch": 57.05,
+        "who": [
+          "Hriju",
+          "Temba",
+          "Peter",
+          "Carole",
+          "Shantan",
+          "Andrew",
+          "Caity",
+          "Alex",
+          "Chey"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Shantan's Costs",
+    "items": [
+      {
+        "what": "Meal + Movie Refund",
+        "howMuch": -43,
+        "who": ["Shantan"]
+      },
+      {
+        "what": "Meal + Movie",
+        "howMuch": 43,
+        "who": [
+          "Hriju",
+          "Peter",
+          "Carole",
+          "Andrew",
+          "Alex",
+          "Angie",
+          "Emma",
+          "Aradhana"
+        ]
+      },
+      {
+        "what": "Cupcakes",
+        "howMuch": 28.33,
+        "who": [
+          "Hriju",
+          "Peter",
+          "Carole",
+          "Andrew",
+          "Alex",
+          "Angie",
+          "Emma",
+          "Aradhana"
+        ]
+      }
+    ]
+  }
+]
