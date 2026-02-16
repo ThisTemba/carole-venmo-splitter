@@ -135,7 +135,7 @@ export default function EventItemRow({
           minH="32px"
           alignItems="center"
           onMouseDown={(e) => editing && e.preventDefault()}
-          onClick={(e) => {
+          onClick={() => {
             if (!editing) {
               onStartEdit("what");
             }

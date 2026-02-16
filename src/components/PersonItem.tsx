@@ -31,10 +31,6 @@ export default function PersonItem({ name, onEdit, onDelete }: PersonItemProps) 
     setEditing(false)
   }
 
-  const handleBlur = () => {
-    handleSave()
-  }
-
   return (
     <Box display="flex" alignItems="center" gap={2}>
       {editing ? (
