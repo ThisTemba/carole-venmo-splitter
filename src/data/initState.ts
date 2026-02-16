@@ -1,47 +1,43 @@
-const eventsInit = [
+import type { Event } from '../types'
+
+export const eventsInit: Event[] = [
   {
-    name: "Don Barriga",
+    name: "Mexican Restaurant",
     items: [
       {
         what: "Enchiladas",
         howMuch: 17,
         who: ["Brietta"],
-        editing: false,
       },
       {
         what: "Chiles Rellenos",
         howMuch: 18,
         who: ["Nick"],
-        editing: false,
       },
       {
         what: "Horchata",
         howMuch: 24,
         who: ["Brietta", "Nick", "Teresa", "Valry"],
-        editing: false,
       },
       {
         what: "Gringas",
         howMuch: 14,
         who: ["Barnard"],
-        editing: false,
       },
       {
         what: "Birria",
         howMuch: 38,
         who: ["Teresa", "Valry"],
-        editing: false,
       },
       {
         what: "Tax+Tip",
         howMuch: 32.86,
         who: ["Brietta", "Valry", "Nick", "Barnard", "Teresa"],
-        editing: false,
       },
     ],
   },
   {
-    name: "Shady Maple Smorgasbord",
+    name: "Buffet Restaurant",
     items: [
       {
         what: "Total",
@@ -55,83 +51,71 @@ const eventsInit = [
           "Brietta",
           "Barnard",
         ],
-        editing: false,
       },
     ],
   },
   {
-    name: "Wakanda Forever",
+    name: "Movie Theater",
     items: [
       {
         what: "Movie",
         howMuch: 62.2,
         who: ["Eda", "Harmony", "Teresa", "Barnard", "Chandler"],
-        editing: false,
       },
     ],
   },
   {
-    name: "Giorgio on Pine",
+    name: "Italian Restaurant",
     items: [
       {
         what: "Bucatini",
         howMuch: 18.5,
         who: ["Teresa"],
-        editing: false,
       },
       {
         what: "Spagetti A la Vodka",
         howMuch: 37,
         who: ["Barnard", "Morry"],
-        editing: false,
       },
       {
         what: "Linguine & Clams",
         howMuch: 19,
         who: ["Eda"],
-        editing: false,
       },
       {
         what: "Rigatoni",
         howMuch: 18.5,
         who: ["Harmony"],
-        editing: false,
       },
       {
         what: "Pesto Pizza",
         howMuch: 18,
         who: ["Chandler"],
-        editing: false,
       },
       {
         what: "GF Fusili",
         howMuch: 20,
         who: ["Fredi"],
-        editing: false,
       },
       {
         what: "Parmesan Crusted Chicken",
         howMuch: 22.75,
         who: ["Fonzie"],
-        editing: false,
       },
       {
         what: "Gnocchi",
         howMuch: 19,
         who: ["Curtis"],
-        editing: false,
       },
       {
         what: "Espresso",
         howMuch: 3,
         who: ["Teresa"],
-        editing: false,
       },
       {
         what: "Cappuccino",
         howMuch: 8,
         who: ["Eda", "Chandler"],
-        editing: false,
       },
       {
         what: "Cake Fee",
@@ -147,7 +131,6 @@ const eventsInit = [
           "Curtis",
           "Morry",
         ],
-        editing: false,
       },
       {
         what: "Tax + Tip",
@@ -163,18 +146,16 @@ const eventsInit = [
           "Curtis",
           "Morry",
         ],
-        editing: false,
       },
     ],
   },
   {
-    name: "Chandler's Costs",
+    name: "Reimbursements",
     items: [
       {
         what: "Meal + Movie Refund",
         howMuch: -43,
         who: ["Chandler"],
-        editing: false,
       },
       {
         what: "Meal + Movie",
@@ -189,7 +170,6 @@ const eventsInit = [
           "Tobie",
           "Diandra",
         ],
-        editing: false,
       },
       {
         what: "Cupcakes",
@@ -204,13 +184,12 @@ const eventsInit = [
           "Tobie",
           "Diandra",
         ],
-        editing: false,
       },
     ],
   },
-];
+]
 
-const peopleInit = [
+export const peopleInit: string[] = [
   "Eda",
   "Harmony",
   "Teresa",
@@ -226,6 +205,4 @@ const peopleInit = [
   "Jilly",
   "Tobie",
   "Diandra",
-];
-
-export { eventsInit, peopleInit };
+]
