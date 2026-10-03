@@ -1,30 +1,28 @@
 import { useRef, useState } from 'react'
-import { Flex, Button } from '@chakra-ui/react'
-import { LuSave, LuFolderOpen, LuTrash, LuFlaskConical, LuFileText } from 'react-icons/lu'
-import type { Event } from '../types'
-import { downloadJSON, loadJSON, exportTotals, formatDate } from '../utils/fileExport'
-import { eventsInit, peopleInit } from '../data/initState'
+import { Flex, Button, IconButton, Menu, Portal } from '@chakra-ui/react'
+import { LuSave, LuFolderOpen, LuTrash, LuFlaskConical, LuEllipsis } from 'react-icons/lu'
+import type { Receipt } from '../types'
+import { downloadJSON, loadJSON, formatDate } from '../utils/fileExport'
+import { receiptsInit, peopleInit } from '../data/initState'
 import ConfirmDialog from './ConfirmDialog'
 import InputDialog from './InputDialog'
 
 interface ActionButtonsProps {
   people: string[]
-  events: Event[]
+  receipts: Receipt[]
   checkedPeople: string[]
   setPeople: (people: string[]) => void
-  setEvents: (events: Event[]) => void
+  setReceipts: (receipts: Receipt[]) => void
   setCheckedPeople: (checked: string[]) => void
-  canExport: boolean
 }
 
 export default function ActionButtons({
   people,
-  events,
+  receipts,
   checkedPeople,
   setPeople,
-  setEvents,
+  setReceipts,
   setCheckedPeople,
-  canExport,
 }: ActionButtonsProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [clearDialogOpen, setClearDialogOpen] = useState(false)
@@ -32,7 +30,7 @@ export default function ActionButtons({
   const [saveDialogOpen, setSaveDialogOpen] = useState(false)
 
   const handleSave = (filename: string) => {
-    downloadJSON(people, events, checkedPeople, filename)
+    downloadJSON(people, receipts, checkedPeople, filename)
   }
 
   const handleLoad = () => {
@@ -42,19 +40,19 @@ export default function ActionButtons({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      loadJSON(file, setPeople, setEvents, setCheckedPeople)
+      loadJSON(file, setPeople, setReceipts, setCheckedPeople)
     }
   }
 
   const handleClear = () => {
     setPeople([])
-    setEvents([])
+    setReceipts([])
     setCheckedPeople([])
   }
 
   const handleExample = () => {
     setPeople(peopleInit)
-    setEvents(eventsInit)
+    setReceipts(receiptsInit)
     setCheckedPeople([])
   }
 
@@ -69,18 +67,30 @@ export default function ActionButtons({
           <LuFolderOpen />
           Load
         </Button>
-        <Button onClick={() => setExampleDialogOpen(true)} variant="outline">
-          <LuFlaskConical />
-          Example Data
-        </Button>
-        <Button onClick={() => exportTotals(people, events, checkedPeople)} disabled={!canExport} variant="outline">
-          <LuFileText />
-          Export Totals
-        </Button>
-        <Button onClick={() => setClearDialogOpen(true)} variant="outline">
-          <LuTrash />
-          Clear Data
-        </Button>
+        {/* Less common actions, kept out of the way */}
+        <Menu.Root
+          onSelect={({ value }) => (value === 'example' ? setExampleDialogOpen(true) : setClearDialogOpen(true))}
+        >
+          <Menu.Trigger asChild>
+            <IconButton aria-label="More actions" variant="outline">
+              <LuEllipsis />
+            </IconButton>
+          </Menu.Trigger>
+          <Portal>
+            <Menu.Positioner>
+              <Menu.Content>
+                <Menu.Item value="example">
+                  <LuFlaskConical />
+                  Load example data
+                </Menu.Item>
+                <Menu.Item value="clear" color="fg.error">
+                  <LuTrash />
+                  Clear all data
+                </Menu.Item>
+              </Menu.Content>
+            </Menu.Positioner>
+          </Portal>
+        </Menu.Root>
         <input
           ref={fileInputRef}
           type="file"

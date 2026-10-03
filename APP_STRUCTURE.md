@@ -2,16 +2,18 @@
 
 ## Purpose
 
-Track shared expenses across events and calculate per-person totals. Users split items among multiple people and get individual cost breakdowns.
+Track shared expenses across receipts and calculate per-person totals. Users split items among multiple people and get individual cost breakdowns.
 
 ## Page Structure
 
 - Title at top: "Carole Venmo Splitter"
-- Action buttons row: Save, Load, Clear, Example, Export Totals
-- Two-column grid layout:
-  - Left column (25% width): People section
-  - Right column (75% width): Events section
-- Totals section: Centered below the grid, full width
+- Action buttons row: Save, Load, and a "⋯" menu with "Load example data" and "Clear all data". Export lives in the Totals section
+- A small, quiet "How it works" section below everything (narrow, centered, no card), always shown: four steps with examples: add a receipt (e.g. "Sakura Sushi"); add items, with bullets for what was it (e.g. "Salmon roll"), how much was it (e.g. "12"), and who had it (e.g. "Omar" or "Maya, Omar"); add tax, tip, and fees, which are split by how much each person ordered; see the totals, and a "Tips" list of shortcuts and power moves, most useful first (only the first shows until "Show N more tips"). The fuller items vs. taxes, tips, and fees explanation stays behind the ? next to "Add tax, tip, or fee"
+- With no receipts, the Receipts section says "No receipts yet."
+- Two-column grid layout (stacks on narrow screens):
+  - Left column: Receipts section
+  - Right column (360px): Totals section, which stays in view while scrolling
+- There's no separate People section: people are added from receipts' people boxes and renamed or removed from Totals
 
 ## Core Data Types
 
@@ -23,12 +25,14 @@ Array of strings representing person names.
 ["Alice", "Bob", "Charlie"]
 ```
 
-**Event Item**
+**Receipt Item**
 
 Object representing a single expense with:
 - `what` (string): Description of the item
 - `howMuch` (number): Cost in dollars, can be negative for refunds/credits
 - `who` (array of strings): Names of people splitting this item
+- `proportional` (boolean, optional): Marks a tax, tip, or fee. Split in proportion to spend instead of evenly (see Calculation Logic). Omitted on regular items
+- `everyone` (boolean, optional): Split between everyone on this receipt instead of the people in `who` (which is then empty). "Everyone on this receipt" means anyone named on one of the receipt's items, worked out each time, so it includes people added later. If nobody on the receipt is named, it's everyone in the People list
 - `editing` (boolean): UI state flag, included in JSON exports but should default to false on load
 
 ```javascript
@@ -40,11 +44,12 @@ Object representing a single expense with:
 }
 ```
 
-**Event** (localStorage key: "events")
+**Receipt** (localStorage key: "receipts"; data under the older "events" key is read once and moved)
 
 Object representing an occasion/grouping of expenses with:
-- `name` (string): Event name (e.g., "Restaurant", "Groceries")
-- `items` (array of Event Items): List of expenses within this event
+- `name` (string): Receipt name (e.g., "Restaurant", "Groceries")
+- `items` (array of Receipt Items): List of expenses within this receipt
+- `collapsed` (boolean, optional): Folded down to a one-line summary in the UI
 
 ```javascript
 {
@@ -56,7 +61,7 @@ Object representing an occasion/grouping of expenses with:
 }
 ```
 
-Full events array:
+Full receipts array:
 ```javascript
 [
   {name: "Restaurant", items: [...]},
@@ -74,7 +79,7 @@ Array of strings representing checked state for each person. Checkboxes appear n
 
 ## Storage & Persistence
 
-- **localStorage**: Auto-saves all changes (people, events, checkedPeople)
+- **localStorage**: Auto-saves all changes (people, receipts, checkedPeople)
 - **JSON Export/Import**: Save/load complete app state to `.json` files
 - **Text Export**: Generate human-readable receipt files
 
@@ -83,7 +88,7 @@ Array of strings representing checked state for each person. Checkboxes appear n
 ```json
 {
   "people": ["Alice", "Bob", "Charlie"],
-  "events": [
+  "receipts": [
     {
       "name": "Restaurant",
       "items": [
@@ -100,7 +105,7 @@ Array of strings representing checked state for each person. Checkboxes appear n
 }
 ```
 
-All three top-level fields required. The `editing` field is included but ignored on import.
+Saved files use `receipts`. Files saved before the rename use `events` instead, and Load accepts either. The `editing` field is included but ignored on import.
 
 ## User Actions
 
@@ -108,7 +113,7 @@ All three top-level fields required. The `editing` field is included but ignored
 
 **Save**
 
-- Exports current state (people, events, checkedPeople) as JSON file
+- Exports current state (people, receipts, checkedPeople) as JSON file
 - Prompts for filename with date suggestion: `venmo-splitter-YYYY-M-D.json` (month is 0-indexed: 0=Jan, 11=Dec)
 - Downloads `.json` file
 - No data modification
@@ -122,44 +127,43 @@ Example:
 ```javascript
 // Before (current state)
 people: ["Alice"]
-events: [...]
+receipts: [...]
 checkedPeople: []
 
 // After loading file
 people: ["Bob", "Charlie"]
-events: [...from file...]
+receipts: [...from file...]
 checkedPeople: ["Bob"]
 ```
 
-**Clear**
+**Clear all data** (in the "⋯" menu)
 
 - Confirmation prompt
-- Deletes all data (people, events, checkedPeople)
+- Deletes all data (people, receipts, checkedPeople)
 
 ```javascript
 // Before
 people: ["Alice", "Bob"]
-events: [{...}]
+receipts: [{...}]
 checkedPeople: ["Alice"]
 
 // After
 people: []
-events: []
+receipts: []
 checkedPeople: []
 ```
 
-**Example**
+**Load example data** (in the "⋯" menu)
 
 - Confirmation prompt
-- Loads predefined example data from initState.jsx
-- Replaces current data with peopleInit and eventsInit
+- Loads predefined example data from `src/data/initState.ts`
+- Replaces current data with peopleInit and receiptsInit
 
-**Export Totals**
+**Export Totals** (in the Totals section)
 
-- Generates text file with per-person receipts
+- Generates text file with per-person receipts for the people included in export
 - Prompts for filename with date suggestion: `receipts-YYYY-M-D.txt` (month is 0-indexed: 0=Jan, 11=Dec)
 - Disabled when no valid data exists
-- Also available in Totals section
 
 **Text Export Format:**
 ```
@@ -172,14 +176,16 @@ $10.00 - Restaurant - Pizza
 $12.50 - Restaurant - Drinks
 
 ```
-Each person section: name + total, then itemized costs (person's share only) with format `$amount - EventName - ItemName`
+Each person section: name + total, then itemized costs (person's share only) with format `$amount - ReceiptName - ItemName`
 
-### People Section
+### People
+
+People are managed where they're used rather than in their own section.
 
 **Add Person**
 
-- Text input field + "Add" button
-- Enter key submits
+- From any item's people box: type a name that doesn't match anyone and choose `Add "<name>"`
+- A comma-separated list (e.g. `om, th, Kai`) adds everyone in it at once. Each name is matched like a single entry (exact, then starts with, then contains, ignoring case); anything that matches nobody becomes a new person. The suggestion spells out the result first, e.g. `Add Omar, Theo, Kai (new)`
 
 ```javascript
 // Before
@@ -189,16 +195,21 @@ people: ["Alice", "Bob"]
 people: ["Alice", "Bob", "Charlie"]
 ```
 
-**Edit Person**
+**Name Capitalization**
 
-- Click name to enter edit mode
-- Save on: Enter key or click outside
-- Cascades through all event items
+- A new or renamed name typed entirely in lowercase gets its first letter capitalized ("zara" → "Zara"). Any other capitalization is kept as typed ("mcKenzie", "LIA")
+- The suggestion shows the result before it's added, e.g. `Add "Zara"`
+
+**Rename Person**
+
+- "Edit people" in the Totals header switches the list to a name box per person; edit a name and press Enter or leave the box to save (Escape undoes). "Done" switches back
+- Refused (with a message) if someone else already has that name, ignoring case
+- Cascades through all receipt items
 
 ```javascript
 // Before
 people: ["Alice", "Bob"]
-events: [{
+receipts: [{
   name: "Restaurant",
   items: [{what: "Pizza", howMuch: 20, who: ["Alice", "Bob"]}]
 }]
@@ -206,7 +217,7 @@ checkedPeople: ["Alice"]
 
 // After editing "Alice" to "Alicia"
 people: ["Alicia", "Bob"]
-events: [{
+receipts: [{
   name: "Restaurant",
   items: [{what: "Pizza", howMuch: 20, who: ["Alicia", "Bob"]}]
 }]
@@ -215,13 +226,14 @@ checkedPeople: ["Alicia"]
 
 **Delete Person**
 
-- Delete icon button next to each person
-- Cascades: removes from all event items and checkedPeople
+- Trash icon next to the person's name box in Totals' "Edit people" mode
+- Asks for confirmation first, saying how many items they're on
+- Cascades: removes from all receipt items and checkedPeople
 
 ```javascript
 // Before
 people: ["Alice", "Bob", "Charlie"]
-events: [{
+receipts: [{
   items: [
     {what: "Pizza", howMuch: 20, who: ["Alice", "Bob"]},
     {what: "Drinks", howMuch: 10, who: ["Alice", "Charlie"]}
@@ -231,7 +243,7 @@ checkedPeople: ["Alice", "Bob"]
 
 // After deleting "Alice"
 people: ["Bob", "Charlie"]
-events: [{
+receipts: [{
   items: [
     {what: "Pizza", howMuch: 20, who: ["Bob"]},
     {what: "Drinks", howMuch: 10, who: ["Charlie"]}
@@ -240,75 +252,84 @@ events: [{
 checkedPeople: ["Bob"]
 ```
 
-### Events Section
+### Receipts Section
 
-**Add Event**
+**Add Receipt**
 
-- Text input field at top
-- Creates new event with empty items array
+- "Add receipt" button below the receipts (like "Add item" below items)
+- Creates a new receipt with its name box focused (placeholder "Where? e.g. Bar night")
+- Enter saves the name and opens a blank first item, so you can go straight to typing items
+- Leaving the name box empty (Escape, Enter, or clicking away) removes the new receipt if it has no items, or names it "Untitled receipt" if it does
 
 ```javascript
 // Before
-events: [{name: "Restaurant", items: [...]}]
+receipts: [{name: "Restaurant", items: [...]}]
 
 // After adding "Groceries"
-events: [
+receipts: [
   {name: "Restaurant", items: [...]},
   {name: "Groceries", items: []}
 ]
 ```
 
-**Edit Event Name**
+**Edit Receipt Name**
 
-- Click event name to edit
+- Click receipt name to edit
 - Save on: Enter key or click outside
 
 ```javascript
 // Before
-events: [{name: "Restaurant", items: [...]}]
+receipts: [{name: "Restaurant", items: [...]}]
 
 // After editing to "Dinner"
-events: [{name: "Dinner", items: [...]}]
+receipts: [{name: "Dinner", items: [...]}]
 ```
 
-**Delete Event**
+**Delete Receipt**
 
-- "Delete Event" button on each event
-- Removes entire event and all its items
+- "Delete receipt" button on each receipt
+- Asks for confirmation first
+- Removes entire receipt and all its items
 
 ```javascript
 // Before
-events: [
+receipts: [
   {name: "Restaurant", items: [...]},
   {name: "Groceries", items: [...]}
 ]
 
 // After deleting "Restaurant"
-events: [{name: "Groceries", items: [...]}]
+receipts: [{name: "Groceries", items: [...]}]
 ```
 
-**Event Total Display**
+**Receipt Layout**
 
-- Calculated value, not stored in data
-- Shows sum of all item costs in event
-- Format: "Event Name --- Event Total: $XX.XX"
+Each receipt is laid out like a paper receipt. The header shows a collapse chevron, the name, and "Delete receipt"; totals are at the bottom.
 
-### Event Items (within each event)
+- The chevron folds the receipt to one line: name · item count · total. Opening one of its items from Totals' "needs attention" list unfolds it
+
+- Regular items, then "Add item"
+- Dashed line, then a "Subtotal" line (regular items only; shown when there are taxes, tips, or fees)
+- Tax, tip, and fee items, then "Add tax, tip, or fee" and a ? button that explains the difference
+- Solid line, then "Total"
+- Subtotal and total are calculated, not stored, and line up with the price column
+
+### Receipt Items (within each receipt)
 
 **Add Item**
 
-- "Add event item" button below items list
+- "Add item" button below items list
 - Creates new item in edit mode
 
 ```javascript
 // Before
-events: [{
+receipts: [{
   name: "Restaurant",
   items: [{what: "Pizza", howMuch: 20, who: ["Alice"], editing: false}]
 }]
 
-// After clicking "Add event item"
-events: [{
+// After clicking "Add item"
+receipts: [{
   name: "Restaurant",
   items: [
     {what: "Pizza", howMuch: 20, who: ["Alice"], editing: false},
@@ -317,11 +338,27 @@ events: [{
 }]
 ```
 
+**Add Tax, Tip, or Fee**
+
+- "Add tax, tip, or fee" button next to "Add item"
+- Creates a `proportional: true` item in edit mode, set to "Everyone on this receipt"
+- Proportional items are split in proportion to each person's share of the receipt's regular (non-proportional) items, instead of evenly
+- E.g. A orders $50, B orders $10, a $12 tip splits $10 / $2
+- An item's type is fixed when it's added; proportional items are listed under the subtotal
+
 **Edit Item**
 
-- Click any item field to enter edit mode
-- Three-field form: What, How much, Who (chips to toggle)
-- Save on: Enter key or click outside
+- Click any item field to open the row, with the cursor in that field
+- Three fields: What (placeholder "What was it?", or "Tax, tip, or fee"), How much, Who
+- Who is a tag box: type part of a name and press Enter to add the highlighted suggestion, or click a suggestion. "Everyone on this receipt" is the first suggestion and sets `everyone: true`; while it's set there are no other suggestions, and it shows as that single tag (removing it lets you pick names). Adding people by name always keeps their names, even if that's everyone. Remove someone with their × (mouse only, so Tab goes straight to the text box), or Backspace in an empty box
+- Empty box placeholder: "Type names to add people"
+- "Everyone on this receipt" isn't offered until at least one person exists
+- Nothing is highlighted until you type (highlights the best match) or use the arrow keys / hover. Enter adds the highlighted suggestion if there is one
+- If the typed name doesn't exactly match anyone, the last suggestion is `Add "<name>"`, which adds them to the People list and the item
+- Enter moves What → How much → Who (Tab works too). In the Who box, Tab accepts what's typed (the highlighted match or comma list) and starts a new row of the same kind; Enter with nothing typed or highlighted does the same. On a blank row, either one just closes it
+- Escape or clicking outside closes the row. A row left with no name and no price is removed
+- Closing waits until any click in progress finishes, so warnings appearing or blank rows disappearing can't move a button out from under the cursor
+- Incomplete rows only show their "Missing: ..." warning (and appear in Totals' "needs attention" list) after they've been closed
 
 ```javascript
 // Before (editing: false)
@@ -338,10 +375,11 @@ events: [{
 
 - Delete icon on each item
 - Available in both read and edit modes
+- Asks for confirmation first, except for blank rows
 
 ```javascript
 // Before
-events: [{
+receipts: [{
   name: "Restaurant",
   items: [
     {what: "Pizza", howMuch: 20, who: ["Alice"]},
@@ -350,7 +388,7 @@ events: [{
 }]
 
 // After deleting "Drinks"
-events: [{
+receipts: [{
   name: "Restaurant",
   items: [{what: "Pizza", howMuch: 20, who: ["Alice"]}]
 }]
@@ -358,8 +396,9 @@ events: [{
 
 **Item Display**
 
-- Read-only view when editing: false
-- Shows: "1. [what] $[howMuch] [selected people as chips]"
+- Read-only view when the row isn't open
+- Shows: "[what] $[howMuch] [people as tags]"
+- Items set to everyone show a single "Everyone on this receipt" tag; hovering it lists who that currently is
 
 ### Totals Section
 
@@ -368,49 +407,62 @@ events: [{
 - One accordion per person (from people array)
 - Shows calculated total amount owed
 - Expand to see itemized breakdown
+- "Edit people" button in the header switches to renaming and removing people (Export is hidden until "Done")
 - Values calculated on-the-fly, not stored
+- An "Everyone" line under the list shows the sum of everyone's totals, which matches the receipts when every item is assigned
 
-**Checkbox per Person**
+**Needs Attention**
 
-- Modifies checkedPeople array
-- UI filter only, doesn't affect calculations
+- Above the list: "N items need attention", listing incomplete items (missing name, price, or person) as "Receipt: Item (no ...)"
+- Clicking one opens that row with the cursor in the first missing field (unfolding its receipt if collapsed)
+
+**Export Checkbox per Person**
+
+- Labeled "Tick to export only some people" above the list; decides who Export Totals covers, doesn't affect calculations
+- Nobody is ticked by default, which exports everyone. Ticking people exports only them. `checkedPeople` lists who's ticked
+- The Export button shows the count when it's not everyone, e.g. "Export totals (2 of 7)"
 
 ```javascript
-// Before (checkbox unchecked)
-checkedPeople: ["Alice"]
+// Default: nobody ticked, so everyone is exported
+checkedPeople: []
 
-// After checking "Bob"
-checkedPeople: ["Alice", "Bob"]
-
-// After unchecking "Alice"
-checkedPeople: ["Bob"]
+// After ticking "Bob" and "Charlie": only they're exported
+checkedPeople: ["Bob", "Charlie"]
 ```
 
 **Itemized View (expanded)**
 
-- Calculated on-the-fly from events data
-- Groups items by event
-- Shows person's share: item.howMuch / item.who.length
+- Calculated on-the-fly from receipts data
+- Groups items by receipt
+- Shows person's share of each item (see Calculation Logic)
 - Format: "[Item name] $[person's share]"
 
 **Export Totals Button**
 
-- Duplicate of top-level Export Totals button
+- The only Export button (see Export Totals above)
 - Generates text file, no data modification
 
 ## Calculation Logic
 
 **Per-Person Total**
 
-Iterates through all events and items. For each item assigned to the person, calculates their share (item cost divided by number of people splitting it) and adds to running total. Returns total formatted to 2 decimal places.
+Iterates through all receipts and items. For each item assigned to the person, calculates their share and adds to running total. Returns total formatted to 2 decimal places.
+
+- Regular items: item cost divided by number of people splitting it
+- Tax, tip, or fee (`proportional: true`): item cost × (person's share of the receipt's regular items ÷ the combined regular-item shares of everyone on the item). Other tax/tip/fee items are excluded from the base, so tax doesn't affect how tip splits
+- If no one on a tax/tip/fee item has regular items in the receipt, it falls back to an even split
+
+Each item is split in whole cents. Leftover cents go to the people with the largest remainders (ties go to whoever is listed first on the item), so every item's shares add up exactly, and so do the per-person totals.
+
+The example implementation below shows the even split only, without cent rounding; the real logic lives in `getItemShares` in `src/utils/calculations.ts`.
 
 Example implementation:
 
 ```javascript
 function getTotalForPerson(person) {
   const totalsByPerson = {};
-  events.forEach((event) => {
-    event.items.forEach((item) => {
+  receipts.forEach((receipt) => {
+    receipt.items.forEach((item) => {
       if (item.who.includes(person)) {
         const itemCostPerPerson = item.howMuch / item.who.length;
         totalsByPerson[person] =
@@ -422,14 +474,14 @@ function getTotalForPerson(person) {
 }
 ```
 
-**Event Total**
+**Receipt Total**
 
-Sums all item costs within a single event. Returns total formatted to 2 decimal places.
+Sums all item costs within a single receipt. Returns total formatted to 2 decimal places.
 
 Example implementation:
 
 ```javascript
-const eventTotal = event.items
+const receiptTotal = receipt.items
   .reduce((total, item) => {
     return total + item.howMuch;
   }, 0)
@@ -440,20 +492,20 @@ const eventTotal = event.items
 
 **Cascading Updates**
 
-- Editing person name: updates name in all event items' `who` arrays
-- Deleting person: removes from all event items, removes from checkedPeople
+- Editing person name: updates name in all receipt items' `who` arrays
+- Deleting person: removes from all receipt items, removes from checkedPeople
 
 **Inline Editing Pattern**
 
-- Items toggle between display and edit modes via `editing` boolean
-- Click to edit, blur/Enter to save
-- Focus management for smooth UX
+- One item row is open at a time; which one is UI state, not stored in data
+- Click to open, Escape or click outside to close (see Edit Item)
+- A whole receipt can be typed from the keyboard: add the receipt, then name → Enter → price → Enter → people → Enter → next row
 
 **State Validation**
 
 - Export/totals disabled until valid data exists:
   - At least one person
-  - At least one event with one item
+  - At least one receipt with one item
   - At least one item with at least one person assigned
 
 **Data Integrity**
@@ -462,19 +514,44 @@ const eventTotal = event.items
 - localStorage as single source of truth during session
 - JSON files for long-term storage/sharing
 
+## Code Organization
+
+- `src/types.ts`: saved data (`Receipt`, `ReceiptItem`) and UI state (`ItemField`, `Editing`)
+- `src/utils/calculations.ts`: money math: who an item is split between (including "Everyone on this receipt"), each person's share in whole cents, totals
+- `src/utils/validation.ts`: whether data is complete: blank and incomplete items, "Missing: ..." labels, `canExport`
+- `src/utils/people.ts`: name rules (capitalizing all-lowercase names) and the people box's suggestions, including comma lists
+- `src/utils/dom.ts`: waiting for a click to finish before changing layout; blurring the focused element
+- `src/utils/text.ts`: `plural()`
+- `src/utils/fileExport.ts`: Save, Load (accepts `events` or `receipts`), and the text export
+- `src/hooks/useLocalStorage.ts`: state saved to localStorage, with a legacy key fallback
+- `src/hooks/usePeopleActions.ts`: adding, renaming, and removing people, keeping items and export ticks in step
+- `src/hooks/useConfirm.tsx`: the confirmation dialog used for every delete
+- `src/App.tsx`: page layout and shared state, including which item row is open
+- Receipts: `ReceiptsSection` (list, adding/removing receipts and items) → `ReceiptCard` (one receipt) → `ReceiptName`, `ReceiptItemRow` → `PeopleInput` (the people tag box) → `PersonTag`
+- Totals: `TotalsSection` → `NeedsAttention`, `PersonBreakdown`, `PersonEditRow`
+- Help: `HowItWorks` (bottom of the page), `ItemTypesDialog` (the ? next to "Add tax, tip, or fee")
+
 ## Edge Cases
 
 **Duplicate Person Names**
 
-- No validation prevents duplicate names in people array
-- System allows multiple people with identical names
-- May cause confusion in totals/assignments but no technical errors
+- Adding someone from a people box matches existing names (ignoring case) instead of adding a duplicate, and renaming to a name someone else has is refused
+- Duplicates can still arrive in a loaded JSON file; they cause confusion in totals but no technical errors
 
 **Empty who Array**
 
 - Items with `who: []` are allowed
-- Item cost still counts toward event total
+- Item cost still counts toward receipt total
 - No person is charged for the item in totals calculations
+
+**"Everyone on This Receipt" With No Named People**
+
+- If every item on a receipt is set to everyone, nobody is named, so "everyone on this receipt" falls back to the whole People list
+- Name the people on at least one item to narrow it down
+
+**Older Data With Explicit Names**
+
+- Items saved before `everyone` existed keep their explicit names and don't update when people are added; set them to "Everyone on this receipt" to change that
 
 **Stale Names in Loaded Data**
 
@@ -484,10 +561,10 @@ const eventTotal = event.items
 
 ## Example Data
 
-The "Example" button loads the following predefined data from `src/initState.jsx`:
+"Load example data" loads the following predefined data from `src/data/initState.ts`:
 
 ```javascript
-const eventsInit = [
+const receiptsInit = [
   {
     name: "Mexican Restaurant",
     items: [
@@ -524,7 +601,9 @@ const eventsInit = [
       {
         what: "Tax+Tip",
         howMuch: 32.86,
-        who: ["Brietta", "Valry", "Nick", "Barnard", "Teresa"],
+        who: [],
+        proportional: true,
+        everyone: true,
         editing: false,
       },
     ],
@@ -641,17 +720,9 @@ const eventsInit = [
       {
         what: "Tax + Tip",
         howMuch: 57.05,
-        who: [
-          "Eda",
-          "Harmony",
-          "Teresa",
-          "Barnard",
-          "Chandler",
-          "Fonzie",
-          "Fredi",
-          "Curtis",
-          "Morry",
-        ],
+        proportional: true,
+        who: [],
+        everyone: true,
         editing: false,
       },
     ],
