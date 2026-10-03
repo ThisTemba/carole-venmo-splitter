@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Carole Venmo Splitter - A React web app for splitting bills and tracking shared expenses. Users can:
 
-- Create events (e.g., restaurant visits) with multiple items
+- Create receipts (e.g., restaurant visits) with multiple items, including taxes, tips, and fees split by what each person ordered
 - Assign items to specific people
 - Calculate per-person totals
 - Export receipts as text files

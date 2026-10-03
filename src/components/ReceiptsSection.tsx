@@ -1,0 +1,174 @@
+import { useState } from "react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Stack,
+  Button,
+} from "@chakra-ui/react";
+import { LuPlus } from "react-icons/lu";
+import type { Editing, Receipt, ReceiptItem } from "../types";
+import { isBlankItem } from "../utils/validation";
+import { afterPointerRelease } from "../utils/dom";
+import { plural } from "../utils/text";
+import { useConfirm } from "../hooks/useConfirm";
+import ReceiptCard from "./ReceiptCard";
+
+interface ReceiptsSectionProps {
+  people: string[];
+  onAddPerson: (name: string) => void;
+  receipts: Receipt[];
+  setReceipts: React.Dispatch<React.SetStateAction<Receipt[]>>;
+  // The open item row; lives in App so Totals can open rows too
+  editing: Editing | null;
+  setEditing: React.Dispatch<React.SetStateAction<Editing | null>>;
+}
+
+const blankItem = (): ReceiptItem => ({ what: "", howMuch: 0, who: [] });
+
+export default function ReceiptsSection({
+  people,
+  onAddPerson,
+  receipts,
+  setReceipts,
+  editing,
+  setEditing,
+}: ReceiptsSectionProps) {
+  // The receipt just added, which opens with its name box ready
+  const [newReceipt, setNewReceipt] = useState<number | null>(null);
+  const { confirm, dialog } = useConfirm();
+
+  const updateReceipt = (r: number, fn: (receipt: Receipt) => Receipt) =>
+    setReceipts((prev) => prev.map((receipt, i) => (i === r ? fn(receipt) : receipt)));
+
+  const updateItem = (r: number, i: number, updated: ReceiptItem) =>
+    updateReceipt(r, (receipt) => ({
+      ...receipt,
+      items: receipt.items.map((item, j) => (j === i ? updated : item)),
+    }));
+
+  const removeItem = (r: number, i: number) => {
+    updateReceipt(r, (receipt) => ({ ...receipt, items: receipt.items.filter((_, j) => j !== i) }));
+    // Keep the open row pointing at the same item
+    setEditing((cur) => {
+      if (!cur || cur.receipt !== r || cur.item < i) return cur;
+      return cur.item === i ? null : { ...cur, item: cur.item - 1 };
+    });
+  };
+
+  // Opens with the name box ready to type into; Enter then starts the first item
+  const handleAddReceipt = () => {
+    setReceipts((prev) => [...prev, { name: "", items: [] }]);
+    setNewReceipt(receipts.length);
+    setEditing(null);
+  };
+
+  // A new receipt left unnamed is removed if it's empty, otherwise given a name
+  const handleAbandonReceipt = (r: number) =>
+    afterPointerRelease(() => {
+      setReceipts((prev) => {
+        const receipt = prev[r];
+        if (!receipt || receipt.name) return prev;
+        if (receipt.items.every(isBlankItem)) return prev.filter((_, i) => i !== r);
+        return prev.map((x, i) => (i === r ? { ...x, name: "Untitled receipt" } : x));
+      });
+      setNewReceipt(null);
+    });
+
+  const handleAddItem = (r: number, proportional: boolean) => {
+    const receipt = receipts[r];
+    // Taxes, tips, and fees start as everyone on the receipt
+    const item = proportional ? { ...blankItem(), proportional, everyone: true } : blankItem();
+    updateReceipt(r, (receipt) => ({ ...receipt, items: [...receipt.items, item] }));
+    setEditing({ receipt: r, item: receipt.items.length, field: "what" });
+  };
+
+  const handleLeaveItem = (r: number, i: number) => {
+    const blank = isBlankItem(receipts[r].items[i]);
+    afterPointerRelease(() => {
+      // The click may have opened another row; only close this one
+      setEditing((cur) => (cur?.receipt === r && cur.item === i ? null : cur));
+      if (blank) removeItem(r, i);
+    });
+  };
+
+  // Enter at the end of a row starts another of the same kind
+  const handleNextItem = (r: number, i: number) => {
+    const item = receipts[r].items[i];
+    if (!isBlankItem(item)) handleAddItem(r, !!item.proportional);
+  };
+
+  const handleToggleCollapsed = (r: number) => {
+    updateReceipt(r, (receipt) => ({ ...receipt, collapsed: !receipt.collapsed || undefined }));
+    setEditing((cur) => (cur?.receipt === r ? null : cur));
+  };
+
+  const handleDeleteReceipt = (r: number) => {
+    const { name, items } = receipts[r];
+    confirm({
+      title: "Delete receipt?",
+      message: `"${name}" and its ${plural(items.length, "item")} will be deleted. This can't be undone.`,
+      confirmLabel: "Delete",
+      onConfirm: () => {
+        setReceipts((prev) => prev.filter((_, j) => j !== r));
+        setEditing(null);
+      },
+    });
+  };
+
+  // Blank rows go without asking
+  const handleDeleteItem = (r: number, i: number) => {
+    const item = receipts[r].items[i];
+    if (isBlankItem(item)) return removeItem(r, i);
+    confirm({
+      title: "Delete item?",
+      message: `"${item.what.trim() || "This item"}" will be removed from "${receipts[r].name}".`,
+      confirmLabel: "Delete",
+      onConfirm: () => removeItem(r, i),
+    });
+  };
+
+  return (
+    <Box borderWidth={1} borderRadius="md" p={6} bg="bg">
+      <Heading size="md" mb={4}>
+        Receipts
+      </Heading>
+
+      {receipts.length === 0 ? (
+        <Box color="fg.muted">No receipts yet.</Box>
+      ) : (
+        <Stack gap={4}>
+          {receipts.map((receipt, r) => (
+            <ReceiptCard
+              key={r}
+              receipt={receipt}
+              people={people}
+              isNew={newReceipt === r}
+              onAddPerson={onAddPerson}
+              editing={editing?.receipt === r ? { item: editing.item, field: editing.field } : null}
+              onRename={(name) => updateReceipt(r, (receipt) => ({ ...receipt, name }))}
+              onAbandon={() => handleAbandonReceipt(r)}
+              onDelete={() => handleDeleteReceipt(r)}
+              onToggleCollapsed={() => handleToggleCollapsed(r)}
+              onStartEdit={(i, field) => setEditing({ receipt: r, item: i, field })}
+              onLeaveItem={(i) => handleLeaveItem(r, i)}
+              onUpdateItem={(i, updated) => updateItem(r, i, updated)}
+              onAddItem={(proportional) => handleAddItem(r, proportional)}
+              onNextItem={(i) => handleNextItem(r, i)}
+              onDeleteItem={(i) => handleDeleteItem(r, i)}
+            />
+          ))}
+        </Stack>
+      )}
+
+      <Flex justifyContent="center" mt={4}>
+        <Button onClick={handleAddReceipt}>
+          <LuPlus />
+          Add receipt
+        </Button>
+      </Flex>
+
+      {dialog}
+    </Box>
+  );
+}

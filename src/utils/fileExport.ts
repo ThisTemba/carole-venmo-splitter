@@ -1,4 +1,4 @@
-import type { Event } from '../types'
+import type { Receipt } from '../types'
 import { toaster } from '../components/ui/toaster'
 import { getItemsForPerson } from './calculations'
 
@@ -19,8 +19,8 @@ function downloadBlob(blob: Blob, filename: string) {
   URL.revokeObjectURL(url)
 }
 
-export function downloadJSON(people: string[], events: Event[], checkedPeople: string[], filename: string) {
-  const data = { people, events, checkedPeople }
+export function downloadJSON(people: string[], receipts: Receipt[], checkedPeople: string[], filename: string) {
+  const data = { people, receipts, checkedPeople }
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
   downloadBlob(blob, `${filename}.json`)
 }
@@ -28,7 +28,7 @@ export function downloadJSON(people: string[], events: Event[], checkedPeople: s
 export function loadJSON(
   file: File,
   setPeople: (people: string[]) => void,
-  setEvents: (events: Event[]) => void,
+  setReceipts: (receipts: Receipt[]) => void,
   setCheckedPeople: (checked: string[]) => void,
 ) {
   const reader = new FileReader()
@@ -36,13 +36,15 @@ export function loadJSON(
     try {
       const data = JSON.parse(e.target?.result as string)
       if (data.people) setPeople(data.people)
-      if (data.events) setEvents(data.events)
+      // Files saved before the rename use "events"
+      const receipts = data.receipts ?? data.events
+      if (receipts) setReceipts(receipts)
       if (data.checkedPeople) setCheckedPeople(data.checkedPeople)
       toaster.success({
         title: 'Data loaded',
         description: 'Successfully loaded data from file',
       })
-    } catch (err) {
+    } catch {
       toaster.error({
         title: 'Invalid JSON file',
         description: 'Could not parse the selected file',
@@ -52,35 +54,35 @@ export function loadJSON(
   reader.readAsText(file)
 }
 
-export function exportTotals(people: string[], events: Event[], checkedPeople: string[]) {
+export function exportTotals(people: string[], receipts: Receipt[], checkedPeople: string[]) {
   const filteredPeople = checkedPeople.length > 0 ? people.filter(p => checkedPeople.includes(p)) : people
 
   let text = `${formatDate()}\n`
   text += '='.repeat(50) + '\n\n'
 
   filteredPeople.forEach((person) => {
-    const items = getItemsForPerson(person, events)
+    const items = getItemsForPerson(person, receipts, people)
     const total = items.reduce((sum, item) => sum + parseFloat(item.share), 0)
 
-    const itemsByEvent: Record<string, Array<{ what: string; share: string }>> = {}
+    const itemsByReceipt: Record<string, Array<{ what: string; share: string }>> = {}
     items.forEach((item) => {
-      if (!itemsByEvent[item.eventName]) itemsByEvent[item.eventName] = []
-      itemsByEvent[item.eventName].push({ what: item.item.what, share: item.share })
+      if (!itemsByReceipt[item.receiptName]) itemsByReceipt[item.receiptName] = []
+      itemsByReceipt[item.receiptName].push({ what: item.item.what, share: item.share })
     })
 
     text += `${person.toUpperCase()}\n`
     text += '-'.repeat(50) + '\n\n'
 
-    Object.entries(itemsByEvent).forEach(([eventName, eventItems]) => {
-      text += `  ${eventName}\n`
+    Object.entries(itemsByReceipt).forEach(([receiptName, receiptItems]) => {
+      text += `  ${receiptName}\n`
       text += '  ' + '-'.repeat(46) + '\n'
-      eventItems.forEach((item) => {
+      receiptItems.forEach((item) => {
         const itemName = item.what.padEnd(35)
         const price = `$${item.share}`.padStart(10)
         text += `  ${itemName}${price}\n`
       })
-      if (eventItems.length > 1) {
-        const subtotal = eventItems.reduce((sum, item) => sum + parseFloat(item.share), 0)
+      if (receiptItems.length > 1) {
+        const subtotal = receiptItems.reduce((sum, item) => sum + parseFloat(item.share), 0)
         text += '  ' + '-'.repeat(46) + '\n'
         const subtotalLabel = 'Subtotal'.padEnd(35)
         const subtotalPrice = `$${subtotal.toFixed(2)}`.padStart(10)

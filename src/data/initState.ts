@@ -1,6 +1,6 @@
-import type { Event } from '../types'
+import type { Receipt } from '../types'
 
-export const eventsInit: Event[] = [
+export const receiptsInit: Receipt[] = [
   {
     name: "Mexican Restaurant",
     items: [
@@ -32,8 +32,9 @@ export const eventsInit: Event[] = [
       {
         what: "Tax+Tip",
         howMuch: 32.86,
-        who: ["Brietta", "Valry", "Nick", "Barnard", "Teresa"],
+        who: [],
         proportional: true,
+        everyone: true,
       },
     ],
   },
@@ -137,17 +138,8 @@ export const eventsInit: Event[] = [
         what: "Tax + Tip",
         howMuch: 57.05,
         proportional: true,
-        who: [
-          "Eda",
-          "Harmony",
-          "Teresa",
-          "Barnard",
-          "Chandler",
-          "Fonzie",
-          "Fredi",
-          "Curtis",
-          "Morry",
-        ],
+        who: [],
+        everyone: true,
       },
     ],
   },
