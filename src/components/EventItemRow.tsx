@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 import { Box, IconButton, Grid, Flex, Input } from "@chakra-ui/react";
-import { LuTrash } from "react-icons/lu";
+import { LuScale, LuTrash } from "react-icons/lu";
 import type { EventItem } from "../types";
 import PersonTag from "./PersonTag";
 
@@ -102,6 +102,7 @@ export default function EventItemRow({
           <Input
             ref={whatInputRef}
             value={item.what}
+            placeholder={item.proportional ? "Tax, tip, or fee" : undefined}
             onChange={(e) => onChange({ ...item, what: e.target.value })}
             onKeyDown={handleKeyDown}
             size="sm"
@@ -124,9 +125,19 @@ export default function EventItemRow({
             size="sm"
           />
         ) : (
-          <Box cursor="pointer" onClick={() => onStartEdit("howMuch")}>
+          <Flex
+            cursor="pointer"
+            onClick={() => onStartEdit("howMuch")}
+            alignItems="center"
+            gap={2}
+          >
             ${item.howMuch.toFixed(2)}
-          </Box>
+            {item.proportional && (
+              <Box color="fg.muted" title="Tax, tip, or fee: split in proportion to what each person ordered">
+                <LuScale />
+              </Box>
+            )}
+          </Flex>
         )}
 
         <Flex

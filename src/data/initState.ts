@@ -33,6 +33,7 @@ export const eventsInit: Event[] = [
         what: "Tax+Tip",
         howMuch: 32.86,
         who: ["Brietta", "Valry", "Nick", "Barnard", "Teresa"],
+        proportional: true,
       },
     ],
   },
@@ -135,6 +136,7 @@ export const eventsInit: Event[] = [
       {
         what: "Tax + Tip",
         howMuch: 57.05,
+        proportional: true,
         who: [
           "Eda",
           "Harmony",

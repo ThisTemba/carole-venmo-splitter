@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
-import { Box, Input, Button, Stack } from '@chakra-ui/react'
+import { Box, Input, Button, Stack, Flex, IconButton } from '@chakra-ui/react'
+import { LuCircleHelp } from 'react-icons/lu'
 import type { Event, EventItem } from '../types'
 import { getEventTotal } from '../utils/calculations'
 import EventItemRow from './EventItemRow'
+import ItemTypesDialog from './ItemTypesDialog'
 
 interface EventCardProps {
   event: Event
@@ -23,6 +25,7 @@ export default function EventCard({
   const [editValue, setEditValue] = useState(event.name)
   const [editingItemIndex, setEditingItemIndex] = useState<number | null>(null)
   const [focusField, setFocusField] = useState<"what" | "howMuch" | null>(null)
+  const [helpOpen, setHelpOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -38,8 +41,12 @@ export default function EventCard({
     setEditing(false)
   }
 
-  const handleAddItem = () => {
-    const newItem: EventItem = { what: '', howMuch: 0, who: [] }
+  const handleAddItem = (proportional = false) => {
+    // Tax, tip, and fees default to everyone who ordered something in this event
+    const who = proportional
+      ? people.filter((p) => event.items.some((i) => !i.proportional && i.who.includes(p)))
+      : []
+    const newItem: EventItem = { what: '', howMuch: 0, who, ...(proportional && { proportional }) }
     onUpdate({
       ...event,
       items: [...event.items, newItem],
@@ -126,10 +133,30 @@ export default function EventCard({
         ))}
       </Stack>
 
-      {/* Add button */}
-      <Button size="sm" variant="outline" onClick={handleAddItem}>
-        Add event item
-      </Button>
+      {/* Add buttons */}
+      <Flex gap={2} flexWrap="wrap" alignItems="center">
+        <Button size="sm" variant="outline" onClick={() => handleAddItem()}>
+          Add item
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => handleAddItem(true)}
+          title="Split in proportion to what each person ordered"
+        >
+          Add tax, tip, or fee
+        </Button>
+        <IconButton
+          aria-label="What's the difference?"
+          size="sm"
+          variant="ghost"
+          color="fg.muted"
+          onClick={() => setHelpOpen(true)}
+        >
+          <LuCircleHelp />
+        </IconButton>
+      </Flex>
+      <ItemTypesDialog open={helpOpen} onOpenChange={setHelpOpen} />
     </Box>
   )
 }

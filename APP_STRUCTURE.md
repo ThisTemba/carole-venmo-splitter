@@ -29,6 +29,7 @@ Object representing a single expense with:
 - `what` (string): Description of the item
 - `howMuch` (number): Cost in dollars, can be negative for refunds/credits
 - `who` (array of strings): Names of people splitting this item
+- `proportional` (boolean, optional): Marks a tax, tip, or fee. Split in proportion to spend instead of evenly (see Calculation Logic). Omitted on regular items
 - `editing` (boolean): UI state flag, included in JSON exports but should default to false on load
 
 ```javascript
@@ -297,7 +298,7 @@ events: [{name: "Groceries", items: [...]}]
 
 **Add Item**
 
-- "Add event item" button below items list
+- "Add item" button below items list
 - Creates new item in edit mode
 
 ```javascript
@@ -307,7 +308,7 @@ events: [{
   items: [{what: "Pizza", howMuch: 20, who: ["Alice"], editing: false}]
 }]
 
-// After clicking "Add event item"
+// After clicking "Add item"
 events: [{
   name: "Restaurant",
   items: [
@@ -316,6 +317,14 @@ events: [{
   ]
 }]
 ```
+
+**Add Tax, Tip, or Fee**
+
+- "Add tax, tip, or fee" button next to "Add item"
+- Creates a `proportional: true` item in edit mode, pre-assigned to everyone with a regular item in the event
+- Proportional items are split in proportion to each person's share of the event's regular (non-proportional) items, instead of evenly
+- E.g. A orders $50, B orders $10, a $12 tip splits $10 / $2
+- An item's type is fixed when it's added; proportional items show a scale icon next to the price
 
 **Edit Item**
 
@@ -390,7 +399,7 @@ checkedPeople: ["Bob"]
 
 - Calculated on-the-fly from events data
 - Groups items by event
-- Shows person's share: item.howMuch / item.who.length
+- Shows person's share of each item (see Calculation Logic)
 - Format: "[Item name] $[person's share]"
 
 **Export Totals Button**
@@ -402,7 +411,13 @@ checkedPeople: ["Bob"]
 
 **Per-Person Total**
 
-Iterates through all events and items. For each item assigned to the person, calculates their share (item cost divided by number of people splitting it) and adds to running total. Returns total formatted to 2 decimal places.
+Iterates through all events and items. For each item assigned to the person, calculates their share and adds to running total. Returns total formatted to 2 decimal places.
+
+- Regular items: item cost divided by number of people splitting it
+- Tax, tip, or fee (`proportional: true`): item cost × (person's share of the event's regular items ÷ the combined regular-item shares of everyone on the item). Other tax/tip/fee items are excluded from the base, so tax doesn't affect how tip splits
+- If no one on a tax/tip/fee item has regular items in the event, it falls back to an even split
+
+The example implementation below shows the even split only; the real logic lives in `getItemShare` in `src/utils/calculations.ts`.
 
 Example implementation:
 
@@ -476,6 +491,11 @@ const eventTotal = event.items
 - Item cost still counts toward event total
 - No person is charged for the item in totals calculations
 
+**Tax, Tip, or Fee Assignment Is a Snapshot**
+
+- New tax/tip/fee items are pre-assigned to everyone with a regular item at the time they're added
+- People who order items added afterward aren't added automatically; toggle them on the tax/tip/fee item
+
 **Stale Names in Loaded Data**
 
 - Loading JSON file can introduce names in item.who arrays that don't exist in people array
@@ -525,6 +545,7 @@ const eventsInit = [
         what: "Tax+Tip",
         howMuch: 32.86,
         who: ["Brietta", "Valry", "Nick", "Barnard", "Teresa"],
+        proportional: true,
         editing: false,
       },
     ],
@@ -641,6 +662,7 @@ const eventsInit = [
       {
         what: "Tax + Tip",
         howMuch: 57.05,
+        proportional: true,
         who: [
           "Eda",
           "Harmony",
