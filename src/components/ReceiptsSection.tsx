@@ -1,11 +1,4 @@
 import { useState } from "react";
-import {
-  Box,
-  Flex,
-  Heading,
-  Stack,
-  Button,
-} from "@chakra-ui/react";
 import { LuPlus } from "react-icons/lu";
 import type { Editing, Receipt, ReceiptItem } from "../types";
 import { isBlankItem } from "../utils/validation";
@@ -13,6 +6,7 @@ import { afterPointerRelease } from "../utils/dom";
 import { plural } from "../utils/text";
 import { useConfirm } from "../hooks/useConfirm";
 import ReceiptCard from "./ReceiptCard";
+import { tearFor } from "../utils/tear";
 
 interface ReceiptsSectionProps {
   people: string[];
@@ -23,6 +17,8 @@ interface ReceiptsSectionProps {
   editing: Editing | null;
   setEditing: React.Dispatch<React.SetStateAction<Editing | null>>;
 }
+
+const blankTear = { "--tear": tearFor(7) } as React.CSSProperties;
 
 const blankItem = (): ReceiptItem => ({ what: "", howMuch: 0, who: [] });
 
@@ -129,46 +125,37 @@ export default function ReceiptsSection({
   };
 
   return (
-    <Box borderWidth={1} borderRadius="md" p={6} bg="bg">
-      <Heading size="md" mb={4}>
-        Receipts
-      </Heading>
+    <section className="receipts" aria-label="Receipts">
+      {receipts.length === 0 && <p className="receipts__empty">No receipts yet.</p>}
 
-      {receipts.length === 0 ? (
-        <Box color="fg.muted">No receipts yet.</Box>
-      ) : (
-        <Stack gap={4}>
-          {receipts.map((receipt, r) => (
-            <ReceiptCard
-              key={r}
-              receipt={receipt}
-              people={people}
-              isNew={newReceipt === r}
-              onAddPerson={onAddPerson}
-              editing={editing?.receipt === r ? { item: editing.item, field: editing.field } : null}
-              onRename={(name) => updateReceipt(r, (receipt) => ({ ...receipt, name }))}
-              onAbandon={() => handleAbandonReceipt(r)}
-              onDelete={() => handleDeleteReceipt(r)}
-              onToggleCollapsed={() => handleToggleCollapsed(r)}
-              onStartEdit={(i, field) => setEditing({ receipt: r, item: i, field })}
-              onLeaveItem={(i) => handleLeaveItem(r, i)}
-              onUpdateItem={(i, updated) => updateItem(r, i, updated)}
-              onAddItem={(proportional) => handleAddItem(r, proportional)}
-              onNextItem={(i) => handleNextItem(r, i)}
-              onDeleteItem={(i) => handleDeleteItem(r, i)}
-            />
-          ))}
-        </Stack>
-      )}
+      {receipts.map((receipt, r) => (
+        <ReceiptCard
+          key={r}
+          receipt={receipt}
+          people={people}
+          isNew={newReceipt === r}
+          tilt={r % 2 ? 0.45 : -0.35}
+          onAddPerson={onAddPerson}
+          editing={editing?.receipt === r ? { item: editing.item, field: editing.field } : null}
+          onRename={(name) => updateReceipt(r, (receipt) => ({ ...receipt, name }))}
+          onAbandon={() => handleAbandonReceipt(r)}
+          onDelete={() => handleDeleteReceipt(r)}
+          onToggleCollapsed={() => handleToggleCollapsed(r)}
+          onStartEdit={(i, field) => setEditing({ receipt: r, item: i, field })}
+          onLeaveItem={(i) => handleLeaveItem(r, i)}
+          onUpdateItem={(i, updated) => updateItem(r, i, updated)}
+          onAddItem={(proportional) => handleAddItem(r, proportional)}
+          onNextItem={(i) => handleNextItem(r, i)}
+          onDeleteItem={(i) => handleDeleteItem(r, i)}
+        />
+      ))}
 
-      <Flex justifyContent="center" mt={4}>
-        <Button onClick={handleAddReceipt}>
-          <LuPlus />
-          Add receipt
-        </Button>
-      </Flex>
+      <button type="button" className="blank-slip" style={blankTear} onClick={handleAddReceipt}>
+        <LuPlus aria-hidden />
+        Add receipt
+      </button>
 
       {dialog}
-    </Box>
+    </section>
   );
 }

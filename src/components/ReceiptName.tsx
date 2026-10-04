@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react'
-import { Box, Input } from '@chakra-ui/react'
 
 interface ReceiptNameProps {
   name: string
@@ -9,7 +8,7 @@ interface ReceiptNameProps {
   onDone: (typed: string, viaEnter: boolean) => void
 }
 
-// The receipt's name, click to edit
+// The receipt's name, printed as a heading; click to edit
 export default function ReceiptName({ name, startEditing, onDone }: ReceiptNameProps) {
   const [editing, setEditing] = useState(startEditing)
   const [value, setValue] = useState(name)
@@ -29,11 +28,18 @@ export default function ReceiptName({ name, startEditing, onDone }: ReceiptNameP
     onDone(value.trim(), viaEnter)
   }
 
+  const startEdit = () => {
+    setValue(name)
+    setEditing(true)
+  }
+
   if (editing) {
     return (
-      <Input
+      <input
         ref={inputRef}
+        className="field receipt__name-input"
         value={value}
+        aria-label="Receipt name"
         placeholder="Where? e.g. Bar night"
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={(e) => {
@@ -46,16 +52,19 @@ export default function ReceiptName({ name, startEditing, onDone }: ReceiptNameP
   }
 
   return (
-    <Box
-      fontSize="lg"
-      fontWeight="bold"
-      cursor="pointer"
-      onClick={() => {
-        setValue(name)
-        setEditing(true)
+    <h3
+      className="print-heading receipt__name"
+      tabIndex={0}
+      title="Rename"
+      onClick={startEdit}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault()
+          startEdit()
+        }
       }}
     >
       {name}
-    </Box>
+    </h3>
   )
 }

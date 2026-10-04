@@ -1,43 +1,32 @@
-"use client"
+import { useEffect, useState } from 'react'
+import { LuCircleCheck, LuTriangleAlert } from 'react-icons/lu'
+import Slip from './Slip'
+import { listeners, toasts, type Toast } from '../../utils/toast'
 
-import {
-  Toaster as ChakraToaster,
-  Portal,
-  Spinner,
-  Stack,
-  Toast,
-  createToaster,
-} from "@chakra-ui/react"
+// Little printed slips in the corner
+export function Toaster() {
+  const [current, setCurrent] = useState<Toast[]>(toasts)
 
-export const toaster = createToaster({
-  placement: "bottom-end",
-  pauseOnPageIdle: true,
-})
+  useEffect(() => {
+    listeners.add(setCurrent)
+    return () => {
+      listeners.delete(setCurrent)
+    }
+  }, [])
 
-export const Toaster = () => {
   return (
-    <Portal>
-      <ChakraToaster toaster={toaster} insetInline={{ mdDown: "4" }}>
-        {(toast) => (
-          <Toast.Root width={{ md: "sm" }}>
-            {toast.type === "loading" ? (
-              <Spinner size="sm" color="blue.solid" />
-            ) : (
-              <Toast.Indicator />
-            )}
-            <Stack gap="1" flex="1" maxWidth="100%">
-              {toast.title && <Toast.Title>{toast.title}</Toast.Title>}
-              {toast.description && (
-                <Toast.Description>{toast.description}</Toast.Description>
-              )}
-            </Stack>
-            {toast.action && (
-              <Toast.ActionTrigger>{toast.action.label}</Toast.ActionTrigger>
-            )}
-            {toast.closable && <Toast.CloseTrigger />}
-          </Toast.Root>
-        )}
-      </ChakraToaster>
-    </Portal>
+    <div className="toasts" role="status" aria-live="polite">
+      {current.map((toast) => (
+        <div key={toast.id} className={`toast toast--${toast.type}`}>
+          <Slip tilt={-0.6}>
+            <p className="toast__title">
+              {toast.type === 'success' ? <LuCircleCheck aria-hidden /> : <LuTriangleAlert aria-hidden />}
+              {toast.title}
+            </p>
+            {toast.description && <p className="toast__desc">{toast.description}</p>}
+          </Slip>
+        </div>
+      ))}
+    </div>
   )
 }

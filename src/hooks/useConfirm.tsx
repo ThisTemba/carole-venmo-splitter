@@ -26,7 +26,7 @@ export function useConfirm() {
       title={request?.title ?? ''}
       message={request?.message ?? ''}
       confirmLabel={request?.confirmLabel}
-      colorPalette="red"
+      danger
       onConfirm={() => request?.onConfirm()}
     />
   )

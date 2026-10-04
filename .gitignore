@@ -24,3 +24,9 @@ dist-ssr
 *.sw?
 
 .claude/*
+# Design tooling scratch (screenshots, decision pages, browser logs)
+.playwright-mcp/
+.impeccable/review/
+.impeccable/decision/
+.impeccable/questions/
+.impeccable/hook.cache.json

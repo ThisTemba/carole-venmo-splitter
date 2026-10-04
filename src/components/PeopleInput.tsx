@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Box, Flex, chakra } from "@chakra-ui/react";
+import { useId, useState } from "react";
 import PersonTag from "./PersonTag";
 import { EVERYONE, getPeopleOptions, optionLabel, type PeopleOption } from "../utils/people";
 
@@ -82,30 +81,26 @@ export default function PeopleInput({
     }
   };
 
+  const listId = useId();
+
   return (
-    <Box position="relative">
-      <Flex
-        gap={1}
-        flexWrap="wrap"
-        alignItems="center"
-        minH={8}
-        px={1}
-        py={1}
-        borderWidth={1}
-        borderRadius="sm"
-        cursor="text"
-        _focusWithin={{ outline: "2px solid", outlineColor: "colorPalette.focusRing", outlineOffset: "-1px" }}
-        onClick={() => inputRef.current?.focus()}
-      >
+    <div className="people-box">
+      <div className="people-box__field" onClick={() => inputRef.current?.focus()}>
         {everyone ? (
           <PersonTag person={EVERYONE} onRemove={clearEveryone} />
         ) : (
           who.map((person) => <PersonTag key={person} person={person} onRemove={() => remove(person)} />)
         )}
-        <chakra.input
+        <input
           ref={inputRef}
+          className="people-box__input"
           value={query}
           placeholder={everyone || who.length ? "" : "Type names to add people"}
+          aria-label="Who had it"
+          role="combobox"
+          aria-expanded={open && options.length > 0}
+          aria-controls={listId}
+          aria-activedescendant={active !== null ? `${listId}-${active}` : undefined}
           onChange={(e) => {
             setQuery(e.target.value);
             // Typing highlights the best match
@@ -118,51 +113,33 @@ export default function PeopleInput({
             setHighlight(null);
           }}
           onKeyDown={handleKeyDown}
-          flex="1"
-          minW="6ch"
-          px={1}
-          outline="none"
-          bg="transparent"
-          fontSize="sm"
         />
-      </Flex>
+      </div>
       {open && options.length > 0 && (
-        <Box
-          position="absolute"
-          top="100%"
-          left={0}
-          right={0}
-          mt={1}
-          zIndex="dropdown"
-          bg="bg"
-          borderWidth={1}
-          borderRadius="md"
-          boxShadow="md"
-          maxH="60"
-          overflowY="auto"
-          py={1}
+        <ul
+          id={listId}
+          role="listbox"
+          className="people-box__menu"
           // Hovering highlights; moving off goes back to the typed match, if any
           onMouseLeave={() => setHighlight(query.trim() ? 0 : null)}
         >
           {options.map((option, i) => (
-            <Box
+            <li
               key={optionLabel(option)}
-              px={3}
-              py={1.5}
-              fontSize="sm"
-              cursor="pointer"
-              bg={i === active ? "bg.muted" : undefined}
-              fontWeight={option.kind === "person" ? undefined : "medium"}
+              id={`${listId}-${i}`}
+              role="option"
+              aria-selected={i === active}
+              className={`people-box__option ${option.kind === "person" ? "" : "people-box__option--action"}`}
               onMouseEnter={() => setHighlight(i)}
               // Keep focus in the input so the row stays open
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => add(option)}
             >
               {optionLabel(option)}
-            </Box>
+            </li>
           ))}
-        </Box>
+        </ul>
       )}
-    </Box>
+    </div>
   );
 }

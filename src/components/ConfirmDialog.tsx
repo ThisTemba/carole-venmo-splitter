@@ -1,13 +1,4 @@
-import { Button } from '@chakra-ui/react'
-import {
-  DialogRoot,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogBody,
-  DialogFooter,
-  DialogActionTrigger,
-} from './ui/dialog'
+import Dialog from './ui/Dialog'
 
 interface ConfirmDialogProps {
   open: boolean
@@ -17,7 +8,7 @@ interface ConfirmDialogProps {
   confirmLabel?: string
   cancelLabel?: string
   onConfirm: () => void
-  colorPalette?: string
+  danger?: boolean
 }
 
 export default function ConfirmDialog({
@@ -28,7 +19,7 @@ export default function ConfirmDialog({
   confirmLabel = 'Confirm',
   cancelLabel = 'Cancel',
   onConfirm,
-  colorPalette = 'blue',
+  danger,
 }: ConfirmDialogProps) {
   const handleConfirm = () => {
     onConfirm()
@@ -36,23 +27,23 @@ export default function ConfirmDialog({
   }
 
   return (
-    <DialogRoot open={open} onOpenChange={(e) => onOpenChange(e.open)} role="alertdialog">
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-        </DialogHeader>
-        <DialogBody>{message}</DialogBody>
-        <DialogFooter>
-          <DialogActionTrigger asChild>
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
-              {cancelLabel}
-            </Button>
-          </DialogActionTrigger>
-          <Button colorPalette={colorPalette} onClick={handleConfirm}>
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={title}
+      role="alertdialog"
+      actions={
+        <>
+          <button className="print-btn" onClick={() => onOpenChange(false)} autoFocus>
+            {cancelLabel}
+          </button>
+          <button className={`print-btn ${danger ? 'print-btn--danger' : 'print-btn--solid'}`} onClick={handleConfirm}>
             {confirmLabel}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </DialogRoot>
+          </button>
+        </>
+      }
+    >
+      <p>{message}</p>
+    </Dialog>
   )
 }

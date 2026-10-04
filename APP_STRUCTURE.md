@@ -6,13 +6,14 @@ Track shared expenses across receipts and calculate per-person totals. Users spl
 
 ## Page Structure
 
-- Title at top: "Carole Venmo Splitter"
-- Action buttons row: Save, Load, and a "⋯" menu with "Load example data" and "Clear all data". Export lives in the Totals section
-- A small, quiet "How it works" section below everything (narrow, centered, no card), always shown: four steps with examples: add a receipt (e.g. "Sakura Sushi"); add items, with bullets for what was it (e.g. "Salmon roll"), how much was it (e.g. "12"), and who had it (e.g. "Omar" or "Maya, Omar"); add tax, tip, and fees, which are split by how much each person ordered; see the totals, and a "Tips" list of shortcuts and power moves, most useful first (only the first shows until "Show N more tips"). The fuller items vs. taxes, tips, and fees explanation stays behind the ? next to "Add tax, tip, or fee"
+- Title at top left: "Carole Venmo Splitter"
+- Action buttons at top right: Save, Load, and a "⋯" menu with "Load example data" and "Clear all data". Export lives on the envelope under the Totals slip
+- A small, quiet "How it works" section below everything (narrow, centered, printed on a dimmer slip), always shown: four steps with examples: add a receipt (e.g. "Sakura Sushi"); add items, with bullets for what was it (e.g. "Salmon roll"), how much was it (e.g. "12"), and who had it (e.g. "Omar" or "Maya, Omar"); add tax, tip, and fees, which are split by how much each person ordered; see the totals, and a "Tips" list of shortcuts and power moves, most useful first (only the first shows until "Show N more tips"). The fuller items vs. taxes, tips, and fees explanation stays behind the ? next to "Add tax, tip, or fee"
 - With no receipts, the Receipts section says "No receipts yet."
+- Look and feel: see DESIGN.md (receipts as thermal-paper slips on a dark desk)
 - Two-column grid layout (stacks on narrow screens):
   - Left column: Receipts section
-  - Right column (360px): Totals section, which stays in view while scrolling
+  - Right column (372px): Totals section, which stays in view while scrolling
 - There's no separate People section: people are added from receipts' people boxes and renamed or removed from Totals
 
 ## Core Data Types
@@ -402,14 +403,14 @@ receipts: [{
 
 ### Totals Section
 
-**Person Accordions**
+**Person Rows**
 
-- One accordion per person (from people array)
+- One row per person (from people array), their name stamped in their own ink
 - Shows calculated total amount owed
 - Expand to see itemized breakdown
 - "Edit people" button in the header switches to renaming and removing people (Export is hidden until "Done")
 - Values calculated on-the-fly, not stored
-- An "Everyone" line under the list shows the sum of everyone's totals, which matches the receipts when every item is assigned
+- An "Everyone" line under the list shows the sum of everyone's totals, which matches the receipts when every item is assigned. It always stays in view above the envelope, with "Matches the receipts", or in red how much on the receipts isn't split yet
 
 **Needs Attention**
 

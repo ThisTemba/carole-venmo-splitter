@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, Button, Heading, Kbd, List, Text } from '@chakra-ui/react'
+import Slip from './ui/Slip'
 
 type Step = { title: string; detail: string; substeps?: Step[] }
 
@@ -21,30 +21,29 @@ const steps: Step[] = [
 
 const StepText = ({ title, detail }: Step) => (
   <>
-    <Text as="span" fontWeight="medium">{title}</Text>{' '}
-    <Text as="span" color="fg.muted">{detail}</Text>
+    <span className="how__step-title">{title}</span> <span className="how__detail">{detail}</span>
   </>
 )
 
 // Most useful first; only the first is shown until "Show more tips"
 const tips = [
   <>
-    <Kbd size="sm">Enter</Kbd> or <Kbd size="sm">Tab</Kbd> moves to the next box, and at the end
+    <kbd>Enter</kbd> or <kbd>Tab</kbd> moves to the next box, and at the end
     of a row starts the next item, so you can type a whole receipt without the mouse.
   </>,
   <>
-    Type part of a name and press <Kbd size="sm">Enter</Kbd> to pick them (“om” for Omar).
+    Type part of a name and press <kbd>Enter</kbd> to pick them (“om” for Omar).
   </>,
   <>“Everyone on this receipt” covers everyone named on the receipt, even people added later.</>,
   <>
-    <Kbd size="sm">Esc</Kbd> closes the row you're editing. Empty rows disappear.
+    <kbd>Esc</kbd> closes the row you're editing. Empty rows disappear.
   </>,
   <>
-    <Kbd size="sm">Backspace</Kbd> in an empty people box removes the last person.
+    <kbd>Backspace</kbd> in an empty people box removes the last person.
   </>,
   <>Add several people at once with commas: “Maya, Omar”.</>,
   <>
-    <Kbd size="sm">↑</Kbd> <Kbd size="sm">↓</Kbd> choose from the suggestions.
+    <kbd>↑</kbd> <kbd>↓</kbd> choose from the suggestions.
   </>,
   <>The arrow next to a receipt's name folds it to one line.</>,
   <>Click an item under “needs attention” in Totals to jump to it.</>,
@@ -55,45 +54,34 @@ export default function HowItWorks() {
   const [showAllTips, setShowAllTips] = useState(false)
 
   return (
-    <Box maxW="lg" mx="auto" mt={10} mb={4} px={2} fontSize="sm">
-      <Heading size="sm" mb={3}>
-        How it works
-      </Heading>
-      <List.Root as="ol" gap={1.5} ps={5}>
+    <Slip as="section" className="how" tilt={0.5} aria-label="How it works">
+      <h2 className="print-heading">How it works</h2>
+      <hr className="rule" />
+      <ol>
         {steps.map((step) => (
-          <List.Item key={step.title}>
+          <li key={step.title}>
             <StepText {...step} />
             {step.substeps && (
-              <List.Root as="ul" gap={1} ps={5} mt={1}>
+              <ul>
                 {step.substeps.map((substep) => (
-                  <List.Item key={substep.title}>
+                  <li key={substep.title}>
                     <StepText {...substep} />
-                  </List.Item>
+                  </li>
                 ))}
-              </List.Root>
+              </ul>
             )}
-          </List.Item>
+          </li>
         ))}
-      </List.Root>
-      <Heading size="xs" mt={4} mb={2}>
-        Tips
-      </Heading>
-      <List.Root as="ul" gap={1} ps={5} color="fg.muted">
+      </ol>
+      <h3>Tips</h3>
+      <ul className="how__tips">
         {(showAllTips ? tips : tips.slice(0, 1)).map((tip, i) => (
-          <List.Item key={i}>{tip}</List.Item>
+          <li key={i}>{tip}</li>
         ))}
-      </List.Root>
-      <Button
-        variant="plain"
-        size="xs"
-        px={0}
-        mt={1}
-        color="fg.muted"
-        textDecoration="underline"
-        onClick={() => setShowAllTips(!showAllTips)}
-      >
+      </ul>
+      <button type="button" className="text-btn" onClick={() => setShowAllTips(!showAllTips)}>
         {showAllTips ? 'Show fewer' : `Show ${tips.length - 1} more tips`}
-      </Button>
-    </Box>
+      </button>
+    </Slip>
   )
 }
