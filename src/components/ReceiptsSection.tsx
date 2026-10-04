@@ -93,7 +93,11 @@ export default function ReceiptsSection({
       setReceipts((prev) => {
         const receipt = prev[r];
         if (!receipt || receipt.name) return prev;
-        if (receipt.items.every(isBlankItem)) return prev.filter((_, i) => i !== r);
+        // Untouched: nothing to keep
+        if (receipt.items.length === 0) return prev.filter((_, i) => i !== r);
+        // Leaving the name for its first line (clicking Add item): keep it,
+        // still unnamed. A line left blank removes itself.
+        if (receipt.items.every(isBlankItem)) return prev;
         return prev.map((x, i) => (i === r ? { ...x, name: "Untitled receipt" } : x));
       });
       setNewReceipt(null);
