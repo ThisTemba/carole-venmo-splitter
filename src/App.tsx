@@ -1,29 +1,62 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { usePeopleActions } from "./hooks/usePeopleActions";
 import type { Editing, Receipt } from "./types";
 import { canExport, getIncompleteItems, type IncompleteItem } from "./utils/validation";
-import { exportTotals } from "./utils/fileExport";
+import { saveRecord } from "./utils/record";
 import ActionButtons from "./components/ActionButtons";
 import ReceiptsSection from "./components/ReceiptsSection";
 import TotalsSection from "./components/TotalsSection";
 import HowItWorks from "./components/HowItWorks";
+import TitleNote from "./components/TitleNote";
 import { Toaster } from "./components/ui/toaster";
-import { PeopleInkContext } from "./utils/ink";
+
+const blankReceipt = (): Receipt => ({ name: "", items: [] });
 
 function App() {
   const [people, setPeople] = useLocalStorage<string[]>("people", []);
-  const [receipts, setReceipts] = useLocalStorage<Receipt[]>("receipts", [], "events");
-  const [checkedPeople, setCheckedPeople] = useLocalStorage<string[]>("cp", []);
   // The open item row; here so Totals can open rows too
   const [editing, setEditing] = useState<Editing | null>(null);
+  const [receipts, setStoredReceipts] = useLocalStorage<Receipt[]>("receipts", [blankReceipt()], "events");
+  // Never a bare desk: clearing or deleting the last receipt leaves a fresh one
+  const setReceipts = useCallback<React.Dispatch<React.SetStateAction<Receipt[]>>>(
+    (next) =>
+      setStoredReceipts((prev) => {
+        const updated = typeof next === "function" ? next(prev) : next;
+        return updated.length ? updated : [blankReceipt()];
+      }),
+    [setStoredReceipts],
+  );
+  // Bumped when the whole desk is replaced (clear, load, example), so the
+  // receipts start over, with a blank one's name box ready
+  const [desk, setDesk] = useState(0);
+  const replaceReceipts = (next: Receipt[]) => {
+    setReceipts(next);
+    setEditing(null);
+    setDesk((d) => d + 1);
+  };
   const { addPerson, renamePerson, deletePerson } = usePeopleActions(
     people,
     setPeople,
     setReceipts,
-    setCheckedPeople,
   );
   const incompleteItems = getIncompleteItems(receipts, editing);
+
+  // Typing hides hover highlights, so a row under a resting pointer doesn't
+  // light up beside the one being typed in. Moving the mouse brings them back.
+  useEffect(() => {
+    const root = document.documentElement;
+    const onKey = (e: KeyboardEvent) => {
+      if (!e.metaKey && !e.ctrlKey) root.dataset.typing = "";
+    };
+    const onMove = () => delete root.dataset.typing;
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointermove", onMove);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointermove", onMove);
+    };
+  }, []);
 
   // From Totals' "needs attention" list: open the row at the first missing field
   const handleOpenItem = ({ receiptIndex: r, itemIndex: i, missing }: IncompleteItem) => {
@@ -32,22 +65,21 @@ function App() {
   };
 
   return (
-    <PeopleInkContext.Provider value={people}>
+    <>
       <div className="page">
         <header className="desk-head">
-          <h1 className="tape">Carole Venmo Splitter</h1>
+          <TitleNote />
           <ActionButtons
             people={people}
             receipts={receipts}
-            checkedPeople={checkedPeople}
             setPeople={setPeople}
-            setReceipts={setReceipts}
-            setCheckedPeople={setCheckedPeople}
+            setReceipts={replaceReceipts}
           />
         </header>
 
         <main className="layout">
           <ReceiptsSection
+            key={desk}
             people={people}
             onAddPerson={addPerson}
             receipts={receipts}
@@ -55,25 +87,23 @@ function App() {
             editing={editing}
             setEditing={setEditing}
           />
-          {/* Stays in view while scrolling long receipts */}
+          {/* Under the receipts: each person's slip, ready to send */}
           <TotalsSection
             people={people}
             receipts={receipts}
-            checkedPeople={checkedPeople}
-            setCheckedPeople={setCheckedPeople}
             onRenamePerson={renamePerson}
             onDeletePerson={deletePerson}
             incompleteItems={incompleteItems}
             onOpenItem={handleOpenItem}
-            onExport={() => exportTotals(people, receipts, checkedPeople)}
-            canExport={canExport(people, receipts)}
+            onSaveRecord={() => saveRecord(people, receipts)}
+            canSaveRecord={canExport(people, receipts)}
           />
         </main>
 
         <HowItWorks />
       </div>
       <Toaster />
-    </PeopleInkContext.Provider>
+    </>
   );
 }
 

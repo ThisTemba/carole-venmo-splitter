@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Slip from './ui/Slip'
 
 type Step = { title: string; detail: string; substeps?: Step[] }
 
@@ -16,7 +15,7 @@ const steps: Step[] = [
     ],
   },
   { title: 'Add tax, tip, and fees.', detail: "They're split by how much each person ordered." },
-  { title: 'See the totals.', detail: 'Totals shows what everyone owes.' },
+  { title: 'Send the requests.', detail: "In Who owes what, click someone's amount to copy it for Venmo, or use the ⋯ beside it to copy their breakdown as an image." },
 ]
 
 const StepText = ({ title, detail }: Step) => (
@@ -41,22 +40,25 @@ const tips = [
   <>
     <kbd>Backspace</kbd> in an empty people box removes the last person.
   </>,
-  <>Add several people at once with commas: “Maya, Omar”.</>,
+  <>Add several people at once by typing their full names with spaces or commas: “Maya Omar” or “Maya, Omar”.</>,
   <>
     <kbd>↑</kbd> <kbd>↓</kbd> choose from the suggestions.
   </>,
-  <>The arrow next to a receipt's name folds it to one line.</>,
+  <>
+    Drag the handle to the left of a line to move it up or down, or Tab to the line and
+    press <kbd>Alt</kbd> + <kbd>↑</kbd> <kbd>↓</kbd>.
+  </>,
+  <>The arrow next to a receipt's name folds its items away, leaving the name and total.</>,
   <>Click an item under “needs attention” in Totals to jump to it.</>,
 ]
 
-// Always shown at the bottom of the page, kept quiet
+// Always shown at the bottom of the page, quiet on the desk so it never competes with the receipts
 export default function HowItWorks() {
   const [showAllTips, setShowAllTips] = useState(false)
 
   return (
-    <Slip as="section" className="how" tilt={0.5} aria-label="How it works">
-      <h2 className="print-heading">How it works</h2>
-      <hr className="rule" />
+    <section className="how" aria-labelledby="how-title">
+      <h2 id="how-title" className="how__title">How it works</h2>
       <ol>
         {steps.map((step) => (
           <li key={step.title}>
@@ -82,6 +84,6 @@ export default function HowItWorks() {
       <button type="button" className="text-btn" onClick={() => setShowAllTips(!showAllTips)}>
         {showAllTips ? 'Show fewer' : `Show ${tips.length - 1} more tips`}
       </button>
-    </Slip>
+    </section>
   )
 }

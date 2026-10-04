@@ -1,27 +1,20 @@
-import type { CSSProperties } from 'react'
 import { LuX } from 'react-icons/lu'
 import { EVERYONE } from '../utils/people'
-import { stampTilt, usePersonInk } from '../utils/ink'
 
 interface PersonTagProps {
   person: string
   onRemove?: () => void
 }
 
-// A person's name, rubber-stamped in their own ink
+// A person in the people box while an item is open, removable with the x
 export default function PersonTag({ person, onRemove }: PersonTagProps) {
-  const ink = usePersonInk(person)
-  const everyone = person === EVERYONE
   return (
-    <span
-      className={`stamp ${everyone ? 'stamp--everyone' : ''} ${ink.double ? 'stamp--double' : ''}`}
-      style={{ '--ink': ink.color, '--stamp-tilt': stampTilt(person) } as CSSProperties}
-    >
+    <span className={`chip ${person === EVERYONE ? 'chip--everyone' : ''}`}>
       {person}
       {onRemove && (
         <button
           type="button"
-          className="stamp__x"
+          className="chip__x"
           aria-label={`Remove ${person}`}
           // Mouse only: Tab goes straight to the text box, where Backspace removes
           tabIndex={-1}

@@ -8,7 +8,8 @@ interface ReceiptNameProps {
   onDone: (typed: string, viaEnter: boolean) => void
 }
 
-// The receipt's name, printed as a heading; click to edit
+// The receipt's name, printed as a heading; click it (a button inside the
+// heading) to edit
 export default function ReceiptName({ name, startEditing, onDone }: ReceiptNameProps) {
   const [editing, setEditing] = useState(startEditing)
   const [value, setValue] = useState(name)
@@ -52,19 +53,20 @@ export default function ReceiptName({ name, startEditing, onDone }: ReceiptNameP
   }
 
   return (
-    <h3
-      className="print-heading receipt__name"
-      tabIndex={0}
-      title="Rename"
-      onClick={startEdit}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault()
-          startEdit()
-        }
-      }}
-    >
-      {name}
+    <h3 className="print-heading receipt__name">
+      <button
+        type="button"
+        className="receipt__name-btn"
+        title="Rename"
+        aria-label={name ? `${name}, rename receipt` : 'Name this receipt'}
+        onClick={startEdit}
+      >
+        {name ? (
+          <span className="receipt__name-text">{name}</span>
+        ) : (
+          <span className="receipt__name-text receipt__name-text--blank">Name this receipt</span>
+        )}
+      </button>
     </h3>
   )
 }

@@ -14,7 +14,7 @@ The situation: someone went out with friends (dinner, then ice cream after), pai
 
 ## Product Purpose
 
-Turn one outing's receipts into one number per person: the amount to request on Venmo. Success means typing everything in quickly, getting totals you trust, sending the requests, and being done. It is not a ledger or a record that lasts. You don't need a permanent record; you need your money.
+Turn one outing's receipts into one number per person: the amount to request on Venmo. Success means typing everything in quickly, getting totals you trust, sending the requests, and being done. It is not a ledger: the one thing kept is a dated PDF of the outing (every receipt, then who owes what) for the payer's own sake. You don't need a running balance; you need your money.
 
 ## Positioning
 
@@ -25,14 +25,14 @@ Simpler than Splitwise and similar tools, on purpose. There are no accounts, no 
 - Mostly used on a laptop after the event, working from paper or photographed receipts. It's keyboard friendly: Enter or Tab moves through the fields, and you can type part of a name to pick a person. Not everyone works that way, though, so clicking through has to be just as easy.
 - One outing often has several receipts (a restaurant, then dessert somewhere else) plus things like reimbursements or refunds, which are negative amounts.
 - Groups can be large. The example data has 15 people at a birthday dinner with a shared cake fee.
-- Afterwards, the payer usually sends each Venmo request by hand. Optionally, they share the itemized breakdown (the text export) so people can see what the request covers. The total per person is the main thing they need.
+- Afterwards, the payer usually sends each Venmo request by hand. Optionally, they share the itemized breakdown as an image, so people can see what the request covers. The total per person is the main thing they need.
 
 ## Capabilities and Constraints
 
 - A static single-page app (React, Vite, Chakra UI), deployed to GitHub Pages. No backend and no accounts.
 - Data saves automatically to localStorage. Saving and loading JSON files moves data between devices, and old files that use `events` instead of `receipts` still load.
 - Receipts contain items (what, how much, who). An item can be split among named people or among "everyone on this receipt". Tax, tip, or fee items are split in proportion to what each person ordered.
-- Totals has a section per person showing what they owe, and exports a text file.
+- Under the receipts, Who owes what is a note with everyone's amount, each opening to what they had. The amount copies for a Venmo request; the breakdown copies as a small invoice image. A dated PDF record of the whole outing can be saved.
 - The app does not connect to Venmo. Requests are sent by hand outside the app.
 - Undecided: how Carole and the others actually use the breakdown after the totals. The author isn't sure, and nobody has observed it.
 
@@ -49,7 +49,7 @@ Simpler than Splitwise and similar tools, on purpose. There are no accounts, no 
 
 ## Product Principles
 
-1. **Done fast, then gone.** Every feature has to make it quicker to go from receipts to request amounts. Anything that turns the app into a record-keeping system works against its purpose.
+1. **Done fast, then gone.** Every feature has to make it quicker to go from receipts to request amounts. A one-off record of an outing is fine; anything that turns the app into a running record-keeping system works against its purpose.
 2. **The number per person comes first.** What each person owes is the answer. Breakdowns are there to back up that number and to explain it if someone asks.
 3. **Fair without arithmetic.** Splitting tax and tip by what each person ordered, and "everyone on this receipt", do the fair math so the payer doesn't have to.
 4. **Keyboard friendly, easy either way.** The keyboard shortcuts are there to make entry fast for people who like typing straight through. Everything has to be just as obvious and easy with a mouse or trackpad, and nobody should have to learn a shortcut to finish.

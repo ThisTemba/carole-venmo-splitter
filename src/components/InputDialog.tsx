@@ -57,6 +57,7 @@ export default function InputDialog({
         {label && <p>{label}</p>}
         <input
           className="field"
+          aria-label={label ? undefined : title}
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => {

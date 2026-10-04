@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { LuChevronDown, LuChevronRight, LuCircleHelp, LuPlus } from 'react-icons/lu'
+import { LuChevronDown, LuCircleHelp, LuPlus } from 'react-icons/lu'
 import type { ItemField, Receipt, ReceiptItem } from '../types'
 import { getReceiptPeople, getReceiptTotal, getSubtotal } from '../utils/calculations'
 import { money, plural } from '../utils/text'
 import { isBlankItem } from '../utils/validation'
 import ReceiptItemRow from './ReceiptItemRow'
+import ItemList, { type IndexedItem } from './ItemList'
 import ReceiptName from './ReceiptName'
 import ItemTypesDialog from './ItemTypesDialog'
 import Slip from './ui/Slip'
@@ -29,15 +30,36 @@ interface ReceiptCardProps {
   onAddItem: (proportional: boolean) => void
   onNextItem: (item: number) => void
   onDeleteItem: (item: number) => void
+  onMoveItem: (item: number, direction: -1 | 1) => void
+  // Items (by index) in a new order, after dragging one
+  onReorderItems: (order: number[]) => void
 }
 
 // Lines up with item prices
 function SumLine({ label, amount, total }: { label: string; amount: number; total?: boolean }) {
   return (
-    <div className={`sum-line ${total ? 'sum-line--total' : ''}`}>
+    <div className={`sum-line ${total ? 'sum-line--total' : 'sum-line--sub'}`}>
       <span>{label}</span>
       <span>{money(amount)}</span>
-      <span />
+    </div>
+  )
+}
+
+// The next line, waiting to be printed: a faint "+ Add item ..... $0.00"
+// in the receipt's own columns. The whole line is the button.
+function AddLine({ label, onClick, title, children }: { label: string; onClick: () => void; title?: string; children?: React.ReactNode }) {
+  return (
+    <div className="add-line">
+      <span className="add-line__what">
+        <button type="button" className="add-line__btn" onClick={onClick} title={title}>
+          <LuPlus aria-hidden />
+          {label}
+        </button>
+        {children}
+      </span>
+      <span className="add-line__price" aria-hidden>
+        {money(0)}
+      </span>
     </div>
   )
 }
@@ -59,8 +81,19 @@ export default function ReceiptCard({
   onAddItem,
   onNextItem,
   onDeleteItem,
+  onMoveItem,
+  onReorderItems,
 }: ReceiptCardProps) {
   const [helpOpen, setHelpOpen] = useState(false)
+  // Clip the items only while folded or folding, so the people suggestions
+  // can spill over when open
+  const collapsed = !!receipt.collapsed
+  const [folding, setFolding] = useState(false)
+  const [wasCollapsed, setWasCollapsed] = useState(collapsed)
+  if (collapsed !== wasCollapsed) {
+    setWasCollapsed(collapsed)
+    setFolding(true)
+  }
 
   const handleNameDone = (name: string, viaEnter: boolean) => {
     if (!name) {
@@ -82,9 +115,10 @@ export default function ReceiptCard({
   const itemCount = receipt.items.filter((item) => !isBlankItem(item)).length
   const namedPeople = receipt.items.some((item) => item.who.length || item.everyone) ? receiptPeople.length : 0
 
-  const renderRow = ({ item, idx }: { item: ReceiptItem; idx: number }) => (
+  const renderRow = ({ item, idx }: IndexedItem, sortId: string) => (
     <ReceiptItemRow
       key={idx}
+      sortId={sortId}
       item={item}
       people={people}
       receiptPeople={receiptPeople}
@@ -96,76 +130,70 @@ export default function ReceiptCard({
       onLeave={() => onLeaveItem(idx)}
       onNext={() => onNextItem(idx)}
       onDelete={() => onDeleteItem(idx)}
+      onMove={(direction) => onMoveItem(idx, direction)}
     />
   )
 
   return (
-    <Slip as="article" tilt={tilt} className={`receipt ${isNew ? 'feed' : ''}`} aria-label={receipt.name || 'New receipt'}>
+    <Slip as="article" tilt={tilt} className="receipt" aria-label={receipt.name || 'New receipt'}>
       <header className="receipt__head">
         <button
           type="button"
-          className="icon-btn"
-          aria-label={receipt.collapsed ? 'Expand receipt' : 'Collapse receipt'}
-          aria-expanded={!receipt.collapsed}
+          className="icon-btn receipt__fold"
+          aria-label={collapsed ? 'Expand receipt' : 'Collapse receipt'}
+          aria-expanded={!collapsed}
           onClick={onToggleCollapsed}
         >
-          {receipt.collapsed ? <LuChevronRight aria-hidden /> : <LuChevronDown aria-hidden />}
+          <LuChevronDown aria-hidden />
         </button>
         <ReceiptName name={receipt.name} startEditing={isNew} onDone={handleNameDone} />
         <span />
       </header>
 
-      {receipt.collapsed ? (
-        <p className="receipt__summary">
-          {plural(receipt.items.length, 'item')} · {money(getReceiptTotal(receipt))}
+      {itemCount > 0 && (
+        <p className="receipt__meta">
+          {plural(itemCount, 'item')}
+          {namedPeople > 0 && ` · ${plural(namedPeople, 'person').replace('persons', 'people')}`}
         </p>
-      ) : (
-        <>
-          {itemCount > 0 && (
-            <p className="receipt__meta">
-              {plural(itemCount, 'item')}
-              {namedPeople > 0 && ` · ${plural(namedPeople, 'person').replace('persons', 'people')}`}
-            </p>
-          )}
+      )}
+
+      {/* Folding hides only the items; the name, counts, and total stay put */}
+      <div
+        className={`receipt__body ${collapsed || folding ? 'receipt__body--clip' : ''}`}
+        data-collapsed={collapsed}
+        inert={collapsed}
+        onTransitionEnd={(e) => e.target === e.currentTarget && setFolding(false)}
+      >
+        <div className="receipt__body-inner">
           <hr className="rule" />
 
-          {regularItems.map(renderRow)}
-          <div className="receipt__adds">
-            <button type="button" className="print-btn" onClick={() => onAddItem(false)}>
-              <LuPlus aria-hidden />
-              Add item
-            </button>
-          </div>
+          <ItemList entries={regularItems} renderRow={renderRow} onReorder={onReorderItems} />
+          <AddLine label="Add item" onClick={() => onAddItem(false)} />
 
           <hr className="rule" />
           {feeItems.length > 0 && <SumLine label="Subtotal" amount={getSubtotal(receipt)} />}
-          {feeItems.map(renderRow)}
-          <div className="receipt__adds">
+          <ItemList entries={feeItems} renderRow={renderRow} onReorder={onReorderItems} />
+          <AddLine
+            label="Add tax, tip, or fee"
+            onClick={() => onAddItem(true)}
+            title="Split in proportion to what each person ordered"
+          >
             <button
               type="button"
-              className="print-btn"
-              onClick={() => onAddItem(true)}
-              title="Split in proportion to what each person ordered"
-            >
-              <LuPlus aria-hidden />
-              Add tax, tip, or fee
-            </button>
-            <button
-              type="button"
-              className="icon-btn"
+              className="icon-btn add-line__help"
               aria-label="What's the difference?"
               onClick={() => setHelpOpen(true)}
             >
               <LuCircleHelp aria-hidden />
             </button>
-          </div>
+          </AddLine>
+        </div>
+      </div>
 
-          <hr className="rule rule--double" />
-          <SumLine label="Total" amount={getReceiptTotal(receipt)} total />
-        </>
-      )}
+      <hr className="rule rule--double" />
+      <SumLine label="Total" amount={getReceiptTotal(receipt)} total />
 
-      <footer className={`receipt__foot ${receipt.collapsed ? 'receipt__foot--tight' : ''}`}>
+      <footer className="receipt__foot">
         <button type="button" className="text-btn text-btn--danger" onClick={onDelete}>
           Delete receipt
         </button>

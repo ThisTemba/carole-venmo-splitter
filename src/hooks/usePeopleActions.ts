@@ -4,12 +4,11 @@ import { tidyName } from '../utils/people'
 
 type Setter<T> = React.Dispatch<React.SetStateAction<T>>
 
-// Adding, renaming, and removing people, keeping items and export ticks in step
+// Adding, renaming, and removing people, keeping items in step
 export function usePeopleActions(
   people: string[],
   setPeople: Setter<string[]>,
   setReceipts: Setter<Receipt[]>,
-  setCheckedPeople: Setter<string[]>,
 ) {
   // Apply a change to every item's people
   const updateWho = (fn: (who: string[]) => string[]) =>
@@ -32,13 +31,11 @@ export function usePeopleActions(
     const rename = (p: string) => (p === oldName ? newName : p)
     setPeople((prev) => prev.map(rename))
     updateWho((who) => who.map(rename))
-    setCheckedPeople((prev) => prev.map(rename))
   }
 
   const deletePerson = (name: string) => {
     setPeople((prev) => prev.filter((p) => p !== name))
     updateWho((who) => who.filter((p) => p !== name))
-    setCheckedPeople((prev) => prev.filter((p) => p !== name))
   }
 
   return { addPerson, renamePerson, deletePerson }

@@ -1,0 +1,11 @@
+Paper textures, both from ambientCG (https://ambientcg.com), CC0 (public domain).
+
+paper-thermal.jpg: from "Paper 001" (https://ambientcg.com/view?id=Paper001), 1K color map.
+paper-notepad.jpg: from "Paper 002" (https://ambientcg.com/view?id=Paper002), 1K color map.
+
+Processing (in the browser, on a canvas): cropped to a clean region (Paper 001's
+right edge has print showing through from the back), mirrored four ways into a
+seamless tile, converted to grey, and flattened to near white (mean 252) so the
+paper color comes from the CSS and only the texture is multiplied onto it.
+
+The app loads the .webp copies (re-encoded from the .jpg at quality 0.82 to cut download size); the .jpg files are the sources.

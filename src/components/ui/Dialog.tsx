@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useId, useRef, type ReactNode } from 'react'
 import Slip from './Slip'
 
 interface DialogProps {
@@ -14,6 +14,7 @@ interface DialogProps {
 // A modal slip, on the browser's own <dialog> so focus and Escape just work
 export default function Dialog({ open, onOpenChange, title, children, actions, role, wide }: DialogProps) {
   const ref = useRef<HTMLDialogElement>(null)
+  const id = useId()
 
   useEffect(() => {
     const dialog = ref.current
@@ -27,7 +28,8 @@ export default function Dialog({ open, onOpenChange, title, children, actions, r
       ref={ref}
       className={`dialog ${wide ? 'dialog--wide' : ''}`}
       role={role}
-      aria-label={title}
+      aria-labelledby={`${id}-title`}
+      aria-describedby={`${id}-body`}
       onClose={() => onOpenChange(false)}
       // Clicking the dimmed desk around the slip closes it
       onClick={(e) => {
@@ -36,8 +38,8 @@ export default function Dialog({ open, onOpenChange, title, children, actions, r
     >
       {open && (
         <Slip tilt={-0.4}>
-          <h2 className="print-heading dialog__title">{title}</h2>
-          <div className="dialog__body">{children}</div>
+          <h2 id={`${id}-title`} className="print-heading dialog__title">{title}</h2>
+          <div id={`${id}-body`} className="dialog__body">{children}</div>
           <div className="dialog__actions">{actions}</div>
         </Slip>
       )}

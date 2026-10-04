@@ -29,8 +29,8 @@ export default function Slip({
     <Tag className={`slip-wrap ${className}`} style={style} {...rest}>
       <div className={`slip ${openBottom ? 'slip--open-bottom' : ''} ${slipClassName}`}>
         {children}
-        {/* Thermal print fades unevenly; this lies over the ink */}
-        <div className="slip__fade" aria-hidden />
+        {/* The paper's grain showing through the ink */}
+        <div className="slip__ink" aria-hidden />
       </div>
     </Tag>
   )

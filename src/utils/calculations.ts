@@ -27,36 +27,34 @@ export function getReceiptPeople(receipt: Receipt, people: string[]): string[] {
 }
 
 // Who an item is split between
-function getItemPeople(item: ReceiptItem, receipt: Receipt, people: string[]): string[] {
+export function getItemPeople(item: ReceiptItem, receipt: Receipt, people: string[]): string[] {
   return item.everyone ? getReceiptPeople(receipt, people) : item.who
 }
 
-// What a person owes for a receipt's regular (non-proportional) items
-function getRegularSpend(person: string, receipt: Receipt, people: string[]): number {
-  return receipt.items
+// What each person owes for a receipt's regular (non-proportional) items
+function getRegularSpends(receipt: Receipt, people: string[]): Map<string, number> {
+  const spends = new Map<string, number>()
+  receipt.items
     .filter((item) => !item.proportional)
-    .map((item) => ({ item, who: getItemPeople(item, receipt, people) }))
-    .filter(({ who }) => who.includes(person))
-    .reduce((sum, { item, who }) => sum + item.howMuch / who.length, 0)
+    .forEach((item) => {
+      const who = getItemPeople(item, receipt, people)
+      who.forEach((p) => spends.set(p, (spends.get(p) ?? 0) + item.howMuch / who.length))
+    })
+  return spends
 }
 
 // Each person's share of an item, in cents. Regular items split evenly; taxes,
 // tips, and fees split in proportion to each person's regular spend.
-function getItemShares(item: ReceiptItem, receipt: Receipt, people: string[]): Map<string, number> {
+function getItemShares(item: ReceiptItem, receipt: Receipt, people: string[], spends: Map<string, number>): Map<string, number> {
   const who = getItemPeople(item, receipt, people)
-  const weights = who.map((p) => (item.proportional ? getRegularSpend(p, receipt, people) : 1))
+  const weights = who.map((p) => (item.proportional ? (spends.get(p) ?? 0) : 1))
   const cents = splitCents(item.howMuch, weights)
   return new Map(who.map((p, i) => [p, cents[i]]))
 }
 
-function getItemShare(item: ReceiptItem, receipt: Receipt, person: string, people: string[]): number {
-  return (getItemShares(item, receipt, people).get(person) ?? 0) / 100
-}
-
-export function getTotalForPerson(person: string, receipts: Receipt[], people: string[]): string {
-  const items = getItemsForPerson(person, receipts, people)
-  const total = items.reduce((sum, item) => sum + parseFloat(item.share), 0)
-  return total.toFixed(2)
+// A person's total, from their items
+export function sumItems(items: PersonItem[]): string {
+  return items.reduce((sum, item) => sum + parseFloat(item.share), 0).toFixed(2)
 }
 
 export function getSubtotal(receipt: Receipt): number {
@@ -70,28 +68,43 @@ export function getReceiptTotal(receipt: Receipt): number {
 }
 
 export interface PersonItem {
+  // Which receipt, by position: two receipts can share a name
+  receiptIndex: number
   receiptName: string
   item: ReceiptItem
   share: string
 }
 
-export function getItemsForPerson(person: string, receipts: Receipt[], people: string[]): PersonItem[] {
-  const items: PersonItem[] = []
-  receipts.forEach((receipt) => {
+// Everyone's items with their shares, worked out in one pass: each item is
+// split once, not once per person
+export function getItemsByPerson(receipts: Receipt[], people: string[]): Map<string, PersonItem[]> {
+  const byPerson = new Map<string, PersonItem[]>(people.map((p) => [p, []]))
+  receipts.forEach((receipt, receiptIndex) => {
+    const spends = getRegularSpends(receipt, people)
     receipt.items.forEach((item) => {
-      if (getItemPeople(item, receipt, people).includes(person)) {
-        const share = getItemShare(item, receipt, person, people).toFixed(2)
-        items.push({ receiptName: receipt.name, item, share })
-      }
+      getItemShares(item, receipt, people, spends).forEach((cents, person) => {
+        if (!byPerson.has(person)) byPerson.set(person, [])
+        byPerson.get(person)!.push({ receiptIndex, receiptName: receipt.name, item, share: (cents / 100).toFixed(2) })
+      })
     })
   })
-  return items
+  return byPerson
 }
 
-export function groupItemsByReceipt(items: PersonItem[]): Record<string, PersonItem[]> {
-  return items.reduce((acc, item) => {
-    if (!acc[item.receiptName]) acc[item.receiptName] = []
-    acc[item.receiptName].push(item)
-    return acc
-  }, {} as Record<string, typeof items>)
+export interface ReceiptGroup {
+  receiptIndex: number
+  receiptName: string
+  items: PersonItem[]
+}
+
+// A person's items, receipt by receipt in receipt order. Grouped by receipt,
+// not by name, so two receipts called the same thing stay apart.
+export function groupItemsByReceipt(items: PersonItem[]): ReceiptGroup[] {
+  const groups = new Map<number, ReceiptGroup>()
+  items.forEach((item) => {
+    const group = groups.get(item.receiptIndex)
+    if (group) group.items.push(item)
+    else groups.set(item.receiptIndex, { receiptIndex: item.receiptIndex, receiptName: item.receiptName, items: [item] })
+  })
+  return [...groups.values()]
 }

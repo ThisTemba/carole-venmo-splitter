@@ -11,7 +11,7 @@ interface NeedsAttentionProps {
 export default function NeedsAttention({ items, onOpenItem }: NeedsAttentionProps) {
   if (items.length === 0) return null;
   return (
-    <div className="attention" role="alert">
+    <div className="attention" role="status">
       <p className="attention__title">
         <LuTriangleAlert aria-hidden />
         {plural(items.length, "item")} need{items.length > 1 ? "" : "s"} attention

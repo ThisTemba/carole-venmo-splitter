@@ -122,6 +122,7 @@ export const receiptsInit: Receipt[] = [
       {
         what: "Cake Fee",
         howMuch: 20,
+        proportional: true,
         who: [
           "Eda",
           "Harmony",

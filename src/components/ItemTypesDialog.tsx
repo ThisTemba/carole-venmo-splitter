@@ -5,11 +5,14 @@ interface ItemTypesDialogProps {
   onOpenChange: (open: boolean) => void
 }
 
-const exampleRows = [
-  { label: 'Sushi platter ($40)', maya: '$40', omar: '—' },
-  { label: 'Ramen ($10)', maya: '—', omar: '$10' },
-  { label: '$10 tip as an item', maya: '$5', omar: '$5', className: 'muted' },
-  { label: '$10 tip as a tax, tip, or fee', maya: '$8', omar: '$2', className: 'strong' },
+// What each of them ordered, then the same $10 tip split both ways
+const ordered = [
+  { label: 'Sushi platter', maya: '$40', omar: '' },
+  { label: 'Ramen', maya: '', omar: '$10' },
+]
+const tip = [
+  { label: 'As an item', maya: '$5', omar: '$5' },
+  { label: 'As a tax, tip, or fee', maya: '$8', omar: '$2', chosen: true },
 ]
 
 export default function ItemTypesDialog({ open, onOpenChange }: ItemTypesDialogProps) {
@@ -27,8 +30,7 @@ export default function ItemTypesDialog({ open, onOpenChange }: ItemTypesDialogP
     >
       <p>
         Taxes, tips, and fees split differently from regular items. Say Maya and Omar go out for
-        sushi. Maya gets a $40 platter, Omar gets a $10 bowl of ramen, and they leave a $10 tip.
-        Here's how the tip splits each way:
+        sushi. Maya gets a $40 platter, Omar gets a $10 bowl of ramen, and they leave a $10 tip:
       </p>
       <table className="split-table">
         <thead>
@@ -39,8 +41,23 @@ export default function ItemTypesDialog({ open, onOpenChange }: ItemTypesDialogP
           </tr>
         </thead>
         <tbody>
-          {exampleRows.map((row) => (
-            <tr key={row.label} className={row.className}>
+          <tr className="split-table__group">
+            <th colSpan={3}>What they ordered</th>
+          </tr>
+          {ordered.map((row) => (
+            <tr key={row.label}>
+              <td>{row.label}</td>
+              <td>{row.maya}</td>
+              <td>{row.omar}</td>
+            </tr>
+          ))}
+        </tbody>
+        <tbody>
+          <tr className="split-table__group">
+            <th colSpan={3}>The $10 tip</th>
+          </tr>
+          {tip.map((row) => (
+            <tr key={row.label} className={row.chosen ? 'split-table__chosen' : undefined}>
               <td>{row.label}</td>
               <td>{row.maya}</td>
               <td>{row.omar}</td>

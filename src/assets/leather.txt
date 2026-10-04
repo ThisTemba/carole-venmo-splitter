@@ -1,0 +1,4 @@
+leather.jpg: "Brown Leather" by Rob Tuytel, Poly Haven, CC0 (public domain).
+https://polyhaven.com/a/brown_leather (1k diffuse map, unmodified). Used as the desk surface.
+
+The app loads the .webp copies (re-encoded from the .jpg at quality 0.82 to cut download size); the .jpg files are the sources.
