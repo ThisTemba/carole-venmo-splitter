@@ -232,7 +232,7 @@ receipts: [{
 - "Add receipt" below the receipts: the outline of the next receipt traced on the desk (a receipt's paper width, one thin line with the same torn bottom as the receipts), "+ Add receipt" in the middle; it brightens and fills faintly on hover
 - Creates a new receipt with its name box focused (placeholder "Where? e.g. Bar night")
 - Enter saves the name and opens a blank first item, so you can go straight to typing items
-- Leaving the name box empty (Escape, Enter, or clicking away) removes the new receipt if it has no items, or names it "Untitled receipt" if it does
+- Leaving the name box empty (Escape, Enter, or clicking away) removes the new receipt if it has no items, or names it "Untitled receipt" if it has filled-in items. Leaving it for the receipt's first line (clicking Add item or Add tax, tip, or fee) keeps the receipt, still unnamed
 
 ```javascript
 // Before

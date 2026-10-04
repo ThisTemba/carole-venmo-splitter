@@ -3,6 +3,8 @@ import type { Receipt, ReceiptItem } from '../types'
 // Split an amount into whole cents by weight. Leftover cents go to the largest
 // remainders (ties to whoever is listed first), so the parts always add up exactly.
 function splitCents(amount: number, weights: number[]): number[] {
+  // Nobody to split between (an item with no people yet)
+  if (weights.length === 0) return []
   const totalCents = Math.round(amount * 100)
   const totalWeight = weights.reduce((sum, w) => sum + w, 0)
   if (totalWeight === 0) return splitCents(amount, weights.map(() => 1))
