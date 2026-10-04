@@ -58,8 +58,15 @@ export default function ReceiptItemRow({
     refs[field].current?.focus();
   };
 
+  // Opened from the keyboard, the name comes up selected, so typing replaces
+  // it; opened with a click, it's left as is to fix a letter
+  const clicked = useRef(false);
   useEffect(() => {
-    if (editing) focus(focusField ?? "what");
+    if (!editing) return;
+    const field = focusField ?? "what";
+    focus(field);
+    if (field === "what" && !clicked.current) whatInputRef.current?.select();
+    clicked.current = false;
   }, [editing, focusField]);
 
   // Closing the row with Escape leaves focus nowhere; put it back on the
@@ -147,7 +154,10 @@ export default function ReceiptItemRow({
             role="button"
             tabIndex={0}
             aria-label={`Edit ${item.what.trim() || "this item"}`}
-            onClick={() => onStartEdit("what")}
+            onClick={() => {
+              clicked.current = true;
+              onStartEdit("what");
+            }}
             aria-keyshortcuts="Alt+ArrowUp Alt+ArrowDown"
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {

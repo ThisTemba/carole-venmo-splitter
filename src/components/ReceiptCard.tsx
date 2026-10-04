@@ -15,6 +15,8 @@ interface ReceiptCardProps {
   people: string[]
   // Just added: start with the name box open
   isNew: boolean
+  // Just added: it feeds out like a printed receipt
+  printing?: boolean
   // Alternate receipts lean the other way on the desk
   tilt: number
   onAddPerson: (name: string) => void
@@ -64,10 +66,15 @@ function AddLine({ label, onClick, title, children }: { label: string; onClick: 
   )
 }
 
+// "Teresa, Barnard & Eda"
+const listNames = (names: string[]) =>
+  names.length < 2 ? names.join('') : `${names.slice(0, -1).join(', ')} & ${names[names.length - 1]}`
+
 export default function ReceiptCard({
   receipt,
   people,
   isNew,
+  printing,
   tilt,
   onAddPerson,
   editing,
@@ -135,7 +142,7 @@ export default function ReceiptCard({
   )
 
   return (
-    <Slip as="article" tilt={tilt} className="receipt" aria-label={receipt.name || 'New receipt'}>
+    <Slip as="article" tilt={tilt} className={`receipt ${printing ? 'receipt--printing' : ''}`} aria-label={receipt.name || 'New receipt'}>
       <header className="receipt__head">
         <button
           type="button"
@@ -189,6 +196,13 @@ export default function ReceiptCard({
           </AddLine>
         </div>
       </div>
+
+      {/* Folded, the notepad strip keeps who was on it */}
+      {namedPeople > 0 && (
+        <p className="receipt__who" data-shown={collapsed} aria-hidden={!collapsed} title={receiptPeople.join(', ')}>
+          {listNames(receiptPeople)}
+        </p>
+      )}
 
       <hr className="rule rule--double" />
       <SumLine label="Total" amount={getReceiptTotal(receipt)} total />
