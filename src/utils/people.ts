@@ -10,24 +10,33 @@ export function tidyName(name: string): string {
 
 const isEveryoneWord = (name: string) => ['everyone', EVERYONE.toLowerCase()].includes(name.toLowerCase())
 
-// The person a typed name means, matched the same way as the suggestions:
-// exact, then starts with, then contains. Undefined if nobody matches.
-function findPerson(typed: string, people: string[]): string | undefined {
-  const q = typed.toLowerCase()
-  return (
-    people.find((p) => p.toLowerCase() === q) ??
-    people.find((p) => p.toLowerCase().startsWith(q)) ??
-    people.find((p) => p.toLowerCase().includes(q))
-  )
+// The person a typed name is, ignoring case. In a list a name has to be typed
+// in full, so a half-typed one never picks the wrong person.
+const findExact = (typed: string, people: string[]) =>
+  people.find((p) => p.toLowerCase() === typed.toLowerCase())
+
+// The names in one comma-separated part, split at spaces. The longest run of
+// words that's someone's full name counts as one name, so "Mary Ann" stays
+// together when she's on the People list.
+function namesInPart(part: string, people: string[]): string[] {
+  const words = part.split(/\s+/).filter(Boolean)
+  const names: string[] = []
+  for (let i = 0; i < words.length; ) {
+    let len = words.length - i
+    while (len > 1 && !findExact(words.slice(i, i + len).join(' '), people)) len--
+    names.push(words.slice(i, i + len).join(' '))
+    i += len
+  }
+  return names
 }
 
-// "om, th, Kai" → Omar, Theo, and Kai as a new person
+// "Omar, Theo Kai" → Omar, Theo, and Kai as a new person
 function parseNameList(query: string, people: string[]): string[] {
   const names = query
     .split(',')
-    .map((part) => part.trim())
-    .filter((name) => name && !isEveryoneWord(name))
-    .map((name) => findPerson(name, people) ?? tidyName(name))
+    .flatMap((part) => namesInPart(part, people))
+    .filter((name) => !isEveryoneWord(name))
+    .map((name) => findExact(name, people) ?? tidyName(name))
   return [...new Set(names)]
 }
 
@@ -48,6 +57,11 @@ export function optionLabel(option: PeopleOption): string {
 // Suggestions for what's typed: "Everyone on this receipt" first, then names
 // that start with the text, then names that contain it, then adding it as a
 // new person. None while "Everyone on this receipt" is chosen.
+//
+// A list of names, split by commas or spaces, is suggested as one option that
+// adds them all. With commas it's the only option. With only spaces it could
+// also be one name ("Mary Ann"), so it comes after any matches for the whole
+// text, and adding the whole text as one new person is still offered last.
 export function getPeopleOptions(
   people: string[],
   selected: string[],
@@ -55,11 +69,10 @@ export function getPeopleOptions(
   query: string,
 ): PeopleOption[] {
   if (everyone) return []
-  if (query.includes(',')) {
-    const names = parseNameList(query, people)
-    return names.length ? [{ kind: 'list', names, isNew: (name) => !people.includes(name) }] : []
-  }
-  const typed = query.trim()
+  const listOf = (names: string[]): PeopleOption[] =>
+    names.length ? [{ kind: 'list', names, isNew: (name) => !people.includes(name) }] : []
+  if (query.includes(',')) return listOf(parseNameList(query, people))
+  const typed = query.trim().replace(/\s+/g, ' ')
   const q = typed.toLowerCase()
   const remaining = people.filter((p) => !selected.includes(p))
   const matches = [
@@ -69,9 +82,14 @@ export function getPeopleOptions(
   // Means nobody until someone's been added
   const showEveryone = people.length > 0 && EVERYONE.toLowerCase().startsWith(q)
   const isNew = typed && !isEveryoneWord(typed) && ![...people, ...selected].some((p) => p.toLowerCase() === q)
-  return [
+  const listNames = typed.includes(' ') ? parseNameList(typed, people) : []
+  const list = listNames.length > 1 && !showEveryone ? listOf(listNames) : []
+  const whole = [
     ...(showEveryone ? [{ kind: 'everyone' as const }] : []),
     ...matches.map((name) => ({ kind: 'person' as const, name })),
+  ]
+  return [
+    ...(whole.length ? [...whole, ...list] : list),
     ...(isNew ? [{ kind: 'new' as const, name: tidyName(typed) }] : []),
   ]
 }

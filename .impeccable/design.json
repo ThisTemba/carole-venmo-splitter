@@ -1,263 +1,279 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-04T00:54:17.622871+00:00",
+  "generatedAt": "2026-10-04T10:53:34.143485+00:00",
   "title": "Design System: Carole Venmo Splitter",
   "extensions": {
     "colorMeta": {
       "desk-0": {
         "role": "neutral",
-        "displayName": "Desk Shadow",
-        "canonical": "#0f0c0a",
-        "oklch": "oklch(15.7% 0.007 55.8)",
+        "displayName": "Desk Edge",
+        "canonical": "#2c2620",
+        "oklch": "oklch(27.3% 0.014 67.2)",
         "tonalRamp": [
-          "#0d0a09",
-          "#282422",
-          "#45413f",
-          "#64605e",
-          "#86817f",
-          "#a8a4a1",
-          "#cdc8c5",
-          "#f2edea"
+          "#0f0a06",
+          "#29231d",
+          "#453e38",
+          "#635c55",
+          "#837c75",
+          "#a59d95",
+          "#cac3bb",
+          "#f5ede5"
         ]
       },
       "desk-1": {
         "role": "neutral",
-        "displayName": "Night Desk",
-        "canonical": "#17130f",
-        "oklch": "oklch(19.0% 0.010 67.1)",
+        "displayName": "Warm Desk",
+        "canonical": "#3b342d",
+        "oklch": "oklch(33.0% 0.016 67.2)",
         "tonalRamp": [
-          "#0e0a07",
-          "#292420",
-          "#46413c",
-          "#65605b",
-          "#87817c",
-          "#aaa49e",
-          "#cec8c2",
-          "#f3ede7"
+          "#100a05",
+          "#29231c",
+          "#463e37",
+          "#645c54",
+          "#847c74",
+          "#a59d94",
+          "#cbc2ba",
+          "#f6ede4"
         ]
       },
       "desk-2": {
         "role": "neutral",
         "displayName": "Lamp-lit Desk",
-        "canonical": "#201a14",
-        "oklch": "oklch(22.3% 0.015 67.0)",
+        "canonical": "#463e36",
+        "oklch": "oklch(36.9% 0.017 67.2)",
         "tonalRamp": [
-          "#0f0a05",
-          "#2a241e",
-          "#47413a",
-          "#676059",
-          "#898179",
-          "#aca39c",
-          "#d0c7bf",
-          "#f5ede4"
+          "#100a04",
+          "#2a231b",
+          "#463e36",
+          "#645c53",
+          "#857b73",
+          "#a69d93",
+          "#ccc2b9",
+          "#f7ede3"
         ]
       },
       "desk-3": {
         "role": "neutral",
         "displayName": "Desk Grain",
-        "canonical": "#2b231b",
-        "oklch": "oklch(26.3% 0.019 66.9)",
+        "canonical": "#524840",
+        "oklch": "oklch(40.9% 0.019 60.9)",
         "tonalRamp": [
-          "#110a04",
-          "#2b231b",
-          "#494038",
-          "#695f56",
-          "#8a8077",
-          "#ada399",
-          "#d2c7bd",
-          "#f7ece2"
+          "#110904",
+          "#2b221b",
+          "#473e36",
+          "#665b53",
+          "#867b72",
+          "#a79c93",
+          "#cec2b8",
+          "#f8ece2"
         ]
       },
       "desk-4": {
         "role": "neutral",
-        "displayName": "Worn Desk Edge",
-        "canonical": "#3a3026",
-        "oklch": "oklch(31.7% 0.022 66.9)",
+        "displayName": "Worn Desk Highlight",
+        "canonical": "#685d52",
+        "oklch": "oklch(48.6% 0.022 67.3)",
         "tonalRamp": [
           "#110903",
-          "#2d2319",
-          "#4a4035",
-          "#6a5f54",
-          "#8c8074",
-          "#afa397",
-          "#d3c7ba",
+          "#2b2218",
+          "#483e33",
+          "#665b50",
+          "#877b6f",
+          "#a89c90",
+          "#cec2b5",
           "#f9ecdf"
         ]
       },
       "desk-ink": {
         "role": "neutral",
         "displayName": "Desk Ink",
-        "canonical": "#b9ab95",
-        "oklch": "oklch(74.7% 0.035 79.2)",
+        "canonical": "#d9cfbf",
+        "oklch": "oklch(85.8% 0.024 79.7)",
         "tonalRamp": [
-          "#130900",
-          "#2e2311",
-          "#4c402d",
-          "#6c5f4b",
-          "#8e806b",
-          "#b1a38d",
-          "#d5c7b1",
-          "#fbecd5"
+          "#110a02",
+          "#2a2316",
+          "#473e31",
+          "#655c4e",
+          "#857c6d",
+          "#a79d8e",
+          "#cdc3b3",
+          "#f7eddd"
         ]
       },
       "desk-ink-dim": {
         "role": "neutral",
         "displayName": "Dim Desk Ink",
-        "canonical": "#9a8c78",
-        "oklch": "oklch(64.7% 0.033 76.8)",
+        "canonical": "#c2b6a3",
+        "oklch": "oklch(78.1% 0.030 79.4)",
         "tonalRamp": [
-          "#130900",
-          "#2e2312",
-          "#4c402e",
-          "#6c5f4c",
-          "#8e806c",
-          "#b1a38e",
-          "#d6c7b2",
-          "#fcecd6"
+          "#120900",
+          "#2c2213",
+          "#483e2e",
+          "#675c4b",
+          "#877c6a",
+          "#a89d8a",
+          "#cfc2af",
+          "#f9edd9"
         ]
       },
       "desk-ink-bright": {
         "role": "neutral",
         "displayName": "Bright Desk Ink",
-        "canonical": "#eadfca",
-        "oklch": "oklch(90.7% 0.030 83.6)",
+        "canonical": "#f3ebdd",
+        "oklch": "oklch(94.3% 0.021 81.8)",
         "tonalRamp": [
-          "#110a00",
-          "#2c2413",
-          "#4a412f",
-          "#6a604e",
-          "#8b816e",
-          "#aea490",
-          "#d3c8b3",
-          "#f8edd8"
+          "#0f0a03",
+          "#292319",
+          "#453f34",
+          "#635d51",
+          "#837c70",
+          "#a59d90",
+          "#cbc3b6",
+          "#f5eddf"
         ]
       },
       "paper": {
         "role": "neutral",
         "displayName": "Thermal Paper",
-        "canonical": "#eceff1",
-        "oklch": "oklch(95.0% 0.004 236.5)",
+        "canonical": "#f7f7f4",
+        "oklch": "oklch(97.5% 0.004 106.5)",
         "tonalRamp": [
-          "#0a0b0d",
-          "#232527",
-          "#404244",
-          "#5f6263",
-          "#808384",
-          "#a3a5a7",
-          "#c7c9cb",
-          "#eceff1"
+          "#0b0b09",
+          "#272724",
+          "#454543",
+          "#666664",
+          "#898987",
+          "#aeaeab",
+          "#d1d1ce",
+          "#f7f7f4"
         ]
       },
       "paper-hover": {
         "role": "neutral",
         "displayName": "Paper Hover",
-        "canonical": "#e4e8eb",
-        "oklch": "oklch(92.9% 0.006 239.8)",
+        "canonical": "#f0f0ec",
+        "oklch": "oklch(95.4% 0.005 106.5)",
         "tonalRamp": [
-          "#090c0d",
-          "#232528",
-          "#3f4245",
-          "#5e6264",
-          "#7f8386",
-          "#a2a6a8",
-          "#c6cacd",
-          "#ebeff2"
+          "#0b0b09",
+          "#272724",
+          "#454542",
+          "#666663",
+          "#898986",
+          "#aeaeaa",
+          "#d1d1cd",
+          "#f2f2ee"
         ]
       },
       "paper-shade": {
         "role": "neutral",
         "displayName": "Paper Shade",
-        "canonical": "#dde1e5",
-        "oklch": "oklch(90.8% 0.007 247.9)",
+        "canonical": "#ebebe6",
+        "oklch": "oklch(93.9% 0.007 106.5)",
         "tonalRamp": [
-          "#090b0e",
-          "#222528",
-          "#3f4246",
-          "#5e6265",
-          "#7f8386",
-          "#a2a5a9",
-          "#c6cacd",
-          "#ebeff3"
+          "#0b0b08",
+          "#272723",
+          "#454541",
+          "#666662",
+          "#898985",
+          "#aeaea9",
+          "#d1d1cc",
+          "#f2f2ed"
         ]
       },
       "paper-dim": {
         "role": "neutral",
         "displayName": "Aged Paper",
-        "canonical": "#d0d5da",
-        "oklch": "oklch(87.1% 0.009 247.9)",
+        "canonical": "#dcdcd5",
+        "oklch": "oklch(89.3% 0.009 106.6)",
         "tonalRamp": [
-          "#080c0f",
-          "#222529",
-          "#3e4247",
-          "#5d6266",
-          "#7e8387",
-          "#a1a6aa",
-          "#c5cacf",
-          "#eaeff4"
+          "#0c0b07",
+          "#272722",
+          "#454540",
+          "#666660",
+          "#8a8a83",
+          "#aeaea8",
+          "#d1d1ca",
+          "#f2f2eb"
+        ]
+      },
+      "paper-hover-band": {
+        "role": "neutral",
+        "displayName": "Hover Band",
+        "canonical": "rgba(46, 43, 39, 0.07)",
+        "oklch": "oklch(29.1% 0.008 75.3 / 0.07)",
+        "tonalRamp": [
+          "#0d0b07",
+          "#292622",
+          "#484440",
+          "#696561",
+          "#8c8884",
+          "#b1ada8",
+          "#d4d0cb",
+          "#f5f1ec"
         ]
       },
       "print": {
         "role": "primary",
         "displayName": "Thermal Print",
-        "canonical": "#423e50",
-        "oklch": "oklch(37.5% 0.031 295.1)",
+        "canonical": "#2e2b27",
+        "oklch": "oklch(29.1% 0.008 75.3)",
         "tonalRamp": [
-          "#0c0817",
-          "#262233",
-          "#433f51",
-          "#625e71",
-          "#837f93",
-          "#a6a2b7",
-          "#cac6dc",
-          "#efebff"
+          "#0d0b07",
+          "#292622",
+          "#484440",
+          "#696561",
+          "#8c8884",
+          "#b1ada8",
+          "#d4d0cb",
+          "#f5f1ec"
         ]
       },
       "print-deep": {
         "role": "primary",
         "displayName": "Spent Ribbon",
-        "canonical": "#1d1b22",
-        "oklch": "oklch(22.7% 0.014 298.4)",
+        "canonical": "#1c1a17",
+        "oklch": "oklch(21.9% 0.007 78.2)",
         "tonalRamp": [
-          "#0c0a10",
-          "#26242b",
-          "#434148",
-          "#626068",
-          "#83818a",
-          "#a6a3ad",
-          "#cac7d1",
-          "#efedf7"
+          "#0d0b08",
+          "#282623",
+          "#474541",
+          "#686662",
+          "#8b8985",
+          "#b0ada9",
+          "#d3d0cc",
+          "#f4f1ed"
         ]
       },
       "print-soft": {
         "role": "neutral",
         "displayName": "Soft Print",
-        "canonical": "#585565",
-        "oklch": "oklch(49.0% 0.024 294.7)",
+        "canonical": "#5f5a53",
+        "oklch": "oklch(47.0% 0.013 76.5)",
         "tonalRamp": [
-          "#0c0914",
-          "#262330",
-          "#43404e",
-          "#625f6e",
-          "#838090",
-          "#a6a2b3",
-          "#cac6d8",
-          "#efecfd"
+          "#0e0a06",
+          "#2a2620",
+          "#49443e",
+          "#6a655e",
+          "#8e8881",
+          "#b3ada5",
+          "#d6d0c8",
+          "#f7f1e9"
         ]
       },
       "print-faint": {
         "role": "neutral",
         "displayName": "Faint Print",
-        "canonical": "#a19ea6",
-        "oklch": "oklch(70.4% 0.012 303.0)",
+        "canonical": "#aaa59c",
+        "oklch": "oklch(72.3% 0.014 82.4)",
         "tonalRamp": [
-          "#0c0a0f",
-          "#26242a",
-          "#434147",
-          "#626067",
-          "#848188",
-          "#a6a3ab",
-          "#cac7d0",
-          "#f0edf5"
+          "#0e0b05",
+          "#2a261f",
+          "#49443d",
+          "#6a655d",
+          "#8d8880",
+          "#b2ada4",
+          "#d5d0c7",
+          "#f6f1e7"
         ]
       },
       "print-red": {
@@ -342,7 +358,7 @@
       },
       "kraft-ink": {
         "role": "tertiary",
-        "displayName": "Kraft Marker Ink",
+        "displayName": "Kraft Ink",
         "canonical": "#24180c",
         "oklch": "oklch(22.1% 0.029 65.4)",
         "tonalRamp": [
@@ -356,196 +372,84 @@
           "#fdebdb"
         ]
       },
-      "tape": {
+      "note": {
         "role": "tertiary",
-        "displayName": "Masking Tape",
-        "canonical": "rgba(226, 212, 176, 0.94)",
+        "displayName": "Sticky Note",
+        "canonical": "#f1db7a",
+        "oklch": "oklch(89.0% 0.120 96.9)",
         "tonalRamp": [
-          "#130900",
-          "#2f2303",
-          "#4d4121",
-          "#6d6040",
-          "#8e8160",
-          "#b2a481",
-          "#d6c8a5",
-          "#fceec9"
+          "#0f0b00",
+          "#292101",
+          "#453a00",
+          "#63550a",
+          "#847110",
+          "#a7922c",
+          "#d4be5d",
+          "#feefae"
         ]
       },
-      "ink-0": {
-        "role": "secondary",
-        "displayName": "Postal Blue",
-        "canonical": "#1f4fa3",
-        "oklch": "oklch(44.5% 0.146 260.7)",
+      "note-ink": {
+        "role": "tertiary",
+        "displayName": "Note Ink",
+        "canonical": "#2f2a1c",
+        "oklch": "oklch(28.6% 0.025 90.7)",
         "tonalRamp": [
-          "#010047",
-          "#00186a",
-          "#0a3b8e",
-          "#2d5db3",
-          "#4d80d9",
-          "#6fa4ff",
-          "#92c9ff",
-          "#c0f0ff"
-        ]
-      },
-      "ink-1": {
-        "role": "secondary",
-        "displayName": "Cancel Red",
-        "canonical": "#b0302a",
-        "oklch": "oklch(50.6% 0.166 27.5)",
-        "tonalRamp": [
-          "#380000",
-          "#5e0000",
-          "#840000",
-          "#ab2b26",
-          "#d35248",
-          "#fc7669",
-          "#ff9b8c",
-          "#ffcfc2"
-        ]
-      },
-      "ink-2": {
-        "role": "secondary",
-        "displayName": "Ledger Green",
-        "canonical": "#23744a",
-        "oklch": "oklch(49.9% 0.103 156.5)",
-        "tonalRamp": [
-          "#001500",
-          "#00320d",
-          "#00512a",
-          "#217248",
-          "#479569",
-          "#6bb98a",
-          "#8fdeae",
-          "#b4ffd2"
-        ]
-      },
-      "ink-3": {
-        "role": "secondary",
-        "displayName": "Violet Pad",
-        "canonical": "#6a3fa0",
-        "oklch": "oklch(46.7% 0.152 301.1)",
-        "tonalRamp": [
-          "#1a003f",
-          "#340061",
-          "#522484",
-          "#7147a8",
-          "#9369ce",
-          "#b68cf4",
-          "#dab0ff",
-          "#fcdcff"
-        ]
-      },
-      "ink-4": {
-        "role": "secondary",
-        "displayName": "Teal Pad",
-        "canonical": "#0d6f7c",
-        "oklch": "oklch(49.7% 0.083 209.4)",
-        "tonalRamp": [
-          "#00111e",
-          "#002e3b",
-          "#004d5a",
-          "#0a6e7b",
-          "#3b909d",
-          "#61b4c1",
-          "#86d8e6",
-          "#abffff"
-        ]
-      },
-      "ink-5": {
-        "role": "secondary",
-        "displayName": "Rust Pad",
-        "canonical": "#9c5218",
-        "oklch": "oklch(51.9% 0.119 53.3)",
-        "tonalRamp": [
-          "#2a0000",
-          "#4d0400",
-          "#702900",
-          "#944a0c",
-          "#b96c37",
-          "#df8f5a",
-          "#ffb37e",
-          "#ffd9a2"
-        ]
-      },
-      "ink-6": {
-        "role": "secondary",
-        "displayName": "Magenta Pad",
-        "canonical": "#a22d6b",
-        "oklch": "oklch(49.5% 0.163 352.3)",
-        "tonalRamp": [
-          "#310011",
-          "#56002d",
-          "#7b004a",
-          "#a12c6a",
-          "#c8518c",
-          "#f075af",
-          "#ff99d4",
-          "#ffcdf7"
-        ]
-      },
-      "ink-7": {
-        "role": "secondary",
-        "displayName": "Olive Pad",
-        "canonical": "#53661b",
-        "oklch": "oklch(47.9% 0.102 122.7)",
-        "tonalRamp": [
-          "#050f00",
-          "#1d2b00",
-          "#394a00",
-          "#576a20",
-          "#778c43",
-          "#99b066",
-          "#bdd489",
-          "#e2faae"
+          "#0f0b02",
+          "#262114",
+          "#3f3a2c",
+          "#5a5546",
+          "#777161",
+          "#989281",
+          "#c4bdac",
+          "#f5eedc"
         ]
       }
     },
     "typographyMeta": {
-      "sign": {
-        "displayName": "Signage",
-        "purpose": "Every printed heading: receipt names, TOTALS, How it works, dialog titles."
+      "heading": {
+        "displayName": "Printer Caps",
+        "purpose": "Every printed heading: receipt names, TOTALS, dialog titles (1.15rem); Sometype Mono 700 uppercase, 0.14em, centered."
       },
-      "marker": {
-        "displayName": "Marker",
-        "purpose": "Handwriting on the tape title and envelope label only."
+      "title": {
+        "displayName": "Title Note",
+        "purpose": "The app title in Sometype Mono 700, mixed case, in Note Ink on the sticky note, tilted -1.4deg with it."
+      },
+      "total": {
+        "displayName": "Receipt Total",
+        "purpose": "A receipt's TOTAL line at 1.3rem bold, the largest print on a receipt."
       },
       "figure": {
         "displayName": "Figure",
-        "purpose": "Per-person totals, EVERYONE line, receipt TOTAL lines; plain bold, never stretched."
+        "purpose": "Per-person totals and the EVERYONE line; plain bold, never stretched."
       },
       "body": {
         "displayName": "Print",
-        "purpose": "Everything printed on paper; item names uppercase."
+        "purpose": "Item and sum lines at 1rem (0.94rem at 560px and below); item names uppercase."
+      },
+      "names": {
+        "displayName": "Names",
+        "purpose": "People on a receipt line: comma-separated Thermal Print at 0.95rem, mixed case as typed, italic for Everyone on this receipt."
       },
       "label": {
         "displayName": "Label",
         "purpose": "Buttons, meta, notes, table headers; uppercase and tracked."
-      },
-      "stamp": {
-        "displayName": "Stamp",
-        "purpose": "Person names in their stamp ink."
       }
     },
     "shadows": [
       {
         "name": "slip-lift",
-        "value": "drop-shadow(0 1px 1px rgba(0,0,0,0.45)) drop-shadow(0 16px 22px rgba(0,0,0,0.42))",
+        "value": "drop-shadow(0 1px 1px rgba(0,0,0,0.35)) drop-shadow(0 12px 18px rgba(0,0,0,0.30))",
         "purpose": "Filter on every slip so the torn edge casts a real shadow."
       },
       {
-        "name": "curl-contact",
-        "value": "radial-gradient(closest-side, rgba(0,0,0,0.55), transparent) blur(3px)",
-        "purpose": "Contact shadow under a receipt's curled bottom."
-      },
-      {
         "name": "envelope",
-        "value": "0 -2px 6px rgba(0,0,0,0.18), 0 14px 24px rgba(0,0,0,0.45)",
-        "purpose": "Kraft envelope."
+        "value": "drop-shadow(0 -1px 3px rgba(0,0,0,0.16)) drop-shadow(0 12px 18px rgba(0,0,0,0.32))",
+        "purpose": "Filter on the kraft envelope, following its notched outline."
       },
       {
-        "name": "tape",
-        "value": "0 2px 6px rgba(0,0,0,0.35)",
-        "purpose": "Title tape strip."
+        "name": "note",
+        "value": "drop-shadow(0 1px 1px rgba(0,0,0,0.25)) drop-shadow(0 8px 12px rgba(0,0,0,0.28))",
+        "purpose": "Filter on the title sticky note and its tape."
       },
       {
         "name": "popover",
@@ -580,6 +484,21 @@
         "purpose": "Totals figures re-ink when they change."
       },
       {
+        "name": "hover-wash",
+        "value": "120ms ease-out background-color to rgba(46,43,39,0.07)",
+        "purpose": "Hover on receipt lines (not while editing), Totals rows, and the receipt name (2px 10px band, 3px radius, also on focus-visible)."
+      },
+      {
+        "name": "fold",
+        "value": "260ms ease-out; grid-template-rows 1fr to 0fr",
+        "purpose": "Folding a receipt body; inert while folded, clipped only while folded or folding."
+      },
+      {
+        "name": "fold-chevron",
+        "value": "200ms ease-out rotate(-90deg)",
+        "purpose": "The receipt fold chevron when folded."
+      },
+      {
         "name": "dialog-in",
         "value": "260ms ease-out; from opacity 0, translateY(-14px)",
         "purpose": "Dialog entrance."
@@ -607,27 +526,74 @@
     ],
     "edges": {
       "tear": {
-        "tile": "360px",
+        "method": "clip-path polygon generated per slip by tearFor() in src/utils/tear.ts (not a mask: a rotated mask left a faint hairline along the paper's bottom edge)",
         "height": "12px",
+        "span": "1400px",
         "toothWidth": "10-14px",
-        "peak": "2-4.5px",
-        "valley": "9-10.5px",
+        "valley": "1.5-3px into the band",
+        "tip": "7.5-10px into the band",
         "seed": "per slip from useId",
-        "top": "flat cut"
+        "top": "flat cut",
+        "layer": "same clipped paper layer as the slip body (.slip::before), extending 12px below",
+        "blankSlip": "Add receipt slip uses the same clip-path on a 12px strip (.blank-slip::after)"
       },
       "tilt": {
-        "slips": "-0.6deg to 0.5deg",
-        "stamps": "-1.2deg to 1.2deg stable per name",
-        "tape": "-1.6deg",
-        "envelope": "-0.8deg",
-        "mobile": "none"
+        "rule": "material layers only (paper); text never rotates, except the large title writing on its sticky note",
+        "slips": "paper layer only: receipts alternate -0.35deg / 0.45deg; the Totals slip lies level",
+        "envelope": "level, no rotation",
+        "mobile": "slip paper flat at 560px and below",
+        "titleNote": "whole .title rotated -1.4deg, note and writing together; tape a further 3deg"
+      },
+      "tape": {
+        "color": "rgba(240,236,224,0.62)",
+        "size": "108x24px",
+        "rotate": "3deg",
+        "ends": "torn clip-path",
+        "where": "title note only"
       }
     },
-    "inkAssignment": {
-      "count": 8,
-      "by": "index in People list",
-      "wrap": "people 9-16 get a double border",
-      "unlisted": "plain print"
+    "layout": {
+      "page": "1200px",
+      "receiptColumn": "up to 720px",
+      "totalsColumn": "372px",
+      "lineGrid": "minmax(0,1fr) 10ch minmax(0,1.25fr) 32px; areas what price who del; 12px gap",
+      "lineGridMobile": "minmax(0,1fr) 10ch 32px; who drops below, indented 2ch",
+      "how": "centered, max 560px, 112px below the slips",
+      "whoRule": "1.5px dotted paper-dim, 14px inset"
+    },
+    "people": {
+      "atRest": "plain text: comma-separated Thermal Print list at 0.95rem on receipt lines (People-list order, italic for Everyone on this receipt); 0.95rem plain names in Totals",
+      "editing": "neutral removable chips in the people box: paper-shade fill, 1px paper-dim border, 3px radius, print text 0.86rem, no tilt",
+      "colors": "none; no per-person inks or stamps"
+    },
+    "lift": {
+      "focusWithin": "only receipts rise (z-index 3) while focused so people suggestions overlap the next slip; the Totals slip never rises over its envelope"
+    },
+    "hierarchy": {
+      "principle": "The Work Leads: receipts and Totals figures loudest; help, chrome and decoration recede",
+      "referenceSecondary": "Save/Load desk buttons",
+      "howItWorks": "plain desk text, desk-ink-dim 0.84rem, max 560px, not a slip"
+    },
+    "subtotal": {
+      "position": "first line of the totals block, under the dashed rule",
+      "label": "plain mixed-case 'Subtotal' on the left, no dot leaders",
+      "type": "1rem, 600, letter-spacing 0.02em",
+      "figure": "in the price column",
+      "note": "only TOTAL is bold"
+    },
+    "paperSurface": {
+      "base": "paper color (#f7f7f4) with two procedural SVG textures multiplied on, plus a sheen in soft-light",
+      "fiber": "feTurbulence fractalNoise baseFrequency 0.8 0.55, 3 octaves, lit by feDiffuseLighting (surfaceScale 1.6, distant light azimuth 225, elevation 55), remapped to 0.92-1.0; 240px tile",
+      "mottle": "feTurbulence fractalNoise baseFrequency 0.012, 3 octaves, lit by feDiffuseLighting (surfaceScale 3, distant light azimuth 225, elevation 65), remapped to 0.955-1.0; 600px tile",
+      "sheen": "linear-gradient(115deg, rgba(255,255,255,0.5), transparent 38%), soft-light",
+      "grain": "the soft-light --grain is not on paper; it stays on the desk and the kraft"
+    },
+    "fold": {
+      "alwaysShown": "header, 'N items · N people' meta line, double rule, TOTAL line, Delete receipt",
+      "folds": "receipt body only: items, add buttons, subtotal and fees",
+      "inert": "while folded",
+      "clip": "only while folded or folding, so people suggestions overflow when open",
+      "summaryLine": "none"
     }
   },
   "components": [
@@ -635,9 +601,9 @@
       "name": "Printed Outline Button",
       "kind": "button",
       "refersTo": "print-btn",
-      "description": "Printed action on a slip: Add item, Add tax, tip, or fee.",
+      "description": "Quiet printed action on a slip: Add item, Add tax, tip, or fee. Dashed Paper Dim at rest, darkens on hover.",
       "html": "<div class=\"ds-paper\"><button class=\"ds-print-btn\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M5 12h14\"/><path d=\"M12 5v14\"/></svg>Add item</button></div>",
-      "css": ".ds-paper{background:#eceff1;color:#423e50;padding:20px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;} .ds-print-btn{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:0 12px;border:1.5px dashed #585565;border-radius:3px;background:none;color:#423e50;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background-color 140ms cubic-bezier(.16,1,.3,1),border-color 140ms cubic-bezier(.16,1,.3,1);} .ds-print-btn svg{width:15px;height:15px} .ds-print-btn:hover{background:#e4e8eb;border-color:#423e50;border-style:solid} .ds-print-btn:focus-visible{outline:2px dashed #423e50;outline-offset:2px}"
+      "css": ".ds-paper{background:#f7f7f4;color:#2e2b27;padding:20px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;} .ds-print-btn{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:0 12px;border:1.5px dashed #dcdcd5;border-radius:3px;background:none;color:#5f5a53;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background-color 140ms cubic-bezier(.16,1,.3,1),border-color 140ms cubic-bezier(.16,1,.3,1);} .ds-print-btn svg{width:15px;height:15px} .ds-print-btn:hover{background:#f0f0ec;border-color:#5f5a53;border-style:solid;color:#2e2b27} .ds-print-btn:focus-visible{outline:2px dashed #2e2b27;outline-offset:2px}"
     },
     {
       "name": "Printed Solid Button",
@@ -645,7 +611,7 @@
       "refersTo": "print-btn-solid",
       "description": "Dialog confirm action; danger variant in Correction Red.",
       "html": "<div class=\"ds-paper\"><button class=\"ds-solid\">Save</button> <button class=\"ds-solid ds-danger\">Delete</button></div>",
-      "css": ".ds-paper{background:#eceff1;color:#423e50;padding:20px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;} .ds-solid{min-height:34px;padding:0 12px;border:1.5px solid #423e50;border-radius:3px;background:#423e50;color:#eceff1;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background-color 140ms cubic-bezier(.16,1,.3,1)} .ds-solid:hover{background:#1d1b22} .ds-danger{background:#b3261e;border-color:#b3261e} .ds-danger:hover{background:#96201a;border-color:#96201a} .ds-solid:focus-visible{outline:2px dashed #423e50;outline-offset:2px}"
+      "css": ".ds-paper{background:#f7f7f4;color:#2e2b27;padding:20px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;} .ds-solid{min-height:34px;padding:0 12px;border:1.5px solid #2e2b27;border-radius:3px;background:#2e2b27;color:#f7f7f4;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background-color 140ms cubic-bezier(.16,1,.3,1)} .ds-solid:hover{background:#1c1a17} .ds-danger{background:#b3261e;border-color:#b3261e} .ds-danger:hover{background:#96201a;border-color:#96201a} .ds-solid:focus-visible{outline:2px dashed #2e2b27;outline-offset:2px}"
     },
     {
       "name": "Desk Button",
@@ -653,7 +619,7 @@
       "refersTo": "desk-btn",
       "description": "Quiet ink on the desk: Save, Load, overflow menu.",
       "html": "<div class=\"ds-desk\"><button class=\"ds-desk-btn\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z\"/><path d=\"M17 21v-8H7v8\"/><path d=\"M7 3v5h8\"/></svg>Save</button></div>",
-      "css": ".ds-desk{background:#17130f;padding:20px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;} .ds-desk-btn{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 12px;border:0;border-radius:4px;background:none;color:#b9ab95;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:color 160ms cubic-bezier(.16,1,.3,1),background-color 160ms cubic-bezier(.16,1,.3,1)} .ds-desk-btn svg{width:17px;height:17px} .ds-desk-btn:hover{color:#eadfca;background:rgba(234,223,202,.07)} .ds-desk-btn:focus-visible{outline:2px solid #eadfca;outline-offset:3px}"
+      "css": ".ds-desk{background:#3b342d;padding:20px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;} .ds-desk-btn{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 12px;border:0;border-radius:4px;background:none;color:#d9cfbf;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.86rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:color 160ms cubic-bezier(.16,1,.3,1),background-color 160ms cubic-bezier(.16,1,.3,1)} .ds-desk-btn svg{width:17px;height:17px} .ds-desk-btn:hover{color:#f3ebdd;background:rgba(234,223,202,.07)} .ds-desk-btn:focus-visible{outline:2px solid #f3ebdd;outline-offset:3px}"
     },
     {
       "name": "Printed Field",
@@ -661,39 +627,47 @@
       "refersTo": "field",
       "description": "Input printed straight onto paper with a dotted baseline and red caret.",
       "html": "<div class=\"ds-paper\"><input class=\"ds-field\" placeholder=\"What\"></div>",
-      "css": ".ds-paper{background:#eceff1;color:#423e50;padding:20px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;} .ds-field{width:100%;height:32px;padding:0 6px;border:0;border-bottom:1.5px dotted #585565;border-radius:0;background:rgba(255,255,255,.55);color:#423e50;caret-color:#b3261e;outline:none;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.9rem} .ds-field::placeholder{color:#585565} .ds-field:focus{border-bottom:1.5px solid #423e50;background:#fff}"
+      "css": ".ds-paper{background:#f7f7f4;color:#2e2b27;padding:20px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;} .ds-field{width:100%;height:32px;padding:0 6px;border:0;border-bottom:1.5px dotted #5f5a53;border-radius:0;background:rgba(255,255,255,.55);color:#2e2b27;caret-color:#b3261e;outline:none;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.9rem} .ds-field::placeholder{color:#5f5a53} .ds-field:focus{border-bottom:1.5px solid #2e2b27;background:#fff}"
     },
     {
-      "name": "Person Stamp",
+      "name": "People Chip and Names",
       "kind": "chip",
-      "refersTo": "stamp",
-      "description": "A person's name rubber-stamped in their ink; double border from person 9, dashed for Everyone.",
-      "html": "<div class=\"ds-paper\"><span class=\"ds-stamp\" style=\"--ink:#1f4fa3;transform:rotate(-0.6deg)\">Eda</span> <span class=\"ds-stamp\" style=\"--ink:#23744a\">Teresa</span> <span class=\"ds-stamp ds-stamp--double\" style=\"--ink:#b0302a;transform:rotate(1.2deg)\">Fredi</span> <span class=\"ds-stamp ds-stamp--everyone\" style=\"--ink:#423e50\">Everyone on this receipt</span></div>",
-      "css": ".ds-paper{background:#eceff1;color:#423e50;padding:20px;display:flex;gap:6px;flex-wrap:wrap;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;} .ds-stamp{display:inline-flex;align-items:center;padding:1px 6px;border:1.5px solid var(--ink);border-radius:1px;color:var(--ink);font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.74rem;font-weight:700;line-height:1.5;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;mix-blend-mode:multiply;opacity:.95} .ds-stamp--double{border-style:double;border-width:4px;padding:0 5px} .ds-stamp--everyone{border-style:dashed}"
+      "refersTo": "chip",
+      "description": "People as plain print: a comma-separated Thermal Print list at rest; neutral removable chips only while an item is being edited. No per-person color.",
+      "html": "<div class=\"ds-paper\"><p class=\"ds-names\">Teresa, Valry, Nick, Brietta</p><p class=\"ds-names ds-names--everyone\">Everyone on this receipt</p><div class=\"ds-box\"><span class=\"ds-chip\">Teresa<button class=\"ds-chip-x\" aria-label=\"Remove Teresa\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M18 6 6 18\"/><path d=\"m6 6 12 12\"/></svg></button></span><span class=\"ds-chip ds-chip--everyone\">Everyone on this receipt<button class=\"ds-chip-x\" aria-label=\"Remove\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M18 6 6 18\"/><path d=\"m6 6 12 12\"/></svg></button></span></div></div>",
+      "css": ".ds-paper{background:#f7f7f4;color:#2e2b27;padding:20px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;} .ds-names{margin:0 0 8px;color:#2e2b27;font-size:.95rem;line-height:1.4} .ds-names--everyone{font-style:italic} .ds-box{display:flex;flex-wrap:wrap;gap:5px 6px;padding:3px 6px;border-bottom:1.5px solid #2e2b27;background:#fff} .ds-chip{display:inline-flex;align-items:center;gap:2px;padding:1px 4px 1px 8px;border:1px solid #dcdcd5;border-radius:3px;background:#ebebe6;color:#2e2b27;font-size:.86rem;line-height:1.5;white-space:nowrap} .ds-chip--everyone{font-style:italic} .ds-chip-x{display:inline-grid;place-items:center;width:18px;height:18px;padding:0;border:0;border-radius:2px;background:none;color:#5f5a53;cursor:pointer} .ds-chip-x svg{width:12px;height:12px} .ds-chip-x:hover{background:#dcdcd5;color:#2e2b27} .ds-chip-x:focus-visible{outline:2px dashed #2e2b27;outline-offset:2px}"
     },
     {
       "name": "Receipt Slip",
       "kind": "card",
       "refersTo": "slip",
-      "description": "Thermal slip: flat-cut top, torn bottom, Bungee heading, register lines with dot leaders.",
-      "html": "<div class=\"ds-desk2\"><div class=\"ds-slip\"><h2 class=\"ds-sign\">Mexican Restaurant</h2><hr class=\"ds-rule\"><div class=\"ds-line\"><span class=\"ds-what\">Enchiladas</span><span>$17.00</span></div><div class=\"ds-line\"><span class=\"ds-what\">Horchata</span><span>$24.00</span></div><hr class=\"ds-rule2\"><div class=\"ds-line ds-total\"><span>Total</span><span>$41.00</span></div></div></div>",
-      "css": ".ds-desk2{background:#17130f;padding:24px 24px 36px} .ds-slip{position:relative;background:#eceff1;color:#423e50;padding:22px 26px 24px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.9rem;line-height:1.5;font-variant-numeric:tabular-nums;transform:rotate(-.35deg);filter:drop-shadow(0 1px 1px rgba(0,0,0,.45)) drop-shadow(0 16px 22px rgba(0,0,0,.42))} .ds-slip::after{content:'';position:absolute;left:0;right:0;top:100%;height:12px;background:#eceff1;clip-path:polygon(0 0,100% 0,100% 20%,97% 85%,94% 25%,90.5% 80%,87% 20%,83.5% 90%,80% 30%,76.5% 80%,73% 15%,69.5% 85%,66% 25%,62.5% 75%,59% 20%,55.5% 90%,52% 30%,48.5% 80%,45% 15%,41.5% 85%,38% 25%,34.5% 80%,31% 20%,27.5% 85%,24% 30%,20.5% 75%,17% 20%,13.5% 85%,10% 25%,6.5% 80%,3% 20%,0 70%)} .ds-sign{margin:0;font-family:Bungee,'Arial Black',sans-serif;font-weight:400;font-size:1.45rem;line-height:1.1;letter-spacing:.02em;text-transform:uppercase;text-align:center} .ds-rule{border:0;border-top:1.5px dashed #a19ea6;margin:10px 0} .ds-rule2{border:0;height:5px;border-top:1.5px solid #423e50;border-bottom:1.5px solid #423e50;margin:12px 0 8px} .ds-line{display:grid;grid-template-columns:minmax(0,1fr) 10ch;column-gap:12px;padding:3px 0;text-transform:uppercase;letter-spacing:.03em} .ds-line>:last-child{text-align:right} .ds-what{display:flex;gap:8px;align-items:baseline} .ds-what::after{content:'';flex:1;border-bottom:1.5px dotted #a19ea6;transform:translateY(-4px)} .ds-total{font-weight:700;font-size:1.12rem}"
+      "description": "Thermal slip: lit fiber-textured paper layer tilted behind straight print, flat-cut top, torn bottom, printer-caps heading, register lines with dot leaders and a plain names column.",
+      "html": "<div class=\"ds-desk2\"><div class=\"ds-slip\"><h2 class=\"ds-heading\">Mexican Restaurant</h2><hr class=\"ds-rule\"><div class=\"ds-line\"><span class=\"ds-what\">Enchiladas</span><span class=\"ds-price\">$17.00</span><span class=\"ds-who\"><span class=\"ds-names\">Eda</span></span></div><div class=\"ds-line\"><span class=\"ds-what\">Horchata</span><span class=\"ds-price\">$24.00</span><span class=\"ds-who\"><span class=\"ds-empty\">Who had it?</span></span></div><hr class=\"ds-rule2\"><div class=\"ds-line ds-total\"><span>Total</span><span class=\"ds-price\">$41.00</span></div></div></div>",
+      "css": ".ds-desk2{background:#3b342d;padding:24px 24px 36px} .ds-slip{position:relative;isolation:isolate;color:#2e2b27;padding:22px 26px 24px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.9rem;line-height:1.5;font-variant-numeric:tabular-nums;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35)) drop-shadow(0 12px 18px rgba(0,0,0,.3))} .ds-slip::before{content:'';position:absolute;inset:0 0 -12px;z-index:-1;background-color:#f7f7f4;background-image:linear-gradient(115deg,rgba(255,255,255,.5),transparent 38%),url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8 0.55' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='%23fff' surfaceScale='1.6' diffuseConstant='1'%3E%3CfeDistantLight azimuth='225' elevation='55'/%3E%3C/feDiffuseLighting%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='0.09' intercept='0.92'/%3E%3CfeFuncG type='linear' slope='0.09' intercept='0.92'/%3E%3CfeFuncB type='linear' slope='0.09' intercept='0.92'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E\"),url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='3' seed='9' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='%23fff' surfaceScale='3'%3E%3CfeDistantLight azimuth='225' elevation='65'/%3E%3C/feDiffuseLighting%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='0.05' intercept='0.955'/%3E%3CfeFuncG type='linear' slope='0.05' intercept='0.955'/%3E%3CfeFuncB type='linear' slope='0.05' intercept='0.955'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E\");background-size:auto,240px 240px,600px 600px;background-blend-mode:soft-light,multiply,multiply;transform:rotate(-.35deg);clip-path:polygon(0 0,100% 0,100% calc(100% - 10px),97% calc(100% - 2px),94% calc(100% - 9px),90.5% calc(100% - 3px),87% calc(100% - 10px),83.5% calc(100% - 1px),80% calc(100% - 8px),76.5% calc(100% - 3px),73% calc(100% - 10px),69.5% calc(100% - 2px),66% calc(100% - 9px),62.5% calc(100% - 3px),59% calc(100% - 10px),55.5% calc(100% - 1px),52% calc(100% - 8px),48.5% calc(100% - 3px),45% calc(100% - 10px),41.5% calc(100% - 2px),38% calc(100% - 9px),34.5% calc(100% - 3px),31% calc(100% - 10px),27.5% calc(100% - 2px),24% calc(100% - 8px),20.5% calc(100% - 3px),17% calc(100% - 10px),13.5% calc(100% - 2px),10% calc(100% - 9px),6.5% calc(100% - 3px),3% calc(100% - 10px),0 calc(100% - 4px))} .ds-heading{margin:0;font-weight:700;font-size:1.3rem;line-height:1.2;letter-spacing:.14em;text-transform:uppercase;text-align:center} .ds-rule{border:0;border-top:1.5px dashed #aaa59c;margin:10px 0} .ds-rule2{border:0;height:5px;border-top:1.5px solid #2e2b27;border-bottom:1.5px solid #2e2b27;margin:12px 0 8px} .ds-line{display:grid;grid-template-columns:minmax(0,1fr) 10ch minmax(0,1.25fr) 32px;column-gap:12px;align-items:center;padding:3px 0;font-size:1rem} .ds-what{text-transform:uppercase;letter-spacing:.02em} .ds-price{text-align:right} .ds-what{display:flex;gap:8px;align-items:baseline} .ds-what::after{content:'';flex:1;min-width:12px;border-bottom:1.5px dotted #aaa59c;transform:translateY(-4px)} .ds-who{align-self:stretch;display:flex;align-items:center;min-height:30px;padding-left:14px;border-left:1.5px dotted #dcdcd5} .ds-names{color:#2e2b27;font-size:.95rem;line-height:1.4} .ds-empty{color:#5f5a53;font-size:.76rem;letter-spacing:.06em} .ds-total{font-weight:700;font-size:1.3rem;text-transform:uppercase;letter-spacing:.04em}"
+    },
+    {
+      "name": "How It Works",
+      "kind": "custom",
+      "refersTo": "how",
+      "description": "Help as plain, dim text on the desk, never a slip, so it recedes behind the receipts.",
+      "html": "<div class=\"ds-desk6\"><section class=\"ds-how\"><h2 class=\"ds-how-h\">How it works</h2><ol><li><span class=\"ds-how-step\">Add a receipt.</span> e.g. “Sakura Sushi”</li><li><span class=\"ds-how-step\">See the totals.</span> Totals shows what everyone owes.</li></ol><h3 class=\"ds-how-h ds-how-h3\">Tips</h3><ul><li><kbd>Enter</kbd> or <kbd>Tab</kbd> moves to the next box.</li></ul><button class=\"ds-how-btn\">Show 8 more tips</button></section></div>",
+      "css": ".ds-desk6{background:#3b342d;padding:28px} .ds-how{max-width:560px;margin:0 auto;color:#c2b6a3;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.84rem;line-height:1.55} .ds-how-h{margin:0 0 10px;color:#d9cfbf;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase} .ds-how-h3{margin-top:22px} .ds-how ol,.ds-how ul{margin:0;padding-left:22px} .ds-how li+li{margin-top:5px} .ds-how-step{color:#d9cfbf;font-weight:600} .ds-how kbd{display:inline-block;padding:0 .4em;border:1px solid currentColor;border-bottom-width:2px;border-radius:3px;font-family:inherit;font-size:.82em} .ds-how-btn{margin-top:4px;padding:4px 2px;border:0;background:none;color:#c2b6a3;font-family:inherit;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:underline dotted;text-underline-offset:4px;cursor:pointer} .ds-how-btn:hover{color:#f3ebdd;text-decoration-style:solid} .ds-how-btn:focus-visible{outline:2px solid #f3ebdd;outline-offset:3px}"
     },
     {
       "name": "Kraft Envelope",
       "kind": "custom",
       "refersTo": "envelope-export",
-      "description": "The envelope holding the Totals slip: marker label and the export action.",
+      "description": "The envelope holding the Totals slip: level kraft with a notch and seams, a 700 caps label, mono subline and export action.",
       "html": "<div class=\"ds-desk3\"><div class=\"ds-env\"><p class=\"ds-env-label\">Who owes what<small>15 people · $701.62</small></p><button class=\"ds-env-btn\">Export totals</button></div></div>",
-      "css": ".ds-desk3{background:#17130f;padding:24px} .ds-env{padding:26px 22px 16px;border-radius:3px;color:#24180c;background:linear-gradient(180deg,#b8946a,#a6825a 40%);box-shadow:0 -2px 6px rgba(0,0,0,.18),0 14px 24px rgba(0,0,0,.45);transform:rotate(-.8deg);-webkit-mask:radial-gradient(circle 22px at 50% 0,#0000 98%,#000);mask:radial-gradient(circle 22px at 50% 0,#0000 98%,#000)} .ds-env-label{margin:0 0 10px;font-family:'Permanent Marker','Comic Sans MS',cursive;font-size:1.3rem;line-height:1.15;transform:rotate(-1.2deg)} .ds-env-label small{display:block;margin-top:2px;font-size:.95rem;opacity:.85} .ds-env-btn{width:100%;min-height:42px;border:2px solid #24180c;border-radius:3px;background:#b8946a;color:#24180c;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-weight:700;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:background-color 140ms cubic-bezier(.16,1,.3,1),color 140ms cubic-bezier(.16,1,.3,1)} .ds-env-btn:hover{background:#24180c;color:#b8946a} .ds-env-btn:focus-visible{outline:2px dashed #24180c;outline-offset:3px}"
+      "css": ".ds-desk3{background:#3b342d;padding:24px} .ds-env{position:relative;isolation:isolate;padding:26px 22px 16px;color:#24180c;filter:drop-shadow(0 -1px 3px rgba(0,0,0,.16)) drop-shadow(0 12px 18px rgba(0,0,0,.32))} .ds-env::before{content:'';position:absolute;inset:0;z-index:-1;border-radius:3px;background:linear-gradient(180deg,#b8946a,#a6825a 40%);-webkit-mask:radial-gradient(circle 22px at 50% 0,#0000 98%,#000);mask:radial-gradient(circle 22px at 50% 0,#0000 98%,#000)} .ds-env-label{margin:0 0 12px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:1rem;font-weight:700;line-height:1.2;letter-spacing:.12em;text-transform:uppercase} .ds-env-label small{display:block;margin-top:4px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.8rem;font-weight:600;letter-spacing:.06em} .ds-env-btn{width:100%;min-height:42px;border:2px solid #24180c;border-radius:3px;background:#b8946a;color:#24180c;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-weight:700;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:background-color 140ms cubic-bezier(.16,1,.3,1),color 140ms cubic-bezier(.16,1,.3,1)} .ds-env-btn:hover{background:#24180c;color:#b8946a} .ds-env-btn:focus-visible{outline:2px dashed #24180c;outline-offset:3px}"
     },
     {
-      "name": "Tape Title",
+      "name": "Title Note",
       "kind": "nav",
-      "refersTo": "desk-head",
-      "description": "App title in marker on a strip of torn masking tape, top left of the desk.",
-      "html": "<div class=\"ds-desk4\"><h1 class=\"ds-tape\">Carole Venmo Splitter</h1></div>",
-      "css": ".ds-desk4{background:#17130f;padding:28px} .ds-tape{display:inline-block;margin:0;padding:10px 26px 8px;font-family:'Permanent Marker','Comic Sans MS',cursive;font-weight:400;font-size:1.8rem;line-height:1.1;letter-spacing:.01em;color:#24180c;background:linear-gradient(180deg,rgba(255,255,255,.18),transparent 40%,rgba(0,0,0,.05)),rgba(226,212,176,.94);transform:rotate(-1.6deg);box-shadow:0 2px 6px rgba(0,0,0,.35);clip-path:polygon(1.5% 0,99% 4%,97.8% 22%,100% 41%,98.2% 63%,99.6% 82%,98.4% 100%,.6% 96%,2.2% 78%,0 58%,1.8% 37%,.2% 17%)}"
+      "refersTo": "title-note",
+      "description": "The app title written on a yellow sticky note, note and writing tilted -1.4deg together, with a torn strip of translucent tape across its top.",
+      "html": "<div class=\"ds-desk4\"><h1 class=\"ds-title\">Carole Venmo Splitter</h1></div>",
+      "css": ".ds-desk4{background:#3b342d;padding:36px 28px 28px} .ds-title{position:relative;isolation:isolate;display:inline-block;margin:0;padding:18px 28px 16px;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-weight:700;font-size:clamp(1.2rem,1rem + .8vw,1.5rem);line-height:1.15;letter-spacing:-.01em;color:#2f2a1c;transform:rotate(-1.4deg);filter:drop-shadow(0 1px 1px rgba(0,0,0,.25)) drop-shadow(0 8px 12px rgba(0,0,0,.28))} .ds-title::before{content:'';position:absolute;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(255,255,255,.18),transparent 30%,transparent 78%,rgba(120,90,0,.08)),#f1db7a} .ds-title::after{content:'';position:absolute;top:-11px;left:50%;z-index:-1;width:108px;height:24px;margin-left:-54px;background:rgba(240,236,224,.62);box-shadow:0 1px 2px rgba(0,0,0,.12);transform:rotate(3deg);clip-path:polygon(2% 0,98% 6%,96.5% 30%,99% 55%,97% 78%,98.6% 100%,1% 94%,3% 70%,0 45%,2.5% 22%)}"
     },
     {
       "name": "Paper Menu",
@@ -701,66 +675,90 @@
       "refersTo": "menu-item-active",
       "description": "Overflow menu on a paper sheet; hover and focus print in reverse.",
       "html": "<div class=\"ds-desk5\"><ul class=\"ds-menu\"><li><button class=\"ds-mi\">Load example data</button></li><li><button class=\"ds-mi\">How it works</button></li><li><button class=\"ds-mi ds-mi--danger\">Clear everything</button></li></ul></div>",
-      "css": ".ds-desk5{background:#17130f;padding:24px} .ds-menu{min-width:230px;margin:0;padding:6px 0;list-style:none;color:#423e50;background:#eceff1;box-shadow:0 14px 28px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.3)} .ds-mi{display:flex;width:100%;padding:9px 14px;border:0;background:none;color:inherit;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.84rem;text-align:left;cursor:pointer} .ds-mi--danger{color:#b3261e} .ds-mi:hover,.ds-mi:focus-visible{background:#423e50;color:#eceff1;outline:none}"
+      "css": ".ds-desk5{background:#3b342d;padding:24px} .ds-menu{min-width:230px;margin:0;padding:6px 0;list-style:none;color:#2e2b27;background:#f7f7f4;box-shadow:0 14px 28px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.3)} .ds-mi{display:flex;width:100%;padding:9px 14px;border:0;background:none;color:inherit;font-family:'Sometype Mono',ui-monospace,Menlo,monospace;font-size:.84rem;text-align:left;cursor:pointer} .ds-mi--danger{color:#b3261e} .ds-mi:hover,.ds-mi:focus-visible{background:#2e2b27;color:#f7f7f4;outline:none}"
     }
   ],
   "narrative": {
     "northStar": "The Desk Under One Lamp",
-    "overview": "The app is a warm near-black desk at night, lit by a single lamp, with real objects lying on it. Every receipt is a cool white thermal slip, cut flat across the top, torn off at the bottom, tilted a fraction of a degree and lifted off the desk by a soft shadow. Totals is the collection slip, standing in a kraft envelope that holds the export action. The app title is written in marker on a strip of masking tape. No panels, cards, or dashboard chrome: if something is a surface, it is a physical object with a material.\n\nOn paper, everything prints in one monospace face on one character grid, in faded grey-violet thermal ink. The only exceptions are the chunky signage caps of printed headings and the per-person stamp inks. Figures line up like a register: dot leaders run to right-aligned prices in a shared column, totals sit under dashed and double rules. Each person is a rubber stamp in their own ink, consistent everywhere they appear.\n\nDensity is that of a real receipt: compact lines, uppercase item names, small tracked labels, and generous space between slips on the desk. Motion is mechanical and brief: new lines feed out of the printer in steps, and changed figures re-ink.",
+    "overview": "The app is a warm brown desk under a single soft lamp, with real objects lying on it. Every receipt is a white thermal slip with a fine paper texture, cut flat across the top, torn off at the bottom, its paper tilted a fraction of a degree and lifted off the desk by a soft shadow. Totals is the collection slip, standing in a kraft envelope that holds the export action. The app title is written on a yellow sticky note taped to the desk, the one object whose writing tilts with it. No panels, cards, or dashboard chrome: if something is a surface, it is a physical object with a material.\n\nOn paper, everything prints in one monospace face on one character grid, in warm charcoal thermal ink. Printed headings are the same face in bold, widely tracked caps, the way a receipt printer sets a store name. Figures line up like a register: dot leaders run to right-aligned prices in a shared column, totals sit under dashed and double rules. People are plain printed names: a quiet comma-separated list beside each price, and a plain name beside each figure in Totals.\n\nThe work leads. The core jobs are entering a receipt, checking that every item and its people are right, and reading the totals, so the receipts and the Totals figures are the loudest things on the desk. Help, chrome and decoration recede: How it works is quiet text on the desk, printed add buttons are faint dashed outlines until hovered, and names print in plain mixed case, a hair smaller than the item and its price.\n\nDensity is that of a real receipt: compact lines at a readable 1rem, uppercase item names, small tracked labels, and generous space between slips on the desk. Motion is mechanical and brief: new lines feed out of the printer in steps, and changed figures re-ink.\n\nThe world is meant to be fun but polished: crisp print, muted ink, flat paper and restrained physical effects, never a toy or a classroom craft project.",
     "keyCharacteristics": [
-      "Dark warm desk on a strict tonal ramp with a faint lamp pool and grain.",
-      "Cool thermal paper with a flat-cut top, a seeded, gently varied torn bottom, slight tilt, and lifted shadow.",
-      "One monospace face (Sometype Mono) for everything printed; Bungee only for printed headings; Permanent Marker only for handwriting on tape and kraft.",
-      "Eight stamp inks, one per person by People-list position.",
-      "Register alignment: dot leaders, a shared price column, dashed and double rules."
+      "Warm mid-brown desk on a strict tonal ramp with a weak lamp pool and grain.",
+      "Near-white thermal paper with a lit fiber texture, a flat-cut top, a seeded, gently varied torn bottom, slight tilt on receipts, and lifted shadow.",
+      "Tilt lives on material layers only (paper); the Totals slip and its envelope lie level; all text stays straight, except the large title on its sticky note.",
+      "One family for the whole app: Sometype Mono, with printed headings and the envelope label in its 700 printer caps.",
+      "Receipts and Totals figures lead; help, chrome and decoration recede.",
+      "Names in plain print, no per-person colors.",
+      "Register alignment: dot leaders, a shared price column, a who-had-it column, dashed and double rules."
     ],
     "rules": [
       {
-        "name": "The Ink Belongs to People Rule",
-        "body": "The eight stamp inks mean \"this person\" and nothing else. Never use them for status, categories or decoration. Past eight people the inks repeat with a double border (people 9 to 16), so neighbours stay distinct.",
+        "name": "The Work Leads Rule",
+        "body": "Entering a receipt, checking its items and people, and reading the totals are the work, so receipts and the Totals figures are the loudest things on the page. Help, chrome and decoration recede: smaller, dimmer, outlined rather than filled, never in color. Save and Load on the desk are the reference for correctly balanced secondary UI: legible and easy to find, never louder than the work. If a new element draws the eye before a receipt line or a figure, quiet it.",
+        "section": "overview"
+      },
+      {
+        "name": "The Polished Not Playschool Rule",
+        "body": "Fun comes from the world (slips, the envelope, the title note), not from crude effects. Prefer muted ink, crisp straight text and flat paper over loud colors, handwriting fonts, curls and heavy shading. Tape appears in exactly one place, the strip holding the title note to the desk, because the user asked for it there; nothing else is taped. If a detail would look at home in a fifth grader's educational program, cut it.",
+        "section": "overview"
+      },
+      {
+        "name": "The Faint Is Not Text Rule",
+        "body": "Faint Print draws rules and leaders only. Any words on paper, including placeholders and empty states, are at least Soft Print.",
         "section": "colors"
       },
       {
-        "name": "The One Ink Rule",
-        "body": "Everything printed on a slip is Thermal Print or Soft Print; red is reserved for things that are wrong or destructive.",
-        "section": "colors"
-      },
-      {
-        "name": "The Signage Heading Rule",
-        "body": "Every printed heading is Bungee caps, centered. Nothing else on paper uses Bungee.",
+        "name": "The Printer Caps Rule",
+        "body": "Every printed heading is Sometype Mono 700 in uppercase, tracked 0.14em and centered, the way a thermal printer sets a store name; the envelope label uses the same caps at 1rem, 0.12em. Sometype Mono is the only family in the app, chosen by the user as \"printer caps\"; never add a second display face. The app title is not a printed heading: it is Sometype Mono 700 in mixed case, written on the sticky note. Headings in desk text (How it works) are small tracked caps (0.78rem, 0.12em) in Desk Ink.",
         "section": "typography"
       },
       {
         "name": "The No-Stretch Rule",
-        "body": "Figures are plain bold monospace at 1.12rem. Never scaleY or double-height figures; the user rejected stretched digits.",
+        "body": "Figures are plain bold monospace: 1.12rem in Totals, 1.3rem for a receipt's TOTAL. Never scaleY or double-height figures; the user rejected stretched digits.",
         "section": "typography"
       },
       {
-        "name": "The Marker Is Handwriting Rule",
-        "body": "Permanent Marker appears only where a person would have written by hand: the tape title and the envelope label.",
+        "name": "The Straight Print Rule",
+        "body": "Tilt never touches text. Rotated text blurs on 1080p screens, so only material layers rotate: a slip's paper. Headings, lines, names, labels and buttons always sit at 0 degrees. The one sanctioned exception is the app title: large display text on the sticky note, it tilts -1.4 degrees with the note as one object, at a size that stays sharp. All small text stays straight.",
         "section": "typography"
       },
       {
         "name": "The Objects Cast Shadows Rule",
-        "body": "Only physical objects on the desk (slips, envelope, tape, popovers) cast shadows, and always soft and downward. Nothing printed on paper gets a shadow.",
+        "body": "Only physical objects on the desk (slips, envelope, title note, popovers) cast shadows, and always soft and downward. Nothing printed on paper gets a shadow.",
         "section": "elevation"
+      },
+      {
+        "name": "The Flat Paper Rule",
+        "body": "Thermal paper lies flat: no curl gradients, end darkening, banding, contact shadows or thermal fade overlays. Its surface is a lit fiber texture (fine fiber tooth over soft mottling, multiplied onto the paper color), never a plain fill and never darker than the 0.92 floor.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Quiet Hover Rule",
+        "body": "Hover on the work is a clear but quiet wash of the ink itself (a 7% Thermal Print band), never color, a pen stroke or a motion flourish; the user found a highlighter hover \"a bit too fun\". It fades in briefly and never appears on a line being edited; buttons and chrome keep their own hovers.",
+        "section": "components"
       }
     ],
     "dos": [
-      "Do put every surface on the desk as a physical object: a slip, the envelope, tape, or a paper menu.",
-      "Do cut slips flat on top and tear only the bottom, using the seeded, gently varied tear (12px teeth band, 360px tile).",
-      "Do set every printed heading in Bungee caps and everything else on paper in Sometype Mono.",
-      "Do align prices and totals in the shared register grid with dot leaders.",
-      "Do give each person their stamp ink by People-list position, with a double border from person 9.",
-      "Do set figures in plain bold Sometype Mono at 1.12rem."
+      "Do keep receipts and the Totals figures the loudest things on the page; help, chrome and decoration recede, with Save and Load as the reference weight for secondary UI.",
+      "Do put every surface on the desk as a physical object: a slip, the envelope, or a paper menu.",
+      "Do cut slips flat on top and tear only the bottom, using the seeded, gently varied tear (a per-slip clip-path polygon, 12px teeth band).",
+      "Do set every printed heading in Sometype Mono 700 printer caps (1.3rem, 0.14em, centered) and everything else in Sometype Mono.",
+      "Do tilt only the material layer (receipt paper) and keep every piece of text at 0 degrees; the Totals slip and envelope lie level; the title note's large writing is the one exception.",
+      "Do mark hover on receipt lines, Totals rows and receipt names with the quiet 7% ink wash, faded in over 120ms.",
+      "Do print Subtotal the way real receipts do: a plain mixed-case label on the left, its figure in the price column, and only TOTAL in bold.",
+      "Do align prices and totals in the shared register grid (item, price, who, delete) with dot leaders.",
+      "Do print names as plain text: a comma-separated Thermal Print list at 0.95rem on receipt lines (italic for \"Everyone on this receipt\"), plain 0.95rem names in Totals, and neutral removable chips only while an item is being edited.",
+      "Do set figures in plain bold Sometype Mono: 1.12rem in Totals, 1.3rem for a receipt's TOTAL."
     ],
     "donts": [
       "Don't use rounded cards, panels or a light dashboard background.",
+      "Don't rotate text, headings, buttons or whole slips; rotated text blurs. Only the title note's large writing tilts, with the note.",
       "Don't tear or zigzag the top of a slip, use uniform zigzags, or make tears very random.",
       "Don't stretch figures or headings vertically (no scaleY, no double-height digits).",
-      "Don't use stamp inks for anything other than people.",
-      "Don't use Permanent Marker on paper, or Bungee outside printed headings.",
-      "Don't use Faint Print for text people need to read; it is for rules and leaders."
+      "Don't give people colors, stamps or per-person inks; the user found colored name stamps \"more like a mosaic than helpful UI\".",
+      "Don't let help or chrome compete with the work: no paper slip, printed headings or bright ink for How it works, and no solid or dark outlines on printed add buttons at rest.",
+      "Don't use handwriting fonts, a second typeface beside Sometype Mono, or tape anywhere but the one strip across the title note.",
+      "Don't add curl gradients, end darkening, banding, contact shadows or thermal fade over the paper.",
+      "Don't use Faint Print for any text, including placeholders and empty states; it is for rules and leaders."
     ]
   }
 }

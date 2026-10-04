@@ -5,52 +5,54 @@
   color-scheme: dark;
 
   /* Desk, darkest to lightest */
-  --desk-0: #0f0c0a;
-  --desk-1: #17130f;
-  --desk-2: #201a14;
-  --desk-3: #2b231b;
-  --desk-4: #3a3026;
-  --desk-ink: #b9ab95;
-  --desk-ink-dim: #9a8c78;
-  --desk-ink-bright: #eadfca;
+  --desk-0: #2c2620;
+  --desk-1: #3b342d;
+  --desk-2: #463e36;
+  --desk-3: #524840;
+  --desk-4: #685d52;
+  --desk-ink: #d9cfbf;
+  --desk-ink-dim: #c2b6a3;
+  --desk-ink-bright: #f3ebdd;
 
   /* Thermal paper */
-  --paper: #eceff1;
-  --paper-shade: #dde1e5;
-  --paper-hover: #e4e8eb;
-  --paper-dim: #d0d5da;
-  --paper-rgb: 236, 239, 241;
-  --print: #423e50;
-  --print-soft: #585565;
-  --print-faint: #a19ea6;
+  --paper: #f7f7f4;
+  --paper-shade: #ebebe6;
+  --paper-hover: #f0f0ec;
+  --paper-dim: #dcdcd5;
+  --paper-rgb: 247, 247, 244;
+  --print: #2e2b27;
+  --print-soft: #5f5a53;
+  --print-faint: #aaa59c;
   --print-red: #b3261e;
   --highlight: #f3d86a;
+  /* Breaks in the print: sparse flecks from thresholded noise */
+  --ink-flecks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='k' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.62' numOctaves='2' seed='21' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  9 0 0 0 -5.1' result='m'/%3E%3CfeFlood flood-color='white'/%3E%3CfeComposite in2='m' operator='in'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='black'/%3E%3Crect width='100%25' height='100%25' filter='url(%23k)'/%3E%3C/svg%3E");
 
-  /* Envelope and tape */
+  /* Notepad the names are written on */
+  --notepad: #fbf9ee;
+  --notepad-rule: rgba(46, 43, 39, 0.13);
+
+  /* Hover on paper: a charcoal wash, clearly visible but quiet */
+  --paper-hover-band: rgba(46, 43, 39, 0.07);
+
+  /* Sticky note and tape */
+  --note: #f1db7a;
+  --note-ink: #2f2a1c;
+  --tape: rgba(240, 236, 224, 0.62);
+
+  /* Envelope */
   --kraft: #a6825a;
   --kraft-light: #b8946a;
   --kraft-seam: rgba(60, 38, 14, 0.28);
   --kraft-ink: #24180c;
-  --tape: rgba(226, 212, 176, 0.94);
 
-  /* Stamp inks, one per person */
-  --ink-0: #1f4fa3;
-  --ink-1: #b0302a;
-  --ink-2: #23744a;
-  --ink-3: #6a3fa0;
-  --ink-4: #0d6f7c;
-  --ink-5: #9c5218;
-  --ink-6: #a22d6b;
-  --ink-7: #53661b;
 
   --font-print: 'Sometype Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-  --font-marker: 'Permanent Marker', 'Comic Sans MS', cursive;
-  --font-sign: 'Bungee', 'Arial Black', sans-serif;
+  /* The title is written on its sticky note in marker, not printed */
+  --font-marker: 'Caveat', 'Segoe Print', 'Bradley Hand', cursive;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --tooth: 12px;
-  /* Speckle holes for rubber-stamp ink */
-  --stamp-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -3 2.5'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -68,30 +70,24 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  /* Tilted paper near the edge mustn't make the page scroll sideways */
+  overflow-x: clip;
   font-family: var(--font-print);
   font-size: 15px;
   line-height: 1.45;
   color: var(--desk-ink);
   background-color: var(--desk-1);
-  /* One lamp over the middle of the desk */
+  /* A leather desk pad under one lamp: the leather (a CC0 scan, see
+     assets/leather.txt) darkened toward the desk tones, lit in the middle */
   background-image:
-    radial-gradient(ellipse 60% 48% at 46% 4%, rgba(255, 214, 160, 0.075), transparent 70%),
-    radial-gradient(ellipse 120% 90% at 50% 0%, var(--desk-2), var(--desk-0) 85%);
+    radial-gradient(ellipse 60% 48% at 46% 4%, rgba(255, 220, 175, 0.06), transparent 70%),
+    radial-gradient(ellipse 120% 90% at 50% 0%, rgba(58, 46, 36, 0.42), rgba(30, 24, 19, 0.72) 85%),
+    url('./assets/leather.webp');
+  /* Native size: one image pixel per screen pixel keeps the grain sharp */
+  background-size: auto, auto, 1024px 1024px;
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   font-variant-numeric: tabular-nums;
-}
-
-/* Desk grain, over everything but under the paper */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image: var(--grain);
-  opacity: 0.22;
-  mix-blend-mode: overlay;
-  z-index: 0;
 }
 
 ::selection {
@@ -149,7 +145,7 @@ kbd {
 .page {
   position: relative;
   z-index: 1;
-  max-width: 1100px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 28px 24px 72px;
 }
@@ -163,27 +159,65 @@ kbd {
   margin-bottom: 44px;
 }
 
-/* The title, in marker on a strip of masking tape */
-.tape {
+/* The title, written on a sticky note taped to the desk. The writing tilts
+   with the note; at this size it stays sharp. */
+.title {
   position: relative;
+  isolation: isolate;
   margin: 0;
-  padding: 10px 26px 8px;
+  padding: 18px 28px 16px;
   font-family: var(--font-marker);
-  font-weight: 400;
-  font-size: clamp(1.45rem, 1.1rem + 1.4vw, 2.05rem);
-  line-height: 1.1;
-  letter-spacing: 0.01em;
-  color: var(--kraft-ink);
+  font-weight: 700;
+  font-size: clamp(1.65rem, 1.35rem + 1vw, 2rem);
+  line-height: 1;
+  color: var(--note-ink);
+  /* Where it's been stuck, if it's been moved (see TitleNote) */
+  transform: translate(var(--note-x, 0px), var(--note-y, 0px)) rotate(var(--note-tilt, -1.4deg));
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25)) drop-shadow(0 8px 12px rgba(0, 0, 0, 0.28));
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: transform 180ms var(--ease-out), filter 180ms var(--ease-out);
+}
+
+/* Stuck somewhere on the desk, on top of whatever's there */
+.title--moved {
+  z-index: 30;
+}
+
+/* Peeled off and carried: it lifts, so its shadow spreads and softens */
+.title--carried {
+  z-index: 40;
+  cursor: grabbing;
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.22)) drop-shadow(0 18px 26px rgba(0, 0, 0, 0.34));
+  /* Follows the pointer exactly; only the tilt and lift ease */
+  transition: filter 180ms var(--ease-out);
+}
+
+.title::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 40%, rgba(0, 0, 0, 0.05)),
-    var(--tape);
-  transform: rotate(-1.6deg);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
-  /* Torn ends */
-  clip-path: polygon(
-    1.5% 0, 99% 4%, 97.8% 22%, 100% 41%, 98.2% 63%, 99.6% 82%, 98.4% 100%,
-    0.6% 96%, 2.2% 78%, 0 58%, 1.8% 37%, 0.2% 17%
-  );
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 30%, transparent 78%, rgba(120, 90, 0, 0.08)),
+    var(--note);
+}
+
+/* A strip of tape across the top of the note */
+.title::after {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  z-index: -1;
+  width: 108px;
+  height: 24px;
+  margin-left: -54px;
+  background: var(--tape);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  transform: rotate(3deg);
+  clip-path: polygon(2% 0, 98% 6%, 96.5% 30%, 99% 55%, 97% 78%, 98.6% 100%, 1% 94%, 3% 70%, 0 45%, 2.5% 22%);
 }
 
 .desk-actions {
@@ -224,32 +258,31 @@ kbd {
   justify-content: center;
 }
 
+/* One column: the receipts, then who owes what under them */
+/* Receipts on the left; who owes what beside them, in view while you work
+   (one column, receipts first, on narrower screens) */
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 600px) 372px;
+  grid-template-columns: minmax(0, 820px) 380px;
   justify-content: center;
-  gap: 56px;
+  gap: 48px;
   align-items: start;
 }
 
-.totals-col {
+/* Pinned while scrolling. If it's taller than the window, it scrolls along
+   until its bottom is in view, then stays (see TotalsSection) */
+.owes {
   position: sticky;
-  top: 28px;
-  display: flex;
-  flex-direction: column;
-  /* Fits below the header before scrolling; a little short once stuck */
-  max-height: calc(100vh - 128px);
-  max-height: calc(100dvh - 128px);
+  top: var(--owes-top, 28px);
 }
 
 @media (max-width: 1040px) {
   .layout {
-    grid-template-columns: minmax(0, 600px);
-    gap: 64px;
+    grid-template-columns: minmax(0, 820px);
+    gap: 104px;
   }
-  .totals-col {
+  .owes {
     position: static;
-    max-height: none;
   }
 }
 
@@ -269,87 +302,76 @@ kbd {
 
 .slip-wrap {
   position: relative;
-  transform: rotate(var(--tilt, 0deg));
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45)) drop-shadow(0 16px 22px rgba(0, 0, 0, 0.42));
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35)) drop-shadow(0 12px 18px rgba(0, 0, 0, 0.3));
 }
 
-.slip-wrap:focus-within {
+/* Lift a slip while editing so the people suggestions overlap the next one */
+.receipt:focus-within {
   z-index: 3;
 }
 
 .slip {
   --paper-bg: var(--paper);
   position: relative;
+  isolation: isolate;
   color-scheme: light;
   color: var(--print);
-  background-color: var(--paper-bg);
-  /* Thermal paper: a little darker toward the ends where it curls, with a fine grain */
-  background-image:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.05), transparent 64px, transparent calc(100% - 64px), rgba(0, 0, 0, 0.06)),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.035), transparent 14%, transparent 86%, rgba(0, 0, 0, 0.035)),
-    var(--grain);
-  background-size: auto, auto, 160px 160px;
-  background-blend-mode: normal, normal, soft-light;
   padding: 22px 26px 24px;
   font-size: 0.9rem;
   line-height: 1.5;
 }
 
-/* Uneven thermal density: faint banding, lighter toward the ends */
-.slip__fade {
+/* The paper itself, cut straight across the top and torn at the bottom. Only
+   this layer tilts, so the print on it stays pixel-sharp on any screen. */
+.slip::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 calc(var(--tooth) * -1);
+  z-index: -1;
+  background-color: var(--paper-bg);
+  /* A scanned paper texture (CC0, see assets/paper-textures.txt) at one image
+     pixel per screen pixel, so the tooth stays sharp, with a soft sheen */
+  background-image:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.5), transparent 38%),
+    linear-gradient(rgba(var(--paper-rgb), 0.82), rgba(var(--paper-rgb), 0.82)),
+    url('./assets/paper-thermal.webp');
+  background-size: auto, auto, 1800px 1200px;
+  /* The wash keeps under a fifth of the texture: a hint of tooth, no grit */
+  background-blend-mode: soft-light, normal, multiply;
+  transform: rotate(var(--tilt, 0deg));
+  clip-path: var(--tear);
+}
+
+/* Ink printed on paper: sparse pale flecks on black, screened over the slip.
+   Screen only lightens, so the paper is untouched while dark ink picks up
+   small breaks, like print that didn't fully take on the grain. */
+.slip__ink {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 1;
   pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(var(--paper-rgb), 0.2), transparent 90px, transparent calc(100% - 110px), rgba(var(--paper-rgb), 0.16)),
-    repeating-linear-gradient(180deg, transparent 0 53px, rgba(var(--paper-rgb), 0.16) 53px 61px, transparent 61px 97px, rgba(var(--paper-rgb), 0.1) 97px 100px);
+  background: var(--ink-flecks) 0 0 / 220px 220px;
+  mix-blend-mode: screen;
+  opacity: 0.22;
 }
 
-/* Receipts curl up at the bottom: a highlight along the lifted edge, and a
-   contact shadow where the paper meets the desk */
-.receipt > .slip {
-  background-image:
-    linear-gradient(180deg, transparent calc(100% - 46px), rgba(0, 0, 0, 0.07) calc(100% - 26px), rgba(255, 255, 255, 0.55) calc(100% - 12px), rgba(0, 0, 0, 0.1)),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.05), transparent 64px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.035), transparent 14%, transparent 86%, rgba(0, 0, 0, 0.035)),
-    var(--grain);
-  background-size: auto, auto, auto, 160px 160px;
-  background-blend-mode: normal, normal, normal, soft-light;
+/* Only over the receipt, not the notepad strip */
+.receipt .slip__ink {
+  right: calc(var(--strip) - var(--tuck));
 }
 
-.receipt::after {
-  content: '';
-  position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: -18px;
-  height: 22px;
-  z-index: -1;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.55), transparent);
-  filter: blur(3px);
+.slip--open-bottom::before {
+  bottom: 0;
+  clip-path: none;
 }
 
-/* A clean cut across the top, torn off at the bottom */
-.slip::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: var(--tooth);
-  background: var(--paper-bg);
-}
-
-.slip::after {
-  top: 100%;
-  -webkit-mask: var(--tear) 0 0 / 360px 100% repeat-x;
-  mask: var(--tear) 0 0 / 360px 100% repeat-x;
-  transform: scaleY(-1);
-}
-
-.slip--open-bottom::after {
-  display: none;
+/* Who owes what: the receipts' own paper, laid out on a steady 32px line
+   spacing (--rule) so rows and opened breakdowns stay evenly spaced */
+.slip--note {
+  --margin-x: 34px;
+  --rule: 32px;
+  --rule-top: 44px;
+  color: var(--print);
 }
 
 .slip ::selection {
@@ -366,15 +388,14 @@ kbd {
   outline-offset: 2px;
 }
 
-/* Printed headings: the place's name in chunky signage caps */
+/* Printed headings: the place's name in the printer's own bold, spaced caps */
 .print-heading {
   display: block;
   margin: 0;
-  font-family: var(--font-sign);
-  font-size: 1.45rem;
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: 0.02em;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   text-align: center;
   padding-block: 0.1em;
@@ -384,7 +405,7 @@ kbd {
   border: 0;
   margin: 10px 0;
   height: 0;
-  border-top: 1.5px dashed var(--print-faint);
+  border-top: 1px solid var(--print-faint);
 }
 
 .rule--double {
@@ -400,25 +421,36 @@ kbd {
   gap: 7px;
   min-height: 34px;
   padding: 0 12px;
-  border: 1.5px dashed var(--print-soft);
+  border: 1.5px solid var(--paper-dim);
   border-radius: 3px;
-  color: var(--print);
+  color: var(--print-soft);
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  transition: background-color 140ms var(--ease-out), border-color 140ms var(--ease-out);
+  transition:
+    background-color 140ms var(--ease-out),
+    border-color 140ms var(--ease-out),
+    color 140ms var(--ease-out);
 }
 
+/* Secondary: the outline and label darken a step, over a faint fill */
 .print-btn:hover {
   background: var(--paper-hover);
-  border-color: var(--print);
-  border-style: solid;
+  border-color: var(--print-faint);
+  color: var(--print);
 }
 
 .print-btn svg {
   width: 15px;
   height: 15px;
+}
+
+/* Solid fills sit above the slip's ink wear, which would speckle them */
+.print-btn--solid,
+.print-btn--danger {
+  position: relative;
+  z-index: 2;
 }
 
 .print-btn--solid {
@@ -428,8 +460,12 @@ kbd {
   color: var(--paper);
 }
 
+/* Primary: a dark button can't visibly darken, so it lifts a step */
 .print-btn--solid:hover {
-  background: #1d1b22;
+  border-color: #48433c;
+  background: #48433c;
+  /* Keeps its light text over the plain button's hover ink */
+  color: var(--paper);
 }
 
 .print-btn--danger {
@@ -442,6 +478,7 @@ kbd {
 .print-btn--danger:hover {
   background: #96201a;
   border-color: #96201a;
+  color: var(--paper);
 }
 
 .icon-btn {
@@ -515,6 +552,15 @@ kbd {
 
 .field--price {
   text-align: right;
+}
+
+/* The price column fits its figures (so leaders run right up to them);
+   the box for typing one keeps a steady width */
+.line__price-field {
+  width: 10ch;
+}
+
+.field--price {
   -moz-appearance: textfield;
 }
 
@@ -532,13 +578,6 @@ kbd {
   gap: 52px;
 }
 
-.receipts__empty {
-  margin: 0;
-  color: var(--desk-ink-dim);
-  text-align: center;
-  font-size: 0.9rem;
-  letter-spacing: 0.04em;
-}
 
 .receipt:nth-child(even) {
   margin-left: 22px;
@@ -556,30 +595,67 @@ kbd {
 .receipt__name {
   min-width: 0;
   overflow-wrap: anywhere;
-  border-radius: 2px;
+}
+
+.receipt__name-btn {
+  display: inline;
+  max-width: 100%;
+  text-align: inherit;
+  text-transform: inherit;
   cursor: text;
 }
 
-.receipt__name:hover {
-  background: var(--paper-hover);
+.receipt__name-text {
+  padding: 2px 10px;
+  border-radius: 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-color 120ms var(--ease-out);
+}
+
+.receipt__name-text--blank {
+  color: var(--print-soft);
+}
+
+.receipt__name-btn:hover .receipt__name-text,
+.receipt__name-btn:focus-visible .receipt__name-text {
+  background: var(--paper-hover-band);
 }
 
 .receipt__name-input {
   height: 44px;
-  font-family: var(--font-sign);
-  font-size: 1.25rem;
+  font-size: 1.2rem;
+  font-weight: 700;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.12em;
 }
 
-.receipt__summary {
-  margin: 4px 0 0;
-  text-align: center;
-  color: var(--print-soft);
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+/* The items fold away smoothly; everything around them stays where it is */
+.receipt__body {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 260ms var(--ease-out);
+}
+
+.receipt__body[data-collapsed='true'] {
+  grid-template-rows: 0fr;
+}
+
+.receipt__body-inner {
+  min-height: 0;
+}
+
+.receipt__body--clip > .receipt__body-inner {
+  overflow: hidden;
+}
+
+.receipt__fold svg {
+  transition: transform 200ms var(--ease-out);
+}
+
+.receipt__fold[aria-expanded='false'] svg {
+  transform: rotate(-90deg);
 }
 
 .receipt__meta {
@@ -591,11 +667,98 @@ kbd {
   text-transform: uppercase;
 }
 
-.receipt__adds {
+/* The next line, waiting to be printed: "+ ADD ITEM ........ $0.00" in
+   faint ink, in the receipt's own columns. The whole line is the button
+   (its ::after covers it); on hover the whole line darkens. */
+.add-line {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 12px;
+  align-items: center;
+  margin: 2px -10px 6px calc(-1 * var(--line-inset));
+  padding: 1px 10px 1px var(--line-inset);
+  border-radius: 3px;
+  font-size: 1rem;
+}
+
+.add-line__what {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin: 8px 0 4px;
+  gap: 8px;
+  min-width: 0;
+}
+
+.add-line__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 28px;
+  color: var(--print-soft);
+  /* A small tracked label, like the receipt's other controls, so it never
+     reads as another item */
+  font-size: 0.74rem;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.add-line__btn svg {
+  flex: none;
+  width: 12px;
+  height: 12px;
+}
+
+.add-line__btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.add-line__btn:focus-visible {
+  outline: none;
+}
+
+.add-line:has(.add-line__btn:focus-visible) {
+  outline: 2px dashed var(--print);
+  outline-offset: 2px;
+}
+
+/* Above the line-wide button, so it opens its own help */
+.add-line__help {
+  position: relative;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+}
+
+.add-line__help svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* The ghost $0.00 only shows on the line you're about to add */
+.add-line__price {
+  color: var(--print-faint);
+  text-align: right;
+  opacity: 0;
+}
+
+.add-line:hover,
+.add-line:has(.add-line__btn:focus-visible) {
+  background: var(--paper-hover-band);
+}
+
+.add-line:hover .add-line__btn,
+.add-line__btn:focus-visible {
+  color: var(--print);
+}
+
+.add-line:hover .add-line__price,
+.add-line:has(.add-line__btn:focus-visible) .add-line__price {
+  opacity: 1;
 }
 
 .receipt__foot {
@@ -611,40 +774,179 @@ kbd {
   text-transform: uppercase;
 }
 
-.receipt__foot--tight {
-  margin-top: 10px;
+/* The receipt is only items and prices. Who had each one is written on a
+   strip of notepad tucked under its right edge, line for line. Each row still
+   spans both papers, so adding and editing rows works the same. */
+/* On the receipts list, so "Add receipt" can match a receipt's paper too */
+.receipts {
+  /* Notepad strip width, and how far it tucks under the receipt */
+  --strip: 374px;
+  --tuck: 18px;
 }
 
-/* A shared grid so prices, subtotals, and totals line up like a register */
-.line__main,
-.sum-line {
+.receipt {
+  /* The names column on the strip, leaving room for the delete button at
+     its end, and the receipt's part of a row (to 16px short of its edge) */
+  --who-w: calc(var(--strip) - var(--tuck) - 72px);
+  --row-receipt: calc(100% - var(--strip) + var(--tuck) - 12px);
+  /* The receipt's left margin; a line's band starts 14px from the paper's
+     edge and the handle sits in the space before the text */
+  --gutter: 40px;
+  --line-inset: calc(var(--gutter) - 14px);
+}
+
+.receipt > .slip {
+  padding-right: calc(var(--strip) - var(--tuck) + 26px);
+  /* A wider left margin, so each line's drag handle has its own column */
+  padding-left: var(--gutter);
+}
+
+/* Narrower screens: a narrower strip, so the receipt keeps its room (and
+   a wider one again once who owes what moves below) */
+@media (max-width: 1240px) {
+  .receipts {
+    --strip: 314px;
+  }
+}
+
+@media (max-width: 1040px) {
+  .receipts {
+    --strip: 380px;
+  }
+}
+
+@media (max-width: 820px) {
+  .receipts {
+    --strip: 300px;
+  }
+}
+
+.receipt > .slip::before {
+  right: calc(var(--strip) - var(--tuck));
+}
+
+/* The notepad strip, behind the receipt */
+.receipt > .slip::after {
+  content: '';
+  position: absolute;
+  top: 30px;
+  right: 0;
+  bottom: 22px;
+  width: var(--strip);
+  z-index: -2;
+  background-color: var(--notepad);
+  /* The shadow the receipt's edge casts onto the strip, angled to follow
+     that edge (the receipt's tilt, less the strip's own), then a scanned
+     recycled-paper texture */
+  background-image:
+    linear-gradient(
+      calc(90deg + var(--tilt, 0deg) - var(--strip-tilt)),
+      transparent calc(var(--tuck) - 4px),
+      rgba(46, 38, 28, 0.26) var(--tuck),
+      rgba(46, 38, 28, 0.1) calc(var(--tuck) + 6px),
+      transparent calc(var(--tuck) + 22px)
+    ),
+    linear-gradient(rgba(251, 249, 238, 0.78), rgba(251, 249, 238, 0.78)),
+    url('./assets/paper-notepad.webp');
+  background-size: auto, auto, 1280px 1280px;
+  background-blend-mode: normal, normal, multiply;
+  --strip-tilt: 0.9deg;
+  transform: rotate(var(--strip-tilt));
+}
+
+.receipt:nth-child(even) > .slip::after {
+  --strip-tilt: -0.7deg;
+}
+
+/* A shared grid so prices, subtotals, and totals line up like a register:
+   item ..... price || who had it | delete (on the strip) */
+.line__main {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 10ch 36px;
+  /* The spacer puts the price's right edge on the receipt's text margin,
+     mirroring where item names start on the left, so names sit close by */
+  grid-template-columns: minmax(0, 1fr) auto 16px var(--who-w) 32px;
+  grid-template-areas: 'what price . who del';
   column-gap: 12px;
   align-items: center;
 }
 
+.sum-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 10ch;
+  grid-template-areas: 'what price';
+  column-gap: 12px;
+  align-items: center;
+}
+
+.line__what,
+.line__what-field,
+.sum-line > :first-child {
+  grid-area: what;
+}
+
+.line__price,
+.line__price-field,
+.sum-line > :nth-child(2) {
+  grid-area: price;
+}
+
+.line__who {
+  grid-area: who;
+}
+
+.line__del {
+  grid-area: del;
+}
+
+/* A row reaches across onto the strip; its states only tint the receipt's
+   part, and the names get their own tint on the strip */
 .line {
   position: relative;
-  margin: 0 -10px;
-  padding: 3px 10px 4px;
+  margin: 0 calc(-1 * (var(--strip) - var(--tuck) + 22px)) 0 calc(-1 * var(--line-inset));
+  padding: 3px 10px 3px var(--line-inset);
+  font-size: 1rem;
   border-radius: 3px;
+  background: no-repeat 0 0 / var(--row-receipt) 100%;
+}
+
+/* Hover, or tabbing to a line: a clear, quiet band over the line you're
+   about to edit */
+.line:has(.line__what:focus-visible) {
+  background-image: linear-gradient(var(--paper-hover-band), var(--paper-hover-band));
+}
+
+.line:has(.line__what:focus-visible) .line__who {
+  background: var(--paper-hover-band);
+}
+
+.line:has(.line__what:focus-visible) .line__del,
+.line:has(.line__what:focus-visible) .line__grip {
+  opacity: 1;
 }
 
 .line:hover {
-  background: var(--paper-hover);
+  background-image: linear-gradient(var(--paper-hover-band), var(--paper-hover-band));
+}
+
+.line[data-warn='true'] {
+  background-image: linear-gradient(rgba(179, 38, 30, 0.07), rgba(179, 38, 30, 0.07));
 }
 
 .line[data-editing='true'],
 .line[data-editing='true']:hover {
-  background: var(--paper-shade);
+  background-image: linear-gradient(var(--paper-shade), var(--paper-shade));
 }
 
-.line[data-warn='true'] {
-  background: rgba(179, 38, 30, 0.07);
+.line:hover .line__who {
+  background: var(--paper-hover-band);
+}
+
+.line[data-editing='true'] .line__who {
+  background: none;
 }
 
 .line__warn {
+  padding-right: calc(var(--strip) - var(--tuck) + 12px);
   margin-bottom: 2px;
   color: var(--print-red);
   font-size: 0.74rem;
@@ -664,8 +966,6 @@ kbd {
   align-items: baseline;
   gap: 8px;
   min-width: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
 }
 
 .line__what-text {
@@ -673,12 +973,18 @@ kbd {
 }
 
 /* Dot leaders out to the price */
-.line__what::after {
+/* Each line is ruled like the notepad beside it, the rule running on from
+   the strip across the receipt, so a row reads straight across from item
+   and price to who had it */
+.line::after {
   content: '';
-  flex: 1;
-  min-width: 12px;
-  border-bottom: 1.5px dotted var(--print-faint);
-  transform: translateY(-4px);
+  position: absolute;
+  left: var(--line-inset);
+  bottom: 0;
+  width: calc(var(--row-receipt) - var(--line-inset) - 10px);
+  height: 1px;
+  background: var(--notepad-rule);
+  pointer-events: none;
 }
 
 .line__what--empty {
@@ -691,31 +997,123 @@ kbd {
 
 .line__del {
   justify-self: end;
-  opacity: 0.55;
+  opacity: 0;
 }
 
+/* Only on the line you're on; without hover (touch) it stays visible */
 .line:hover .line__del,
 .line[data-editing='true'] .line__del,
 .line__del:focus-visible {
   opacity: 1;
 }
 
+@media (hover: none) {
+  .line__del {
+    /* Strong enough to read as a control (3:1) without a hover to reveal it */
+    opacity: 0.8;
+  }
+}
+
+/* The drag handle sits in the receipt's left margin, out of the text's way.
+   It shows on hover; without hover (touch) it stays faintly visible. */
+.line__grip {
+  position: absolute;
+  /* The row's full height, so it stays centred beside a tall row */
+  top: 0;
+  bottom: 0;
+  left: 4px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  border-radius: 3px;
+  color: var(--print-soft);
+  cursor: grab;
+  opacity: 0;
+  touch-action: none;
+  transition: opacity 120ms var(--ease-out), color 120ms var(--ease-out);
+}
+
+.line__grip svg {
+  width: 15px;
+  height: 15px;
+}
+
+.line:hover .line__grip,
+.line[data-editing='true'] .line__grip,
+.line[data-dragging='true'] .line__grip,
+.line__grip:focus-visible {
+  opacity: 1;
+}
+
+.line__grip:hover {
+  color: var(--print);
+}
+
+@media (hover: none) {
+  .line__grip {
+    opacity: 0.6;
+  }
+}
+
+/* The line being moved rides above the others, band and all */
+.line[data-dragging='true'] {
+  z-index: 2;
+  background-image: linear-gradient(var(--paper-shade), var(--paper-shade));
+}
+
+.line[data-dragging='true'] .line__grip {
+  cursor: grabbing;
+}
+
+/* While typing (see App), hover highlights step aside until the mouse
+   moves, so the row under a resting pointer doesn't light up beside the
+   one being typed in. Open rows, warnings, and focus keep their looks. */
+[data-typing] .line:not([data-editing='true']):not([data-warn='true']):hover {
+  background-image: none;
+}
+
+[data-typing] .line:not([data-editing='true']):hover .line__who {
+  background: none;
+}
+
+[data-typing] .line:not([data-editing='true']):hover .line__del:not(:focus-visible),
+[data-typing] .line:not([data-editing='true']):hover .line__grip:not(:focus-visible) {
+  opacity: 0;
+}
+
+[data-typing] .add-line:hover:not(:has(:focus-visible)) {
+  background: none;
+}
+
+[data-typing] .add-line:hover:not(:has(:focus-visible)) .add-line__btn {
+  color: var(--print-soft);
+}
+
+[data-typing] .add-line:hover:not(:has(:focus-visible)) .add-line__price {
+  opacity: 0;
+}
+
+/* Who had it, written on the strip with a rule under each line */
 .line__who {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  align-self: stretch;
   gap: 5px 6px;
-  min-height: 26px;
-  margin: 1px 48px 0 2ch;
+  min-height: 30px;
+  margin: -3px 0;
+  padding: 3px 8px;
+  border-radius: 3px 3px 0 0;
+  box-shadow: inset 0 -1px 0 var(--notepad-rule);
 }
 
 .line__who--edit {
-  margin-top: 6px;
   cursor: default;
 }
 
 .sum-line {
   padding: 3px 0;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -725,16 +1123,20 @@ kbd {
 }
 
 .sum-line--total {
+  padding-top: 4px;
   font-weight: 700;
-  font-size: 1.12rem;
+  font-size: 1.3rem;
 }
 
-
-/* The printer feeding out a new line */
-.feed {
-  animation: feed 220ms steps(6, end) backwards;
+/* Subtotal as real receipts print it: first line of the totals block, a
+   plain label on the left, its figure in the price column, no leaders */
+.sum-line--sub {
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.02em;
 }
 
+/* The printer feeding out a toast */
 @keyframes feed {
   from {
     clip-path: inset(0 0 100% 0);
@@ -748,100 +1150,104 @@ kbd {
 
 /* "Add receipt": a blank slip waiting to be printed */
 .blank-slip {
-  --ghost: rgba(var(--paper-rgb), 0.07);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  width: 100%;
-  min-height: 84px;
-  margin: var(--tooth) 0;
-  background: var(--ghost);
+  /* The size of a receipt's paper (without its notepad strip), outlined
+     where the next one will go */
+  width: calc(100% - var(--strip) + var(--tuck));
+  height: 108px;
+  margin-bottom: 12px;
   color: var(--desk-ink);
   font-size: 0.9rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  transition: color 160ms var(--ease-out), background-color 160ms var(--ease-out);
+  transition: color 160ms var(--ease-out);
 }
 
-.blank-slip::after {
-  content: '';
+/* One line all the way round, torn along the bottom (see AddReceipt) */
+.blank-slip__outline {
   position: absolute;
+  top: 0;
   left: 0;
-  right: 0;
-  height: var(--tooth);
-  background: inherit;
+  overflow: visible;
+  pointer-events: none;
 }
 
-.blank-slip::after {
-  top: 100%;
-  -webkit-mask: var(--tear) 0 0 / 360px 100% repeat-x;
-  mask: var(--tear) 0 0 / 360px 100% repeat-x;
-  transform: scaleY(-1);
+.blank-slip__outline path {
+  fill: rgba(var(--paper-rgb), 0);
+  /* A thin solid line, like a pencil tracing: dashes or dots break the
+     small torn teeth up into noise */
+  stroke: rgba(217, 207, 191, 0.32);
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+  transition: fill 160ms var(--ease-out), stroke 160ms var(--ease-out);
 }
 
 .blank-slip:hover {
-  --ghost: rgba(var(--paper-rgb), 0.13);
   color: var(--desk-ink-bright);
 }
 
-.blank-slip svg {
+.blank-slip:hover .blank-slip__outline path {
+  fill: rgba(var(--paper-rgb), 0.05);
+  stroke: rgba(243, 235, 221, 0.65);
+}
+
+.blank-slip > svg:not(.blank-slip__outline) {
   width: 18px;
   height: 18px;
 }
 
-/* ---------- Stamps (people) ---------- */
+/* ---------- People ---------- */
 
-.stamp {
-  --ink: var(--print);
+/* Who had it, as a plain list: a step quieter than the item and price */
+.line__names {
+  color: var(--print);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.line__names--everyone {
+  font-style: italic;
+}
+
+/* A removable person in the people box while an item is open */
+.chip {
   display: inline-flex;
   align-items: center;
   gap: 2px;
   max-width: 100%;
-  padding: 1px 6px;
-  border: 1.5px solid var(--ink);
-  border-radius: 1px;
-  color: var(--ink);
-  font-size: 0.74rem;
-  font-weight: 700;
+  padding: 1px 4px 1px 8px;
+  border: 1px solid var(--paper-dim);
+  border-radius: 3px;
+  background: var(--paper-shade);
+  color: var(--print);
+  font-size: 0.86rem;
   line-height: 1.5;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
   white-space: nowrap;
-  transform: rotate(var(--stamp-tilt, 0deg));
-  /* Uneven rubber-stamp ink */
-  -webkit-mask: var(--stamp-grain) 0 0 / 60px 60px;
-  mask: var(--stamp-grain) 0 0 / 60px 60px;
-  mix-blend-mode: multiply;
-  opacity: 0.95;
 }
 
-.stamp--double {
-  border-style: double;
-  border-width: 4px;
-  padding: 0 5px;
+.chip--everyone {
+  font-style: italic;
 }
 
-.stamp--everyone {
-  border-style: dashed;
-}
-
-.stamp__x {
+.chip__x {
   display: inline-grid;
   place-items: center;
   width: 18px;
   height: 18px;
-  margin-right: -4px;
   border-radius: 2px;
-  color: inherit;
+  color: var(--print-soft);
 }
 
-.stamp__x:hover {
-  background: rgba(0, 0, 0, 0.08);
+.chip__x:hover {
+  background: var(--paper-dim);
+  color: var(--print);
 }
 
-.stamp__x svg {
+.chip__x svg {
   width: 12px;
   height: 12px;
 }
@@ -888,7 +1294,9 @@ kbd {
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
-  right: 0;
+  min-width: 100%;
+  width: max-content;
+  max-width: 280px;
   z-index: 10;
   max-height: 240px;
   overflow-y: auto;
@@ -917,68 +1325,286 @@ kbd {
   color: var(--paper);
 }
 
-/* ---------- Totals: the collection slip and its envelope ---------- */
+/* ---------- Who owes what: a slip per person, and the envelope ---------- */
 
-.totals-wrap {
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
+.owes__head {
+  margin-bottom: 22px;
+  color: var(--desk-ink);
+  text-align: center;
 }
 
-.totals-slip__scroll.totals-slip__scroll--closed {
-  padding-bottom: 24px;
+/* Printer caps, but on the desk */
+.owes__title {
+  margin: 0;
+  color: var(--desk-ink-bright);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
-.totals-slip {
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
+.owes__sum {
+  margin: 8px 0 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.owes__off {
+  color: #f0a39b;
+  font-weight: 600;
+}
+
+.owes__empty {
+  margin: 0 0 22px;
+  color: var(--desk-ink-dim);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.owes__empty {
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.owes__attention {
+  max-width: 460px;
+}
+
+.slip-wrap:has(.owes__attention) {
+  margin-bottom: 40px;
+}
+
+/* The summary: everyone on one sheet, name ..... amount, one per line */
+.slip-wrap:has(.owes__summary) {
+  /* Narrow, like a page torn from a pocket notepad, so each amount sits
+     close to its name */
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+/* Over the phone padding for slips */
+.slip.owes__summary {
+  /* Three lines clear at the bottom: the envelope's mouth covers them */
+  padding: var(--rule-top) 26px calc(var(--rule) * 3) calc(var(--margin-x) + 12px);
+}
+
+.summary {
+  margin: 0;
   padding: 0;
+  list-style: none;
 }
 
-.totals-slip__scroll {
-  min-height: 0;
-  overflow-y: auto;
-  padding: 18px 24px 4px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--paper-dim) transparent;
+.summary__line {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  /* One line of the paper each, written resting on it */
+  height: var(--rule);
+  padding-bottom: 3px;
 }
 
-@media (max-width: 1040px) {
-  .totals-slip__scroll {
-    overflow: visible;
+/* ⌄ Name: opens what they had, underneath. Runs all the way to the amount,
+   so anywhere on the line before the price opens it */
+.summary__name {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  /* The chevron hangs in the margin, left of the names */
+  margin-left: -34px;
+  /* Over the line's gap too, so there's no dead spot before the amount */
+  margin-right: -8px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.95rem;
+  text-align: left;
+  transition: background-color 120ms var(--ease-out);
+}
+
+/* A long name stays on its line, cut short; the full name is its tooltip */
+.summary__name-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.summary__name:hover,
+.summary__amount:hover {
+  background: var(--paper-hover-band);
+}
+
+.spin {
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
   }
 }
 
-/* Grand total and the check, kept above the envelope's mouth */
-.totals-slip__foot {
-  flex: none;
-  padding: 0 24px 66px;
+.summary__total {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  /* Two lines of the paper, under an inked rule, sitting on the second */
+  height: calc(var(--rule) * 2);
+  margin: 0;
+  padding-bottom: 2px;
+  box-shadow: inset 0 2px 0 var(--print);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-.totals-slip__foot .rule--double {
+.summary__chev {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--print-soft);
+  transition: transform 200ms var(--ease-out);
+}
+
+.summary__name[aria-expanded='true'] .summary__chev {
+  transform: rotate(180deg);
+}
+
+/* Beside the amount for a moment after copying */
+.summary__copied {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 2px);
+  padding: 0 4px;
+  background: var(--notepad);
+  color: var(--print-soft);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  translate: 0 -50%;
+}
+
+/* What they had, opened under their line and written on the paper's lines
+   too: each receipt's share, then its items a little indented */
+.summary__detail .breakdown {
+  margin: 0;
+  /* Figures end under the person's amount, left of the ⋯ */
+  padding: 0 30px 0 0;
+  border-radius: 0;
+  background: none;
+}
+
+.summary__detail .breakdown__receipt + .breakdown__receipt {
   margin-top: 6px;
 }
 
-.totals-slip__head {
+.summary__detail {
+  padding-bottom: 10px;
+}
+
+.summary__detail .breakdown__items {
+  margin: 0;
+  padding-left: 12px;
+}
+
+.summary__detail .breakdown__head,
+.summary__detail .breakdown__line {
+  align-items: flex-end;
+  height: 26px;
+  padding-bottom: 4px;
+  line-height: 1.2;
+}
+
+.summary__detail .breakdown__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.summary__detail .empty-print {
+  display: flex;
+  align-items: flex-end;
+  height: var(--rule);
+  margin: 0;
+  padding-bottom: 4px;
+}
+
+/* ⋯ after the amount: copy as image, rename, or remove */
+.summary__more {
+  flex: none;
+  align-self: center;
+  margin-top: 4px;
+}
+
+.summary__more-btn {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  margin-bottom: 4px;
-}
-
-.totals-slip__head > :last-child {
-  justify-self: end;
-}
-
-.totals-note {
-  margin: 0 0 6px;
+  place-items: center;
+  width: 24px;
+  height: 26px;
+  border-radius: 4px;
   color: var(--print-soft);
-  font-size: 0.74rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  transition: background-color 120ms var(--ease-out), color 120ms var(--ease-out);
+}
+
+.summary__more-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.summary__more-btn:hover,
+.summary__more[data-open='true'] .summary__more-btn {
+  background: var(--paper-hover-band);
+  color: var(--print);
+}
+
+.summary__more .menu__list {
+  top: calc(100% + 4px);
+  min-width: 170px;
+}
+
+.menu__item:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Renaming: the name box, in the name's place */
+.name-edit {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  margin-left: -6px;
+}
+
+.name-edit .field {
+  height: 28px;
+}
+
+/* Copies itself */
+.summary__amount {
+  position: relative;
+  margin-right: -6px;
+  padding: 0 6px;
+  border-radius: 3px;
+  font-size: 1.02rem;
+  font-weight: 700;
+  cursor: copy;
+  transition: background-color 120ms var(--ease-out);
+}
+
+/* The envelope that closes the section, holding the payer's record */
+/* The note stands in the envelope, its foot tucked inside, the way the
+   totals slip used to */
+.owes .envelope {
+  max-width: 380px;
+  margin: -64px auto 0;
 }
 
 .attention {
@@ -1020,197 +1646,63 @@ kbd {
   text-underline-offset: 3px;
 }
 
-.tally {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.tally__row {
-  display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
-  column-gap: 8px;
-  align-items: center;
-}
-
-.tally__toggle {
-  display: grid;
-  grid-template-columns: minmax(0, auto) 1fr auto 14px;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  min-height: 30px;
-  padding: 0 4px;
-  border-radius: 3px;
-  text-align: left;
-}
-
-.tally__toggle:hover {
-  background: var(--paper-hover);
-}
-
-.tally__name {
-  min-width: 0;
-  display: flex;
-}
-
-.tally__leader {
-  border-bottom: 1.5px dotted var(--print-faint);
-  transform: translateY(5px);
-}
-
-/* The number they owe, the biggest figure on the slip */
-.tally__amount {
-  font-size: 1.12rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-.tally__chev {
-  align-self: center;
-  width: 14px;
-  height: 14px;
-  color: var(--print-faint);
-  transition: transform 200ms var(--ease-out);
-}
-
-.tally__toggle[aria-expanded='true'] .tally__chev {
-  transform: rotate(180deg);
-}
-
-.tally__detail {
-  grid-column: 2;
-  margin: 2px 0 10px;
-}
-
-/* Printed checkbox */
-.check {
-  appearance: none;
-  display: grid;
-  place-items: center;
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  border: 1.5px solid var(--print);
-  border-radius: 1px;
-  background: transparent;
-  cursor: pointer;
-}
-
-.check:hover {
-  border-color: var(--print);
-}
-
-.check::after {
-  content: '';
-  width: 9px;
-  height: 5px;
-  border-left: 2px solid var(--paper);
-  border-bottom: 2px solid var(--paper);
-  transform: translateY(-1px) rotate(-45deg);
-  opacity: 0;
-}
-
-.check:checked {
-  background: var(--print);
-  border-color: var(--print);
-}
-
-.check:checked::after {
-  opacity: 1;
-}
-
+/* One person's breakdown: a quiet panel under their row. Each receipt's
+   share is a small heading, the items behind it sit under it in softer print,
+   and every figure lines up under the person's total. */
 .breakdown {
-  padding: 8px 12px 10px;
-  border-left: 1.5px dashed var(--print-faint);
-  font-size: 0.8rem;
+  margin: 2px 0 6px;
+  /* Lined up with the row above: text under the name, figures under the total */
+  padding: 8px 8px 8px 28px;
+  border-radius: 4px;
+  background: var(--paper-hover-band);
 }
 
 .breakdown__receipt + .breakdown__receipt {
   margin-top: 10px;
 }
 
-.breakdown__title {
-  margin: 0 0 4px;
-  color: var(--print-soft);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
+.breakdown__head,
 .breakdown__line {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   gap: 12px;
 }
 
-.breakdown__line > :first-child {
-  overflow-wrap: anywhere;
-}
-
-.breakdown__line--sub {
-  margin-top: 3px;
-  padding-top: 3px;
-  border-top: 1px dashed var(--print-faint);
+.breakdown__head {
+  margin: 0;
+  font-size: 0.8rem;
   font-weight: 700;
-}
-
-.breakdown__line--total {
-  margin-top: 8px;
-  padding-top: 5px;
-  border-top: 1.5px solid var(--print);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-}
-
-.everyone-line {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 2px 22px 0 34px;
-  font-weight: 700;
-  font-size: 1.12rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
-
-.adds-up {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin: 10px 0 0;
-  color: var(--print-soft);
-  font-size: 0.74rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-align: center;
+.breakdown__head .breakdown__amount {
+  font-size: 0.92rem;
+  letter-spacing: 0;
 }
 
-.adds-up svg {
-  width: 14px;
-  height: 14px;
+.breakdown__items {
+  margin: 3px 0 0;
+  padding: 0 0 0 10px;
+  list-style: none;
+}
+
+.breakdown__line {
+  color: var(--print-soft);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.breakdown__name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.breakdown__amount {
   flex: none;
 }
 
-.adds-up--off {
-  color: var(--print-red);
-  font-weight: 600;
-}
-
-.edit-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 32px;
-  gap: 10px;
-  align-items: center;
-}
-
-.edit-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
 
 .empty-print {
   margin: 8px 0 0;
@@ -1234,11 +1726,21 @@ kbd {
 .envelope {
   position: relative;
   z-index: 2;
+  isolation: isolate;
   flex: none;
   margin: -58px -10px 0;
-  padding: 26px 22px 16px;
-  border-radius: 3px;
+  padding: 34px 22px 28px;
   color: var(--kraft-ink);
+  filter: drop-shadow(0 -1px 3px rgba(0, 0, 0, 0.16)) drop-shadow(0 12px 18px rgba(0, 0, 0, 0.32));
+}
+
+/* The kraft itself, with a thumb notch at the mouth */
+.envelope::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 3px;
   background-color: var(--kraft);
   background-image:
     linear-gradient(to bottom right, transparent calc(50% - 1px), var(--kraft-seam) 50%, transparent calc(50% + 1px)),
@@ -1249,26 +1751,26 @@ kbd {
   background-position: left top, right top, 0 0, 0 0;
   background-repeat: no-repeat, no-repeat, no-repeat, repeat;
   background-blend-mode: normal, normal, normal, multiply;
-  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.18), 0 14px 24px rgba(0, 0, 0, 0.45);
-  transform: rotate(-0.8deg);
-  /* Thumb notch at the mouth */
   -webkit-mask: radial-gradient(circle 22px at 50% 0, #0000 98%, #000) top / 100% 100% no-repeat;
   mask: radial-gradient(circle 22px at 50% 0, #0000 98%, #000) top / 100% 100% no-repeat;
 }
 
 .envelope__label {
-  margin: 0 0 10px;
-  font-family: var(--font-marker);
-  font-size: 1.3rem;
-  line-height: 1.15;
-  transform: rotate(-1.2deg);
+  margin: 0 0 18px;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .envelope__label small {
   display: block;
-  margin-top: 2px;
-  font-size: 0.95rem;
-  opacity: 0.85;
+  margin-top: 4px;
+  font-family: var(--font-print);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
 }
 
 .envelope__export {
@@ -1310,15 +1812,27 @@ kbd {
 
 /* ---------- How it works ---------- */
 
+/* Plain text on the desk, quieter than anything on paper */
 .how {
-  max-width: 540px;
-  margin: 96px auto 0;
-  --tilt: 0.5deg;
+  max-width: 560px;
+  margin: 112px auto 0;
+  color: var(--desk-ink-dim);
+  font-size: 0.84rem;
+  line-height: 1.55;
 }
 
-.how .slip {
-  --paper-bg: var(--paper-dim);
-  font-size: 0.84rem;
+.how__title,
+.how h3 {
+  margin: 0 0 10px;
+  color: var(--desk-ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.how h3 {
+  margin-top: 22px;
 }
 
 .how ol,
@@ -1328,30 +1842,24 @@ kbd {
 }
 
 .how li + li {
-  margin-top: 6px;
+  margin-top: 5px;
 }
 
 .how li ul {
-  margin-top: 6px;
+  margin-top: 5px;
 }
 
 .how__step-title {
-  font-weight: 700;
+  color: var(--desk-ink);
+  font-weight: 600;
 }
 
-.how__detail {
-  color: var(--print-soft);
+.how .text-btn {
+  color: var(--desk-ink-dim);
 }
 
-.how h3 {
-  margin: 20px 0 8px;
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.how__tips {
-  color: var(--print-soft);
+.how .text-btn:hover {
+  color: var(--desk-ink-bright);
 }
 
 /* ---------- Menu ---------- */
@@ -1462,18 +1970,23 @@ kbd {
   }
 }
 
+/* A small worked example, ruled like the receipts: what each person
+   ordered, then the same tip split both ways, with the way the app splits
+   it banded */
 .split-table {
   width: 100%;
+  margin: 10px 0 12px;
   border-collapse: collapse;
-  font-size: 0.8rem;
-  margin: 6px 0 8px;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .split-table th,
 .split-table td {
-  padding: 5px 4px;
-  border-bottom: 1px dashed var(--print-faint);
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--notepad-rule);
   text-align: right;
+  vertical-align: baseline;
 }
 
 .split-table th:first-child,
@@ -1481,18 +1994,32 @@ kbd {
   text-align: left;
 }
 
-.split-table th {
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+/* The two name columns stay narrow, beside the labels */
+.split-table th:not(:first-child),
+.split-table td:not(:first-child) {
+  width: 7ch;
+}
+
+.split-table thead th {
   border-bottom: 1.5px solid var(--print);
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-.split-table .muted {
+.split-table__group th {
+  padding-top: 14px;
+  border-bottom-color: transparent;
   color: var(--print-soft);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-align: left;
+  text-transform: uppercase;
 }
 
-.split-table .strong {
+.split-table__chosen td {
+  background: var(--paper-hover-band);
   font-weight: 700;
 }
 
@@ -1559,18 +2086,93 @@ kbd {
   .slip {
     padding: 20px 18px 22px;
   }
-  .slip-wrap {
+  .slip::before {
     transform: none;
   }
   .receipt:nth-child(even) {
     margin-left: 0;
     margin-right: 0;
   }
-  .line__who {
-    margin-right: 0;
+  /* No room for the strip: names go back under each item */
+  .receipt {
+    --gutter: 32px;
   }
-  .totals-slip__scroll {
-    padding: 20px 16px 72px;
+  /* No strip on phones, so the outline is the full width too */
+  .blank-slip {
+    width: 100%;
+  }
+  .receipt > .slip {
+    padding-right: 18px;
+  }
+  .receipt > .slip::before {
+    right: 0;
+  }
+  .receipt > .slip::after {
+    display: none;
+  }
+  .line__main {
+    grid-template-columns: minmax(0, 1fr) auto 32px;
+    grid-template-areas:
+      'what price del'
+      'who who who';
+  }
+  /* Delete stays beside the price here, so sums keep its column */
+  .sum-line {
+    grid-template-columns: minmax(0, 1fr) 10ch 32px;
+    grid-template-areas: 'what price .';
+  }
+  /* No room for the ghost price; the label gets the whole line */
+  .add-line {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .add-line__price {
+    display: none;
+  }
+  .line__del {
+    margin-right: -8px;
+    /* Strong enough to read as a control (3:1) without a hover to reveal it */
+    opacity: 0.8;
+  }
+  .line {
+    margin-right: -10px;
+    font-size: 0.94rem;
+    background-size: 100% 100%;
+  }
+  .line::after {
+    width: calc(100% - var(--line-inset) - 10px);
+  }
+  .line:hover .line__who {
+    background: none;
+  }
+  .line__warn {
+    padding-right: 0;
+  }
+  .line__who {
+    margin: 0 0 0 2ch;
+    padding: 0;
+    box-shadow: none;
+  }
+}
+
+/* Fingers need more room than the pointer: on touch screens the small
+   controls get an invisible 44px hit area, centred on what you see */
+@media (pointer: coarse) {
+  :where(.desk-btn, .icon-btn, .text-btn, .summary__more-btn) {
+    position: relative;
+  }
+
+  .desk-btn::after,
+  .icon-btn::after,
+  .text-btn::after,
+  .summary__more-btn::after,
+  .chip__x::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    translate: -50% -50%;
   }
 }
 

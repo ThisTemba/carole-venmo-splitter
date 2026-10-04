@@ -1,31 +1,35 @@
-import { useRef, useState } from "react";
-import { LuTrash2 } from "react-icons/lu";
+import { useEffect, useRef, useState } from "react";
 
-interface PersonEditRowProps {
+interface PersonNameProps {
   person: string;
   onRename: (newName: string) => void;
-  onDelete: () => void;
+  // Closes the box (saved or undone)
+  onDone: () => void;
 }
 
-// A person's name box in Totals' "Edit people" mode. Saves on Enter or leaving
-// the box; Escape undoes.
-export default function PersonEditRow({ person, onRename, onDelete }: PersonEditRowProps) {
+// Renaming someone on the note: a name box in the name's place, opened with
+// the name selected. Saves on Enter or leaving the box; Escape undoes.
+export default function PersonName({ person, onRename, onDone }: PersonNameProps) {
   const [value, setValue] = useState(person);
+  const inputRef = useRef<HTMLInputElement>(null);
   // Escape blurs the box too; this tells save() to skip it
   const cancelled = useRef(false);
+
+  useEffect(() => {
+    inputRef.current?.select();
+  }, []);
 
   const save = () => {
     const name = value.trim();
     if (!cancelled.current && name && name !== person) onRename(name);
     cancelled.current = false;
-    // If the rename went through this row remounts under the new name; if it
-    // was refused (name taken), this puts the old name back
-    setValue(person);
+    onDone();
   };
 
   return (
-    <div className="edit-row">
+    <div className="name-edit">
       <input
+        ref={inputRef}
         className="field"
         value={value}
         aria-label={`Name for ${person}`}
@@ -36,9 +40,6 @@ export default function PersonEditRow({ person, onRename, onDelete }: PersonEdit
           if (e.key === "Enter" || e.key === "Escape") e.currentTarget.blur();
         }}
       />
-      <button type="button" className="icon-btn icon-btn--danger" aria-label={`Remove ${person}`} onClick={onDelete}>
-        <LuTrash2 aria-hidden />
-      </button>
     </div>
   );
 }

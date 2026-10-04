@@ -1,6 +1,5 @@
 import type { Receipt } from '../types'
 import { toaster } from './toast'
-import { getItemsForPerson } from './calculations'
 
 export function formatDate(): string {
   const now = new Date()
@@ -8,6 +7,18 @@ export function formatDate(): string {
   const day = now.getDate()
   const year = now.getFullYear()
   return `${month}-${day}-${year}`
+}
+
+// A file name for the outing: the receipt's name when there's just one
+// ("mexican-restaurant-10-4-2026"), otherwise `fallback` with the date
+export function fileName(receipts: Receipt[], fallback: string): string {
+  const only = receipts.length === 1 ? receipts[0].name : ''
+  const slug = only
+    .toLowerCase()
+    .replace(/['’]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+  return `${slug || fallback}-${formatDate()}`
 }
 
 function downloadBlob(blob: Blob, filename: string) {
@@ -19,8 +30,8 @@ function downloadBlob(blob: Blob, filename: string) {
   URL.revokeObjectURL(url)
 }
 
-export function downloadJSON(people: string[], receipts: Receipt[], checkedPeople: string[], filename: string) {
-  const data = { people, receipts, checkedPeople }
+export function downloadJSON(people: string[], receipts: Receipt[], filename: string) {
+  const data = { people, receipts }
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
   downloadBlob(blob, `${filename}.json`)
 }
@@ -29,7 +40,6 @@ export function loadJSON(
   file: File,
   setPeople: (people: string[]) => void,
   setReceipts: (receipts: Receipt[]) => void,
-  setCheckedPeople: (checked: string[]) => void,
 ) {
   const reader = new FileReader()
   reader.onload = (e) => {
@@ -39,7 +49,6 @@ export function loadJSON(
       // Files saved before the rename use "events"
       const receipts = data.receipts ?? data.events
       if (receipts) setReceipts(receipts)
-      if (data.checkedPeople) setCheckedPeople(data.checkedPeople)
       toaster.success({
         title: 'Data loaded',
         description: 'Successfully loaded data from file',
@@ -52,52 +61,4 @@ export function loadJSON(
     }
   }
   reader.readAsText(file)
-}
-
-export function exportTotals(people: string[], receipts: Receipt[], checkedPeople: string[]) {
-  const filteredPeople = checkedPeople.length > 0 ? people.filter(p => checkedPeople.includes(p)) : people
-
-  let text = `${formatDate()}\n`
-  text += '='.repeat(50) + '\n\n'
-
-  filteredPeople.forEach((person) => {
-    const items = getItemsForPerson(person, receipts, people)
-    const total = items.reduce((sum, item) => sum + parseFloat(item.share), 0)
-
-    const itemsByReceipt: Record<string, Array<{ what: string; share: string }>> = {}
-    items.forEach((item) => {
-      if (!itemsByReceipt[item.receiptName]) itemsByReceipt[item.receiptName] = []
-      itemsByReceipt[item.receiptName].push({ what: item.item.what, share: item.share })
-    })
-
-    text += `${person.toUpperCase()}\n`
-    text += '-'.repeat(50) + '\n\n'
-
-    Object.entries(itemsByReceipt).forEach(([receiptName, receiptItems]) => {
-      text += `  ${receiptName}\n`
-      text += '  ' + '-'.repeat(46) + '\n'
-      receiptItems.forEach((item) => {
-        const itemName = item.what.padEnd(35)
-        const price = `$${item.share}`.padStart(10)
-        text += `  ${itemName}${price}\n`
-      })
-      if (receiptItems.length > 1) {
-        const subtotal = receiptItems.reduce((sum, item) => sum + parseFloat(item.share), 0)
-        text += '  ' + '-'.repeat(46) + '\n'
-        const subtotalLabel = 'Subtotal'.padEnd(35)
-        const subtotalPrice = `$${subtotal.toFixed(2)}`.padStart(10)
-        text += `  ${subtotalLabel}${subtotalPrice}\n`
-      }
-      text += '\n'
-    })
-
-    text += '  ' + '='.repeat(46) + '\n'
-    const totalLabel = 'TOTAL'.padEnd(35)
-    const totalPrice = `$${total.toFixed(2)}`.padStart(10)
-    text += `  ${totalLabel}${totalPrice}\n`
-    text += '  ' + '='.repeat(46) + '\n\n\n'
-  })
-
-  const blob = new Blob([text], { type: 'text/plain' })
-  downloadBlob(blob, `totals-${formatDate()}.txt`)
 }
