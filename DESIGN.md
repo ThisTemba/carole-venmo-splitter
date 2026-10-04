@@ -24,7 +24,7 @@ colors:
   paper-hover-band: "rgba(46, 43, 39, 0.07)"
   notebook: "#f5f7f9"
   notebook-rule: "rgba(72, 120, 190, 0.3)"
-  notebook-margin: "rgba(208, 64, 60, 0.55)"
+  notebook-margin: "rgba(208, 64, 60, 0.38)"
   kraft: "#a6825a"
   kraft-light: "#b8946a"
   kraft-ink: "#24180c"
