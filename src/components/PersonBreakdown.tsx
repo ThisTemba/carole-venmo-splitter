@@ -1,44 +1,36 @@
-import { Box, Flex, Stack } from "@chakra-ui/react";
 import { groupItemsByReceipt, type PersonItem } from "../utils/calculations";
+import { money } from "../utils/text";
 
 interface PersonBreakdownProps {
   items: PersonItem[];
   total: string;
 }
 
-// One person's share of each item, laid out like a receipt per receipt
+// One person's share of each item, printed like a little receipt per receipt
 export default function PersonBreakdown({ items, total }: PersonBreakdownProps) {
   return (
-    <Box fontFamily="mono" fontSize="sm" px={4}>
+    <div className="breakdown">
       {Object.entries(groupItemsByReceipt(items)).map(([receiptName, receiptItems]) => (
-        <Box key={receiptName} mb={3}>
-          <Box textAlign="center" borderBottom="1px dashed" borderColor="border" pb={1} mb={2}>
-            {receiptName}
-          </Box>
-          <Stack gap={1}>
-            {receiptItems.map((item, idx) => (
-              <Flex key={idx} justifyContent="space-between">
-                <Box>{item.item.what}</Box>
-                <Box>${item.share}</Box>
-              </Flex>
-            ))}
-          </Stack>
+        <div key={receiptName} className="breakdown__receipt">
+          <p className="breakdown__title">{receiptName}</p>
+          {receiptItems.map((item, idx) => (
+            <div key={idx} className="breakdown__line">
+              <span>{item.item.what}</span>
+              <span>{money(parseFloat(item.share))}</span>
+            </div>
+          ))}
           {receiptItems.length > 1 && (
-            <Box borderTop="1px dashed" borderColor="border" mt={2} pt={1}>
-              <Flex justifyContent="space-between" fontWeight="bold">
-                <Box>Subtotal</Box>
-                <Box>${receiptItems.reduce((sum, item) => sum + parseFloat(item.share), 0).toFixed(2)}</Box>
-              </Flex>
-            </Box>
+            <div className="breakdown__line breakdown__line--sub">
+              <span>Subtotal</span>
+              <span>{money(receiptItems.reduce((sum, item) => sum + parseFloat(item.share), 0))}</span>
+            </div>
           )}
-        </Box>
+        </div>
       ))}
-      <Box borderTop="2px solid" borderColor="border.emphasized" mt={2} pt={2}>
-        <Flex justifyContent="space-between" fontWeight="bold" fontSize="md">
-          <Box>TOTAL</Box>
-          <Box>${total}</Box>
-        </Flex>
-      </Box>
-    </Box>
+      <div className="breakdown__line breakdown__line--total">
+        <span>TOTAL</span>
+        <span>{money(parseFloat(total))}</span>
+      </div>
+    </div>
   );
 }

@@ -1,14 +1,5 @@
 import { useState } from 'react'
-import { Button, Input } from '@chakra-ui/react'
-import {
-  DialogRoot,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogBody,
-  DialogFooter,
-  DialogActionTrigger,
-} from './ui/dialog'
+import Dialog from './ui/Dialog'
 
 interface InputDialogProps {
   open: boolean
@@ -32,6 +23,12 @@ export default function InputDialog({
   onConfirm,
 }: InputDialogProps) {
   const [value, setValue] = useState(defaultValue)
+  // Starts fresh each time it opens
+  const [wasOpen, setWasOpen] = useState(open)
+  if (open !== wasOpen) {
+    setWasOpen(open)
+    if (open) setValue(defaultValue)
+  }
 
   const handleConfirm = () => {
     if (value.trim()) {
@@ -40,44 +37,35 @@ export default function InputDialog({
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleConfirm()
-    }
-  }
-
   return (
-    <DialogRoot
+    <Dialog
       open={open}
-      onOpenChange={(e) => {
-        onOpenChange(e.open)
-        if (e.open) setValue(defaultValue)
-      }}
-    >
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-        </DialogHeader>
-        <DialogBody>
-          {label && <p style={{ marginBottom: '8px' }}>{label}</p>}
-          <Input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            autoFocus
-          />
-        </DialogBody>
-        <DialogFooter>
-          <DialogActionTrigger asChild>
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
-              {cancelLabel}
-            </Button>
-          </DialogActionTrigger>
-          <Button onClick={handleConfirm} disabled={!value.trim()}>
+      onOpenChange={onOpenChange}
+      title={title}
+      actions={
+        <>
+          <button className="print-btn" onClick={() => onOpenChange(false)}>
+            {cancelLabel}
+          </button>
+          <button className="print-btn print-btn--solid" onClick={handleConfirm} disabled={!value.trim()}>
             {confirmLabel}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </DialogRoot>
+          </button>
+        </>
+      }
+    >
+      <label>
+        {label && <p>{label}</p>}
+        <input
+          className="field"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleConfirm()
+          }}
+          onFocus={(e) => e.target.select()}
+          autoFocus
+        />
+      </label>
+    </Dialog>
   )
 }

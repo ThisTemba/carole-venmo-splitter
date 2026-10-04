@@ -1,5 +1,5 @@
 import type { Receipt } from '../types'
-import { toaster } from '../components/ui/toaster'
+import { toaster } from '../utils/toast'
 import { tidyName } from '../utils/people'
 
 type Setter<T> = React.Dispatch<React.SetStateAction<T>>

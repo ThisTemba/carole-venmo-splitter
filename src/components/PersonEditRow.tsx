@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
-import { Flex, IconButton, Input } from "@chakra-ui/react";
-import { LuTrash } from "react-icons/lu";
+import { LuTrash2 } from "react-icons/lu";
 
 interface PersonEditRowProps {
   person: string;
@@ -25,9 +24,9 @@ export default function PersonEditRow({ person, onRename, onDelete }: PersonEdit
   };
 
   return (
-    <Flex gap={2} alignItems="center">
-      <Input
-        size="sm"
+    <div className="edit-row">
+      <input
+        className="field"
         value={value}
         aria-label={`Name for ${person}`}
         onChange={(e) => setValue(e.target.value)}
@@ -37,9 +36,9 @@ export default function PersonEditRow({ person, onRename, onDelete }: PersonEdit
           if (e.key === "Enter" || e.key === "Escape") e.currentTarget.blur();
         }}
       />
-      <IconButton aria-label={`Remove ${person}`} size="sm" variant="ghost" colorPalette="red" onClick={onDelete}>
-        <LuTrash />
-      </IconButton>
-    </Flex>
+      <button type="button" className="icon-btn icon-btn--danger" aria-label={`Remove ${person}`} onClick={onDelete}>
+        <LuTrash2 aria-hidden />
+      </button>
+    </div>
   );
 }

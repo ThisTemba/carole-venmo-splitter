@@ -1,5 +1,5 @@
 import type { Receipt } from '../types'
-import { toaster } from '../components/ui/toaster'
+import { toaster } from './toast'
 import { getItemsForPerson } from './calculations'
 
 export function formatDate(): string {

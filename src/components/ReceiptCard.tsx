@@ -1,18 +1,21 @@
 import { useState } from 'react'
-import { Box, Button, Stack, Flex, IconButton, Grid } from '@chakra-ui/react'
 import { LuChevronDown, LuChevronRight, LuCircleHelp, LuPlus } from 'react-icons/lu'
 import type { ItemField, Receipt, ReceiptItem } from '../types'
 import { getReceiptPeople, getReceiptTotal, getSubtotal } from '../utils/calculations'
-import { plural } from '../utils/text'
-import ReceiptItemRow, { ROW_COLUMNS } from './ReceiptItemRow'
+import { money, plural } from '../utils/text'
+import { isBlankItem } from '../utils/validation'
+import ReceiptItemRow from './ReceiptItemRow'
 import ReceiptName from './ReceiptName'
 import ItemTypesDialog from './ItemTypesDialog'
+import Slip from './ui/Slip'
 
 interface ReceiptCardProps {
   receipt: Receipt
   people: string[]
   // Just added: start with the name box open
   isNew: boolean
+  // Alternate receipts lean the other way on the desk
+  tilt: number
   onAddPerson: (name: string) => void
   editing: { item: number; field: ItemField } | null
   onRename: (name: string) => void
@@ -28,14 +31,14 @@ interface ReceiptCardProps {
   onDeleteItem: (item: number) => void
 }
 
-function TotalLine({ label, amount, bold }: { label: string; amount: number; bold?: boolean }) {
+// Lines up with item prices
+function SumLine({ label, amount, total }: { label: string; amount: number; total?: boolean }) {
   return (
-    <Grid templateColumns={ROW_COLUMNS} gap={4} px={2} py={2} fontWeight={bold ? 'bold' : 'medium'}>
-      <Box>{label}</Box>
-      <Box textAlign="right" fontVariantNumeric="tabular-nums">
-        ${amount.toFixed(2)}
-      </Box>
-    </Grid>
+    <div className={`sum-line ${total ? 'sum-line--total' : ''}`}>
+      <span>{label}</span>
+      <span>{money(amount)}</span>
+      <span />
+    </div>
   )
 }
 
@@ -43,6 +46,7 @@ export default function ReceiptCard({
   receipt,
   people,
   isNew,
+  tilt,
   onAddPerson,
   editing,
   onRename,
@@ -74,6 +78,9 @@ export default function ReceiptCard({
   const feeItems = indexed.filter(({ item }) => item.proportional)
 
   const receiptPeople = getReceiptPeople(receipt, people)
+  // Not counting the row being typed into
+  const itemCount = receipt.items.filter((item) => !isBlankItem(item)).length
+  const namedPeople = receipt.items.some((item) => item.who.length || item.everyone) ? receiptPeople.length : 0
 
   const renderRow = ({ item, idx }: { item: ReceiptItem; idx: number }) => (
     <ReceiptItemRow
@@ -93,71 +100,77 @@ export default function ReceiptCard({
   )
 
   return (
-    <Box borderWidth={1} borderRadius="md" p={4}>
-      <Flex alignItems="center" gap={2} mb={receipt.collapsed ? 0 : 2}>
-        <IconButton
+    <Slip as="article" tilt={tilt} className={`receipt ${isNew ? 'feed' : ''}`} aria-label={receipt.name || 'New receipt'}>
+      <header className="receipt__head">
+        <button
+          type="button"
+          className="icon-btn"
           aria-label={receipt.collapsed ? 'Expand receipt' : 'Collapse receipt'}
           aria-expanded={!receipt.collapsed}
-          size="sm"
-          variant="ghost"
-          ml={-2}
           onClick={onToggleCollapsed}
         >
-          {receipt.collapsed ? <LuChevronRight /> : <LuChevronDown />}
-        </IconButton>
+          {receipt.collapsed ? <LuChevronRight aria-hidden /> : <LuChevronDown aria-hidden />}
+        </button>
         <ReceiptName name={receipt.name} startEditing={isNew} onDone={handleNameDone} />
-        {receipt.collapsed && (
-          <Box color="fg.muted" fontSize="sm" whiteSpace="nowrap">
-            {plural(receipt.items.length, 'item')} · ${getReceiptTotal(receipt).toFixed(2)}
-          </Box>
-        )}
-        <Box flex="1" />
-        <Button size="sm" variant="ghost" colorPalette="red" onClick={onDelete} flexShrink={0}>
-          Delete receipt
-        </Button>
-      </Flex>
+        <span />
+      </header>
 
-      {!receipt.collapsed && (
+      {receipt.collapsed ? (
+        <p className="receipt__summary">
+          {plural(receipt.items.length, 'item')} · {money(getReceiptTotal(receipt))}
+        </p>
+      ) : (
         <>
-          <Stack gap={0}>{regularItems.map(renderRow)}</Stack>
-          <Box mt={2} mb={3}>
-            <Button size="sm" variant="outline" onClick={() => onAddItem(false)}>
-              <LuPlus />
+          {itemCount > 0 && (
+            <p className="receipt__meta">
+              {plural(itemCount, 'item')}
+              {namedPeople > 0 && ` · ${plural(namedPeople, 'person').replace('persons', 'people')}`}
+            </p>
+          )}
+          <hr className="rule" />
+
+          {regularItems.map(renderRow)}
+          <div className="receipt__adds">
+            <button type="button" className="print-btn" onClick={() => onAddItem(false)}>
+              <LuPlus aria-hidden />
               Add item
-            </Button>
-          </Box>
+            </button>
+          </div>
 
-          <Box borderTop="1px dashed" borderColor="border.emphasized" pt={1}>
-            {feeItems.length > 0 && <TotalLine label="Subtotal" amount={getSubtotal(receipt)} />}
-            <Stack gap={0}>{feeItems.map(renderRow)}</Stack>
-            <Flex gap={2} alignItems="center" mt={2} mb={3}>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => onAddItem(true)}
-                title="Split in proportion to what each person ordered"
-              >
-                <LuPlus />
-                Add tax, tip, or fee
-              </Button>
-              <IconButton
-                aria-label="What's the difference?"
-                size="sm"
-                variant="ghost"
-                color="fg.muted"
-                onClick={() => setHelpOpen(true)}
-              >
-                <LuCircleHelp />
-              </IconButton>
-            </Flex>
-          </Box>
+          <hr className="rule" />
+          {feeItems.length > 0 && <SumLine label="Subtotal" amount={getSubtotal(receipt)} />}
+          {feeItems.map(renderRow)}
+          <div className="receipt__adds">
+            <button
+              type="button"
+              className="print-btn"
+              onClick={() => onAddItem(true)}
+              title="Split in proportion to what each person ordered"
+            >
+              <LuPlus aria-hidden />
+              Add tax, tip, or fee
+            </button>
+            <button
+              type="button"
+              className="icon-btn"
+              aria-label="What's the difference?"
+              onClick={() => setHelpOpen(true)}
+            >
+              <LuCircleHelp aria-hidden />
+            </button>
+          </div>
 
-          <Box borderTop="2px solid" borderColor="border.emphasized">
-            <TotalLine label="Total" amount={getReceiptTotal(receipt)} bold />
-          </Box>
+          <hr className="rule rule--double" />
+          <SumLine label="Total" amount={getReceiptTotal(receipt)} total />
         </>
       )}
+
+      <footer className={`receipt__foot ${receipt.collapsed ? 'receipt__foot--tight' : ''}`}>
+        <button type="button" className="text-btn text-btn--danger" onClick={onDelete}>
+          Delete receipt
+        </button>
+      </footer>
       <ItemTypesDialog open={helpOpen} onOpenChange={setHelpOpen} />
-    </Box>
+    </Slip>
   )
 }

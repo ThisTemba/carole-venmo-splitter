@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Box, Heading, Grid, Container } from "@chakra-ui/react";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { usePeopleActions } from "./hooks/usePeopleActions";
 import type { Editing, Receipt } from "./types";
@@ -10,6 +9,7 @@ import ReceiptsSection from "./components/ReceiptsSection";
 import TotalsSection from "./components/TotalsSection";
 import HowItWorks from "./components/HowItWorks";
 import { Toaster } from "./components/ui/toaster";
+import { PeopleInkContext } from "./utils/ink";
 
 function App() {
   const [people, setPeople] = useLocalStorage<string[]>("people", []);
@@ -32,58 +32,48 @@ function App() {
   };
 
   return (
-    <>
-      <Box minH="100vh" bg="gray.50">
-        <Container maxW="1200px" py={8}>
-          <Box p={6} mb={6} borderRadius="md" bg="bg" borderWidth={1}>
-            <Heading textAlign="center" size="3xl" mb={4}>
-              Carole Venmo Splitter
-            </Heading>
-            <ActionButtons
-              people={people}
-              receipts={receipts}
-              checkedPeople={checkedPeople}
-              setPeople={setPeople}
-              setReceipts={setReceipts}
-              setCheckedPeople={setCheckedPeople}
-            />
-          </Box>
+    <PeopleInkContext.Provider value={people}>
+      <div className="page">
+        <header className="desk-head">
+          <h1 className="tape">Carole Venmo Splitter</h1>
+          <ActionButtons
+            people={people}
+            receipts={receipts}
+            checkedPeople={checkedPeople}
+            setPeople={setPeople}
+            setReceipts={setReceipts}
+            setCheckedPeople={setCheckedPeople}
+          />
+        </header>
 
-          <Grid
-            templateColumns={{ base: "1fr", lg: "minmax(0, 1fr) 360px" }}
-            gap={6}
-            alignItems="start"
-          >
-            <ReceiptsSection
-              people={people}
-              onAddPerson={addPerson}
-              receipts={receipts}
-              setReceipts={setReceipts}
-              editing={editing}
-              setEditing={setEditing}
-            />
-            {/* Stays in view while scrolling long receipts */}
-            <Box position={{ lg: "sticky" }} top={6}>
-              <TotalsSection
-                people={people}
-                receipts={receipts}
-                checkedPeople={checkedPeople}
-                setCheckedPeople={setCheckedPeople}
-                onRenamePerson={renamePerson}
-                onDeletePerson={deletePerson}
-                incompleteItems={incompleteItems}
-                onOpenItem={handleOpenItem}
-                onExport={() => exportTotals(people, receipts, checkedPeople)}
-                canExport={canExport(people, receipts)}
-              />
-            </Box>
-          </Grid>
+        <main className="layout">
+          <ReceiptsSection
+            people={people}
+            onAddPerson={addPerson}
+            receipts={receipts}
+            setReceipts={setReceipts}
+            editing={editing}
+            setEditing={setEditing}
+          />
+          {/* Stays in view while scrolling long receipts */}
+          <TotalsSection
+            people={people}
+            receipts={receipts}
+            checkedPeople={checkedPeople}
+            setCheckedPeople={setCheckedPeople}
+            onRenamePerson={renamePerson}
+            onDeletePerson={deletePerson}
+            incompleteItems={incompleteItems}
+            onOpenItem={handleOpenItem}
+            onExport={() => exportTotals(people, receipts, checkedPeople)}
+            canExport={canExport(people, receipts)}
+          />
+        </main>
 
-          <HowItWorks />
-        </Container>
-      </Box>
+        <HowItWorks />
+      </div>
       <Toaster />
-    </>
+    </PeopleInkContext.Provider>
   );
 }
 

@@ -1,15 +1,12 @@
-import { useRef, useEffect } from "react";
-import { Box, IconButton, Grid, Flex, Input } from "@chakra-ui/react";
-import { LuTrash } from "react-icons/lu";
+import { useRef, useEffect, useState } from "react";
+import { LuTrash2 } from "react-icons/lu";
 import type { ItemField, ReceiptItem } from "../types";
 import { describeMissing, getMissingFields, isBlankItem } from "../utils/validation";
 import { EVERYONE } from "../utils/people";
 import { blurActive } from "../utils/dom";
+import { money } from "../utils/text";
 import PersonTag from "./PersonTag";
 import PeopleInput from "./PeopleInput";
-
-// Shared with the subtotal and total lines so their amounts line up with prices
-export const ROW_COLUMNS = "2fr 1fr 3fr 36px"; // last column fits the delete button
 
 interface ReceiptItemRowProps {
   item: ReceiptItem;
@@ -44,6 +41,8 @@ export default function ReceiptItemRow({
   const whatInputRef = useRef<HTMLInputElement>(null);
   const priceInputRef = useRef<HTMLInputElement>(null);
   const whoInputRef = useRef<HTMLInputElement>(null);
+  // A line just added feeds out of the printer
+  const [isNew] = useState(() => editing && isBlankItem(item));
 
   const focus = (field: ItemField) => {
     const refs = { what: whatInputRef, howMuch: priceInputRef, who: whoInputRef };
@@ -73,63 +72,58 @@ export default function ReceiptItemRow({
   };
 
   return (
-    <Box>
-      {showWarning && (
-        <Box fontSize="xs" color="orange.600" mb={1} fontWeight="medium">
-          ⚠ Missing: {describeMissing(missing)}
-        </Box>
-      )}
-      <Grid
-        templateColumns={ROW_COLUMNS}
-        gap={4}
-        alignItems="center"
-        py={2}
-        px={2}
-        borderRadius="md"
-        bg={showWarning ? "orange.50" : undefined}
-        _hover={{ bg: showWarning ? "orange.100" : "bg.muted" }}
-        onBlur={handleBlur}
-      >
+    <div
+      className={`line ${isNew ? "feed" : ""}`}
+      data-editing={editing}
+      data-warn={showWarning}
+      onBlur={handleBlur}
+    >
+      {showWarning && <div className="line__warn">** Missing: {describeMissing(missing)} **</div>}
+      <div className="line__main">
         {editing ? (
-          <Input
+          <input
             ref={whatInputRef}
+            className="field"
             value={item.what}
+            aria-label="What was it"
             placeholder={item.proportional ? "Tax, tip, or fee" : "What was it?"}
             onChange={(e) => onChange({ ...item, what: e.target.value })}
             onKeyDown={handleKeyDown("howMuch")}
-            size="sm"
           />
         ) : (
-          <Box cursor="pointer" onClick={() => onStartEdit("what")}>
-            {item.what || "(no item name)"}
-          </Box>
+          <div className="line__what" onClick={() => onStartEdit("what")}>
+            <span className={`line__what-text ${item.what ? "" : "line__what--empty"}`}>
+              {item.what || "(no item name)"}
+            </span>
+          </div>
         )}
 
         {editing ? (
-          <Input
+          <input
             ref={priceInputRef}
+            className="field field--price"
             type="number"
+            inputMode="decimal"
+            step="0.01"
+            aria-label="How much"
             placeholder="0.00"
-            textAlign="right"
             value={item.howMuch || ""}
-            onChange={(e) =>
-              onChange({ ...item, howMuch: parseFloat(e.target.value) || 0 })
-            }
+            onChange={(e) => onChange({ ...item, howMuch: parseFloat(e.target.value) || 0 })}
             onKeyDown={handleKeyDown("who")}
-            size="sm"
           />
         ) : (
-          <Box
-            cursor="pointer"
-            onClick={() => onStartEdit("howMuch")}
-            textAlign="right"
-            fontVariantNumeric="tabular-nums"
-          >
-            ${item.howMuch.toFixed(2)}
-          </Box>
+          <div className="line__price" onClick={() => onStartEdit("howMuch")}>
+            {money(item.howMuch)}
+          </div>
         )}
 
-        {editing ? (
+        <button type="button" className="icon-btn icon-btn--danger line__del" aria-label="Delete item" onClick={onDelete}>
+          <LuTrash2 aria-hidden />
+        </button>
+      </div>
+
+      {editing ? (
+        <div className="line__who line__who--edit">
           <PeopleInput
             people={people}
             who={item.who}
@@ -141,37 +135,22 @@ export default function ReceiptItemRow({
             onEscape={blurActive}
             inputRef={whoInputRef}
           />
-        ) : (
-          <Flex
-            gap={2}
-            flexWrap="wrap"
-            minH="32px"
-            alignItems="center"
-            cursor="pointer"
-            onClick={() => onStartEdit("who")}
-          >
-            {item.everyone ? (
-              <Box title={receiptPeople.join(", ")}>
-                <PersonTag person={EVERYONE} />
-              </Box>
-            ) : (
-              people
-                .filter((person) => item.who.includes(person))
-                .map((person) => <PersonTag key={person} person={person} />)
-            )}
-          </Flex>
-        )}
-
-        <IconButton
-          aria-label="Delete item"
-          size="sm"
-          variant="ghost"
-          colorPalette="red"
-          onClick={onDelete}
-        >
-          <LuTrash />
-        </IconButton>
-      </Grid>
-    </Box>
+        </div>
+      ) : (
+        <div className="line__who" onClick={() => onStartEdit("who")}>
+          {item.everyone ? (
+            <span title={receiptPeople.join(", ")}>
+              <PersonTag person={EVERYONE} />
+            </span>
+          ) : item.who.length ? (
+            people
+              .filter((person) => item.who.includes(person))
+              .map((person) => <PersonTag key={person} person={person} />)
+          ) : (
+            <span className="line__who-empty">Who had it?</span>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
