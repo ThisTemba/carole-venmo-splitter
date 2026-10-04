@@ -1,17 +1,22 @@
+import type { ReactNode } from "react";
 import { groupItemsByReceipt, type PersonItem } from "../utils/calculations";
 import { money } from "../utils/text";
 
 interface PersonBreakdownProps {
+  person: string;
   items: PersonItem[];
+  // At the foot of the box, under the total
+  footer?: ReactNode;
 }
 
 const sumShares = (items: PersonItem[]) => items.reduce((sum, item) => sum + parseFloat(item.share), 0);
 
-// One person's share, receipt by receipt: each receipt with what they owe on
-// it, then the items behind that. Figures line up under the person's total.
-export default function PersonBreakdown({ items }: PersonBreakdownProps) {
+// One person's share, headed with their name, receipt by receipt: each receipt with what they owe on
+// it, then the items behind that, then their total.
+export default function PersonBreakdown({ person, items, footer }: PersonBreakdownProps) {
   return (
     <div className="breakdown">
+      <h3 className="breakdown__person">{person}</h3>
       {groupItemsByReceipt(items).map(({ receiptIndex, receiptName, items: receiptItems }) => (
         <section key={receiptIndex} className="breakdown__receipt">
           <h3 className="breakdown__head">
@@ -28,6 +33,11 @@ export default function PersonBreakdown({ items }: PersonBreakdownProps) {
           </ul>
         </section>
       ))}
+      <p className="breakdown__total">
+        <span>Total</span>
+        <span className="breakdown__amount">{money(sumShares(items))}</span>
+      </p>
+      {footer && <div className="breakdown__foot">{footer}</div>}
     </div>
   );
 }

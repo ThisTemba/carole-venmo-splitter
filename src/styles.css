@@ -28,6 +28,13 @@
   /* Breaks in the print: sparse flecks from thresholded noise */
   --ink-flecks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='k' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.62' numOctaves='2' seed='21' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  9 0 0 0 -5.1' result='m'/%3E%3CfeFlood flood-color='white'/%3E%3CfeComposite in2='m' operator='in'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='black'/%3E%3Crect width='100%25' height='100%25' filter='url(%23k)'/%3E%3C/svg%3E");
 
+  /* Lined notebook paper, for Who owes what: a cooler white than the
+     receipts, blue rules and a red margin */
+  --notebook: #f5f7f9;
+  --notebook-rgb: 245, 247, 249;
+  --notebook-rule: rgba(72, 120, 190, 0.3);
+  --notebook-margin: rgba(208, 64, 60, 0.55);
+
   /* Notepad the names are written on */
   --notepad: #fbf9ee;
   --notepad-rule: rgba(46, 43, 39, 0.13);
@@ -38,6 +45,8 @@
   /* Sticky note and tape */
   --note: #f1db7a;
   --note-ink: #2f2a1c;
+  /* Blue ballpoint, for marks made by hand on the paper */
+  --pen: #2457c9;
   --tape: rgba(240, 236, 224, 0.62);
 
   /* Envelope */
@@ -371,7 +380,26 @@ kbd {
   --margin-x: 34px;
   --rule: 32px;
   --rule-top: 44px;
+  --paper-bg: var(--notebook);
+  --paper-rgb: var(--notebook-rgb);
   color: var(--print);
+}
+
+/* Lined notebook paper: a red margin line down the left, between the
+   chevrons and the names, and blue rules from the first name down, each
+   row written on one (--lines-top is where the list starts; see
+   TotalsSection). Above them, a blank band for the heading. */
+.slip--note::before {
+  background-image:
+    linear-gradient(90deg, transparent calc(var(--margin-x) - 1px), var(--notebook-margin) calc(var(--margin-x) - 1px) calc(var(--margin-x) + 1px), transparent calc(var(--margin-x) + 1px)),
+    repeating-linear-gradient(transparent 0 calc(var(--rule) - 1px), var(--notebook-rule) calc(var(--rule) - 1px) var(--rule)),
+    linear-gradient(115deg, rgba(255, 255, 255, 0.5), transparent 38%),
+    linear-gradient(rgba(var(--paper-rgb), 0.82), rgba(var(--paper-rgb), 0.82)),
+    url('./assets/paper-thermal.webp');
+  background-size: auto, 100% 100%, auto, auto, 1800px 1200px;
+  background-position: 0 0, 0 var(--lines-top, 9999px), 0 0, 0 0, 0 0;
+  background-repeat: no-repeat, no-repeat, repeat, repeat, repeat;
+  background-blend-mode: normal, normal, soft-light, normal, multiply;
 }
 
 .slip ::selection {
@@ -850,12 +878,44 @@ kbd {
     url('./assets/paper-notepad.webp');
   background-size: auto, auto, 1280px 1280px;
   background-blend-mode: normal, normal, multiply;
-  --strip-tilt: 0.9deg;
   transform: rotate(var(--strip-tilt));
 }
 
-.receipt:nth-child(even) > .slip::after {
+/* The strip's own lean, a little off the receipt's */
+.receipt > .slip {
+  --strip-tilt: 0.9deg;
+}
+
+.receipt:nth-child(even) > .slip {
   --strip-tilt: -0.7deg;
+}
+
+/* Folded, the strip keeps who was on the receipt, written where the names
+   go on its lines and leaning with it. Fades in once the items fold away. */
+.receipt__who {
+  position: absolute;
+  top: 50px;
+  right: 26px;
+  width: calc(var(--strip) - var(--tuck) - 48px);
+  margin: 0;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  color: var(--print);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  rotate: var(--strip-tilt);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 120ms var(--ease-out), visibility 0s 120ms;
+}
+
+.receipt__who[data-shown='true'] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 220ms var(--ease-out) 160ms, visibility 0s;
 }
 
 /* A shared grid so prices, subtotals, and totals line up like a register:
@@ -1148,6 +1208,52 @@ kbd {
   }
 }
 
+/* A receipt just added feeds out top first, smoothly rather than in the
+   printer's steps. Only the receipt prints; its notepad strip is
+   another piece of paper, and once the receipt is out it slides out from
+   under its edge. */
+.receipt {
+  /* How far the strip reaches past the receipt's edge */
+  --strip-side: calc(var(--strip) - var(--tuck));
+}
+
+.receipt--printing {
+  animation: print-receipt 420ms var(--ease-out) backwards;
+}
+
+.receipt--printing > .slip::after {
+  animation: strip-out 340ms var(--ease-out) 360ms backwards;
+}
+
+/* Open at the sides and bottom so the paper's shadow and torn edge aren't
+   cut. The strip keeps itself out of sight until its turn (see strip-out). */
+@keyframes print-receipt {
+  from {
+    clip-path: inset(-40px -40px 100% -40px);
+    translate: 0 -10px;
+  }
+  to {
+    clip-path: inset(-40px -40px -40px -40px);
+    translate: 0 0;
+  }
+}
+
+/* Starts all the way under the receipt and slides out its full width. The
+   clip cuts off what's still to come in (its left inset tracks how far it
+   has to go), so it never shows past the receipt's other side on a narrow
+   one. The cut stays a tuck's width under the receipt, never at its edge,
+   so the edge doesn't flicker as the two tilted papers cross. */
+@keyframes strip-out {
+  from {
+    clip-path: inset(0 0 0 var(--strip-side));
+    translate: calc(-1 * var(--strip-side)) 0;
+  }
+  to {
+    clip-path: inset(0);
+    translate: 0 0;
+  }
+}
+
 /* "Add receipt": a blank slip waiting to be printed */
 .blank-slip {
   position: relative;
@@ -1333,9 +1439,10 @@ kbd {
   text-align: center;
 }
 
-/* Printer caps, but on the desk */
+/* Printer caps, but on the desk: only before anyone's on a receipt, when
+   there's no note yet to print it on */
 .owes__title {
-  margin: 0;
+  margin: 0 0 8px;
   color: var(--desk-ink-bright);
   font-size: 1.5rem;
   font-weight: 700;
@@ -1344,29 +1451,74 @@ kbd {
   text-transform: uppercase;
 }
 
-.owes__sum {
-  margin: 8px 0 0;
-  font-size: 0.95rem;
+.owes__empty {
+  margin: 0;
+  color: var(--desk-ink-dim);
+  font-size: 0.9rem;
   letter-spacing: 0.02em;
 }
 
-.owes__off {
-  color: #f0a39b;
+/* The note's own heading, printed like a receipt's, centered on the paper
+   (the left margin is wider, for the chevrons) */
+.note-head {
+  margin: -16px 0 0 -20px;
+  text-align: center;
+}
+
+.note-head__sum {
+  margin: 6px 0 0;
+  color: var(--print-soft);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+
+.note-head__off {
+  color: var(--print-red);
   font-weight: 600;
 }
 
-.owes__empty {
-  margin: 0 0 22px;
-  color: var(--desk-ink-dim);
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+/* A little pen note above the amounts: click one to copy it, with an arrow
+   curling down to the first */
+.copy-hint {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 2px;
+  height: 38px;
+  /* The arrow's tip lands over the middle of the first amount */
+  margin: 10px 48px 0 0;
+  white-space: nowrap;
+  color: var(--print-soft);
+  font-family: var(--font-marker);
+  font-size: 1.22rem;
+  font-weight: 700;
+  line-height: 1;
+  rotate: -2deg;
 }
 
-.owes__empty {
-  font-size: 0.9rem;
-  letter-spacing: 0.02em;
-  text-transform: none;
+.copy-hint__arrow {
+  flex: none;
+  width: 22px;
+  height: 24px;
+  margin-top: 6px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.copy-hint__tap {
+  display: none;
+}
+
+@media (hover: none) {
+  .copy-hint__click {
+    display: none;
+  }
+  .copy-hint__tap {
+    display: inline;
+  }
 }
 
 .owes__attention {
@@ -1380,8 +1532,9 @@ kbd {
 /* The summary: everyone on one sheet, name ..... amount, one per line */
 .slip-wrap:has(.owes__summary) {
   /* Narrow, like a page torn from a pocket notepad, so each amount sits
-     close to its name */
-  max-width: 360px;
+     close to its name. Always a little narrower than the envelope it
+     stands in, phones included */
+  max-width: min(360px, 100% - 20px);
   margin: 0 auto;
 }
 
@@ -1453,15 +1606,52 @@ kbd {
   align-items: flex-end;
   justify-content: space-between;
   gap: 12px;
-  /* Two lines of the paper, under an inked rule, sitting on the second */
+  /* Two lines of the paper, under a hand-drawn rule, sitting on the second */
+  position: relative;
   height: calc(var(--rule) * 2);
   margin: 0;
   padding-bottom: 2px;
-  box-shadow: inset 0 2px 0 var(--print);
   font-size: 1.3rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+/* Ruled off under the last person by hand, a little uneven, in black ink */
+.summary__rule {
+  position: absolute;
+  top: -3px;
+  left: -6px;
+  width: calc(100% + 8px);
+  height: 6px;
+  overflow: visible;
+  fill: none;
+  stroke: var(--print);
+  stroke-width: 2;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  rotate: -0.4deg;
+}
+
+/* The grand total, underlined twice in blue pen */
+.summary__grand {
+  position: relative;
+}
+
+.summary__pen {
+  position: absolute;
+  left: -4px;
+  right: -6px;
+  bottom: -5px;
+  width: calc(100% + 10px);
+  height: 11px;
+  overflow: visible;
+  fill: none;
+  stroke: var(--pen);
+  stroke-width: 2;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  rotate: -1deg;
 }
 
 .summary__chev {
@@ -1481,9 +1671,11 @@ kbd {
   position: absolute;
   top: 50%;
   right: calc(100% + 2px);
-  padding: 0 4px;
-  background: var(--notepad);
-  color: var(--print-soft);
+  padding: 2px 6px;
+  border-radius: 3px;
+  /* Solid ink, so it reads clearly over the names it sits beside */
+  background: var(--print);
+  color: var(--paper);
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -1492,22 +1684,70 @@ kbd {
   translate: 0 -50%;
 }
 
-/* What they had, opened under their line and written on the paper's lines
-   too: each receipt's share, then its items a little indented */
+/* What they had, opened under their line in an outlined box of its own,
+   a little wider than the names: their name at the top, each receipt's share, then
+   its items a little indented, then their total at the foot */
 .summary__detail .breakdown {
-  margin: 0;
-  /* Figures end under the person's amount, left of the ⋯ */
-  padding: 0 30px 0 0;
-  border-radius: 0;
-  background: none;
+  /* A little out past the names, clear of the margin line, to the end of
+     the ⋯; on plain paper, over the lines */
+  margin: 4px 0 0 -8px;
+  padding: 6px 12px 8px;
+  border: 1px solid var(--print-faint);
+  border-radius: 3px;
+  background: var(--paper-bg);
+}
+
+.summary__detail .breakdown__person {
+  overflow: hidden;
+  margin: 0 0 6px;
+  padding: 2px 0 6px;
+  border-bottom: 1px solid var(--print-faint);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Their total again at the foot of the box, under a rule */
+.summary__detail .breakdown__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  height: 30px;
+  margin: 8px 0 0;
+  padding-bottom: 2px;
+  border-top: 1px solid var(--print);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.summary__detail .breakdown__total .breakdown__amount {
+  font-size: 0.92rem;
+  letter-spacing: 0;
+}
+
+/* Copy as image, the same as in the ⋯, centered under the total */
+.summary__detail .breakdown__foot {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
 }
 
 .summary__detail .breakdown__receipt + .breakdown__receipt {
   margin-top: 6px;
 }
 
+/* Its height is rounded up to whole lines of the paper, so the rows under
+   it stay written on lines (see PersonLine). Never clipped: the box reaches
+   out past the names. */
 .summary__detail {
-  padding-bottom: 10px;
+  overflow: visible;
 }
 
 .summary__detail .breakdown__items {
@@ -1710,16 +1950,12 @@ kbd {
   font-size: 0.84rem;
 }
 
-/* Figures re-ink when they change */
-.reink {
-  animation: reink 420ms var(--ease-out);
-}
-
-@keyframes reink {
-  from {
-    opacity: 0.3;
-    filter: blur(1.5px);
-  }
+/* A row sliding to its new place in the list goes over the others on a
+   patch of the note's paper, its own line along the bottom, so the names
+   don't run through each other and the lines stay whole */
+.summary__item--moving {
+  position: relative;
+  background: linear-gradient(to top, var(--notebook-rule) 1px, var(--paper-bg) 1px);
 }
 
 /* The envelope the slip stands in */
@@ -1743,16 +1979,39 @@ kbd {
   border-radius: 3px;
   background-color: var(--kraft);
   background-image:
-    linear-gradient(to bottom right, transparent calc(50% - 1px), var(--kraft-seam) 50%, transparent calc(50% + 1px)),
-    linear-gradient(to bottom left, transparent calc(50% - 1px), var(--kraft-seam) 50%, transparent calc(50% + 1px)),
     linear-gradient(180deg, var(--kraft-light), var(--kraft) 40%),
     var(--grain);
-  background-size: 50% 100%, 50% 100%, auto, 140px 140px;
-  background-position: left top, right top, 0 0, 0 0;
-  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
-  background-blend-mode: normal, normal, normal, multiply;
+  background-size: auto, 140px 140px;
+  background-repeat: no-repeat, repeat;
+  background-blend-mode: normal, multiply;
   -webkit-mask: radial-gradient(circle 22px at 50% 0, #0000 98%, #000) top / 100% 100% no-repeat;
   mask: radial-gradient(circle 22px at 50% 0, #0000 98%, #000) top / 100% 100% no-repeat;
+}
+
+/* The flap's folds, corner to the middle of the bottom. Faint up where the
+   label is written, so they don't compete with the words, and full only
+   towards the bottom. */
+.envelope::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to bottom right, transparent calc(50% - 1px), var(--kraft-seam) 50%, transparent calc(50% + 1px)),
+    linear-gradient(to bottom left, transparent calc(50% - 1px), var(--kraft-seam) 50%, transparent calc(50% + 1px));
+  background-size: 50% 100%, 50% 100%;
+  background-position: left top, right top;
+  background-repeat: no-repeat;
+  /* The fade, and the thumb notch cut out like the kraft's */
+  -webkit-mask:
+    linear-gradient(rgba(0, 0, 0, 0.2) 45%, #000 80%),
+    radial-gradient(circle 22px at 50% 0, #0000 98%, #000);
+  -webkit-mask-composite: source-in;
+  mask:
+    linear-gradient(rgba(0, 0, 0, 0.2) 45%, #000 80%),
+    radial-gradient(circle 22px at 50% 0, #0000 98%, #000);
+  mask-composite: intersect;
 }
 
 .envelope__label {
@@ -2107,7 +2366,8 @@ kbd {
   .receipt > .slip::before {
     right: 0;
   }
-  .receipt > .slip::after {
+  .receipt > .slip::after,
+  .receipt__who {
     display: none;
   }
   .line__main {

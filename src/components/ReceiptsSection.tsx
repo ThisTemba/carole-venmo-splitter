@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { tornOutline } from "../utils/tear";
 import { LuPlus } from "react-icons/lu";
 import type { Editing, Receipt, ReceiptItem } from "../types";
@@ -60,6 +60,10 @@ export default function ReceiptsSection({
   const [newReceipt, setNewReceipt] = useState<number | null>(() =>
     receipts.length === 1 && !receipts[0].name && receipts[0].items.length === 0 ? 0 : null,
   );
+  // The receipt that's printing out of the desk's printer, just added
+  const [printing, setPrinting] = useState<number | null>(null);
+  const printTimer = useRef<number>(undefined);
+  useEffect(() => () => window.clearTimeout(printTimer.current), []);
   const { confirm, dialog } = useConfirm();
 
   const updateReceipt = (r: number, fn: (receipt: Receipt) => Receipt) =>
@@ -80,19 +84,33 @@ export default function ReceiptsSection({
     });
   };
 
+  // Set for a moment while Add receipt is clicked. Clicking it takes focus
+  // from a new receipt's name box first, and that receipt is then kept, not
+  // removed as untouched: adding two in a row means wanting two.
+  const adding = useRef(false);
+
   // Opens with the name box ready to type into; Enter then starts the first item
   const handleAddReceipt = () => {
+    adding.current = true;
+    // After a name box left for this click has had its say (see afterPointerRelease)
+    window.setTimeout(() => (adding.current = false), 0);
     setReceipts((prev) => [...prev, { name: "", items: [] }]);
     setNewReceipt(receipts.length);
+    setPrinting(receipts.length);
+    window.clearTimeout(printTimer.current);
+    printTimer.current = window.setTimeout(() => setPrinting(null), 900);
     setEditing(null);
   };
 
   // A new receipt left unnamed is removed if it's empty, otherwise given a name
   const handleAbandonReceipt = (r: number) =>
     afterPointerRelease(() => {
+      const forAnother = adding.current;
       setReceipts((prev) => {
         const receipt = prev[r];
         if (!receipt || receipt.name) return prev;
+        // Left for another new receipt: keep it, still unnamed
+        if (forAnother && receipt.items.length === 0) return prev;
         // Untouched: nothing to keep
         if (receipt.items.length === 0) return prev.filter((_, i) => i !== r);
         // Leaving the name for its first line (clicking Add item): keep it,
@@ -100,7 +118,8 @@ export default function ReceiptsSection({
         if (receipt.items.every(isBlankItem)) return prev;
         return prev.map((x, i) => (i === r ? { ...x, name: "Untitled receipt" } : x));
       });
-      setNewReceipt(null);
+      // Only if it's still this one: Add receipt may have moved on to the next
+      setNewReceipt((cur) => (cur === r ? null : cur));
     });
 
   const handleAddItem = (r: number, proportional: boolean) => {
@@ -197,6 +216,7 @@ export default function ReceiptsSection({
           receipt={receipt}
           people={people}
           isNew={newReceipt === r}
+          printing={printing === r}
           tilt={r % 2 ? 0.45 : -0.35}
           onAddPerson={onAddPerson}
           editing={editing?.receipt === r ? { item: editing.item, field: editing.field } : null}

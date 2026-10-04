@@ -9,7 +9,7 @@ Track shared expenses across receipts and calculate per-person totals. Users spl
 - Title at top left: "Carole Venmo Splitter"
 - Easter egg: the title's sticky note can be dragged anywhere on the page and stays where it's dropped until the page is reloaded (landing at a fresh slight tilt). Double-click it to send it home. Not mentioned anywhere in the app
 - Action buttons at top right: Save, Load, and a "⋯" menu with "Load example data" and "Clear all data". The PDF record is saved from the envelope at the end of Who owes what
-- A small, quiet "How it works" section below everything (narrow, centered, quiet text right on the desk so it doesn't compete with the receipts), always shown: four steps with examples: add a receipt (e.g. "Sakura Sushi"); add items, with bullets for what was it (e.g. "Salmon roll"), how much was it (e.g. "12"), and who had it (e.g. "Omar" or "Maya, Omar"); add tax, tip, and fees, which are split by how much each person ordered; send the requests (each person's slip under the receipts, amount click-to-copy), and a "Tips" list of shortcuts and power moves, most useful first (only the first shows until "Show N more tips"). The fuller items vs. taxes, tips, and fees explanation stays behind the ? next to "Add tax, tip, or fee"
+- A small, quiet "How it works" section below everything (narrow, centered, quiet text right on the desk so it doesn't compete with the receipts), always shown: four steps with examples: add a receipt (e.g. "Sakura Sushi"); add items, with bullets for what was it (e.g. "Salmon roll"), how much was it (e.g. "12"), and who had it (e.g. "Omar" or "Maya, Omar"); add tax, tip, and fees, which are split by how much each person ordered; send the requests (each person's slip under the receipts, amount click-to-copy), and a "Tips" list of shortcuts, features, and power moves, most useful first (only the first shows until "Show N more tips"). The fuller items vs. taxes, tips, and fees explanation stays behind the ? next to "Add tax, tip, or fee"
 - There's always at least one receipt: on a first visit, after clearing, or after deleting the last receipt, a blank one is waiting. On a fresh start (first visit, clear) its name box is open and ready to type into
 - Look and feel: see DESIGN.md (receipts as thermal-paper slips on a dark desk)
 - Two columns: Receipts on the left (up to 820px), Who owes what on the right (380px). Who owes what stays in view while scrolling: pinned 28px from the top, or, when it's taller than the window (a breakdown open), pinned by its bottom so none of it is out of reach; never an inner scrollbar. At 1040px and below it's one column, Who owes what under the receipts. The notepad strip of names is 374px (314px at 1240px and below, 380px once it's one column, 300px at 820px and below)
@@ -232,7 +232,7 @@ receipts: [{
 - "Add receipt" below the receipts: the outline of the next receipt traced on the desk (a receipt's paper width, one thin line with the same torn bottom as the receipts), "+ Add receipt" in the middle; it brightens and fills faintly on hover
 - Creates a new receipt with its name box focused (placeholder "Where? e.g. Bar night")
 - Enter saves the name and opens a blank first item, so you can go straight to typing items
-- Leaving the name box empty (Escape, Enter, or clicking away) removes the new receipt if it has no items, or names it "Untitled receipt" if it has filled-in items. Leaving it for the receipt's first line (clicking Add item or Add tax, tip, or fee) keeps the receipt, still unnamed
+- Leaving the name box empty (Escape, Enter, or clicking away) removes the new receipt if it has no items, or names it "Untitled receipt" if it has filled-in items. Leaving it for the receipt's first line (clicking Add item or Add tax, tip, or fee) keeps the receipt, still unnamed. So does leaving it for another new receipt (clicking Add receipt again): adding two in a row gives two, the second with its name box open
 
 ```javascript
 // Before
@@ -280,6 +280,7 @@ receipts: [{name: "Groceries", items: [...]}]
 Each receipt is laid out like a paper receipt. The header shows a collapse chevron, the name, and "Delete receipt"; totals are at the bottom.
 
 - The chevron folds the receipt to one line: name · item count · total. Opening one of its items from the "needs attention" list unfolds it
+- Folded, the notepad strip shows who was on the receipt, e.g. "Teresa, Valry, Nick & Barnard" (up to five lines, the full list on hover), fading in once the items have folded away. Not on phones, which have no strip
 
 - Regular items, then an "Add item" line
 - A rule, then a "Subtotal" line (regular items only; shown when there are taxes, tips, or fees)
@@ -390,7 +391,9 @@ Beside the receipts (under them on narrow screens), on the desk.
 
 **Header**
 
-- "WHO OWES WHAT" in printer caps on the desk, centered above the note, with "15 people" under it. If anything on the receipts isn't on anyone's total (an item with no person), it adds in red how much isn't split yet
+- Printed at the top of the note, like a receipt's heading: "WHO OWES WHAT" in printer caps, "15 people" under it. If anything on the receipts isn't on anyone's total (an item left with no person), it adds in red how much isn't split yet; not while that item is still open and being filled in
+- Before anyone's on an item there's no note, so "WHO OWES WHAT" sits on the desk with "Add people to items on a receipt to see what everyone owes."
+- Under the rule, a little handwritten note (the title's marker hand) sits over the amounts: "click to copy" ("tap to copy" on touch screens), with a curly arrow pointing down at the first amount
 
 **Needs Attention**
 
@@ -399,12 +402,13 @@ Beside the receipts (under them on narrow screens), on the desk.
 
 **The Note**
 
-- A slip (up to 360px wide, so amounts sit close to names): on the receipts' own thermal paper, square-cut at the bottom where it stands in the envelope; rows are spaced on a steady 32px line
-- One line per person, most owed first (ties keep People-list order): "⌄ Name   $amount  [⋯]". The chevron hangs in the margin
-- **Amount**: copies just the number (e.g. `68.19`), ready to paste into a Venmo request; "Copied" shows beside it for a moment
-- **Name** (the name and the whole line up to the amount; its hover band runs that far): opens what they had underneath: each receipt's share (bold caps), then its items with their share, figures under the person's amount (someone on no items yet shows "Not on any items yet.")
-- **⋯** (right of the amount, always shown): a menu with Copy as image (their breakdown as an invoice, a small thermal-receipt image headed with the person's name (e.g. "NICK"), the date, their items by receipt, the total, rendered on a canvas and put on the clipboard as a PNG; browsers that can't copy images download it instead; the ⋯ spins while it's made and "Image copied" shows beside the amount once copied; greyed out for someone on no items), Rename (the name becomes a name box: Enter or clicking away saves, Escape undoes) and Remove (asks first, saying how many items they're on)
-- An inked rule and TOTAL (everyone's totals together) close the note
+- A slip (up to 360px wide, so amounts sit close to names, and always 20px narrower than the envelope): on lined notebook paper (a cooler white than the receipts and the notepad strip, faint blue rules, a red margin line between the chevrons and the names), square-cut at the bottom where it stands in the envelope; the heading sits in a blank band at the top, and from the first name down each row is written on a rule, 32px apart. An opened breakdown takes whole lines, rounded up, so the rows below it stay on the rules
+- One line per person: "⌄ Name   $amount  [⋯]". The chevron hangs in the margin
+- Most owed first (ties keep People-list order), always. When a change moves someone up or down, the rows slide to their new places
+- **Amount**: copies just the number (e.g. `68.19`), ready to paste into a Venmo request; "Copied" shows beside it for a moment, as a small dark ink badge
+- **Name** (the name and the whole line up to the amount; its hover band runs that far): opens what they had underneath, in an outlined box under their line, a little wider than the names (from just left of them to the end of the ⋯): their name at the top in spaced caps, each receipt's share (bold caps), then its items with their share, then a ruled TOTAL line with their total, and a Copy as image button (the same as the ⋯ menu's; it reads "Image copied" once done) at the foot (someone on no items yet shows "Not on any items yet.")
+- **⋯** (right of the amount, always shown): a menu with Copy amount (the same as clicking the amount), Copy as image (their breakdown as an invoice, a small thermal-receipt image headed with the person's name (e.g. "NICK"), the date, their items by receipt, the total, rendered on a canvas and put on the clipboard as a PNG; browsers that can't copy images download it instead; the ⋯ spins while it's made and "Image copied" shows beside the amount once copied; greyed out for someone on no items), Rename (the name becomes a name box: Enter or clicking away saves, Escape undoes) and Remove (asks first, saying how many items they're on)
+- A hand-drawn black rule and TOTAL (everyone's totals together) close the note, the figure underlined twice in blue ballpoint
 - Values calculated on-the-fly, not stored
 
 **Envelope**

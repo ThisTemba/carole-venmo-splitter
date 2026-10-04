@@ -22,6 +22,9 @@ colors:
   print-red-deep: "#96201a"
   highlight: "#f3d86a"
   paper-hover-band: "rgba(46, 43, 39, 0.07)"
+  notebook: "#f5f7f9"
+  notebook-rule: "rgba(72, 120, 190, 0.3)"
+  notebook-margin: "rgba(208, 64, 60, 0.55)"
   kraft: "#a6825a"
   kraft-light: "#b8946a"
   kraft-ink: "#24180c"
@@ -168,7 +171,7 @@ On paper, everything prints in one monospace face on one character grid, in warm
 
 The work leads. The core jobs are entering a receipt, checking that every item and its people are right, and reading the totals, so the receipts and the Totals figures are the loudest things on the desk. Help, chrome and decoration recede: How it works is quiet text on the desk, printed add buttons are faint dashed outlines until hovered, and names print in plain mixed case, a hair smaller than the item and its price.
 
-Density is that of a real receipt: compact lines at a readable 1rem, uppercase item names, small tracked labels, and generous space between slips on the desk. Motion is mechanical and brief: new lines feed out of the printer in steps, and changed figures re-ink.
+Density is that of a real receipt: compact lines at a readable 1rem, uppercase item names, small tracked labels, and generous space between slips on the desk. Motion is mechanical and brief: new lines feed out of the printer in steps.
 
 The world is meant to be fun but polished: crisp print, muted ink, flat paper and restrained physical effects, never a toy or a classroom craft project.
 
@@ -294,14 +297,14 @@ Printed text on paper, or quiet ink on the desk.
 A desk header: the title note left, desk buttons right. The title note is Sticky Note paper with a subtle top highlight and bottom shade (padding 18px 28px 16px, Note shadow), with the app name in Sometype Mono 700, mixed case, in Note Ink; note and writing tilt -1.4 degrees together. A 108 by 24px strip of translucent Tape with torn ends crosses its top, rotated a further 3 degrees. The overflow menu is a paper sheet with 9px 14px items; hover and focus print in reverse (Thermal Print fill, paper text). The people picker menu uses the same reverse-print selection.
 
 ### Totals Slip and Envelope
-The collection slip, lying level: a printer-caps TOTALS heading, a checkbox column (18px printed checkboxes that fill solid when ticked), each person's name in plain text (0.95rem), a dot leader, and their bold figure, with a chevron opening a dashed-spine breakdown. A double rule closes into the EVERYONE line and an "adds up" check line (red when off). The slip's bottom sinks into the kraft envelope: the kraft is a level, notched, seamed layer with grain, and on it sit the 700 caps label with its 600 subline and the export button.
+The collection slip, lying level: a printer-caps TOTALS heading, a checkbox column (18px printed checkboxes that fill solid when ticked), each person's name in plain text (0.95rem), a dot leader, and their bold figure, with a chevron opening a dashed-spine breakdown. A double rule closes into the EVERYONE line and an "adds up" check line (red when off). The slip's bottom sinks into the kraft envelope: the kraft is a level, notched, seamed layer with grain, and on it sit the 700 caps label with its 600 subline (the flap's folds fade to a fifth up there, full only towards the bottom, so they don't compete with the words) and the export button.
 
 ### How it works
 Not a slip: plain text lying on the desk below everything, so it never competes with the receipts. Dim Desk Ink at 0.84rem, up to 560px wide; small tracked uppercase headings and step names in Desk Ink; keyboard keys as outlined kbd marks; a text button reveals the rest of the tips.
 
 ### Motion
-- **Feed:** new lines, receipts and toasts clip in from the top in 6 steps over 220 to 240ms, like a printer advancing paper.
-- **Re-ink:** changed figures fade up from 30% opacity and 1.5px blur over 420ms.
+- **Feed:** new lines and toasts clip in from the top in 6 steps over 220 to 240ms, like a printer advancing paper; a receipt added with Add receipt feeds out top first too, but smoothly (420ms on the ease-out curve, no steps; not on page load), the receipt alone; then, from 360ms, its notepad strip slides out its full width from under the receipt's edge (clipped to that edge as it moves) over 340ms on the ease-out curve.
+- **Re-sort:** when a change moves someone up or down Who owes what, each row slides from where it was to its new place over 560ms on the ease-out curve, the row going furthest on top, each on a patch of the note's paper carrying its own line.
 - **File away:** Save PDF record drops the Who owes what note into the envelope: a 12px lift, then a falling ease-in down until only its top edge shows in the thumb notch (everything below the mouth clipped away), the envelope dipping 5px as it lands. After a 380ms beat it slides back up on the ease-out curve. The one authored moment in the app; reduced motion skips it.
 - **Hover wash:** the Hover Band fades in over 120ms on the ease-out curve: across a receipt line (not while it is being edited), a Totals row, and the receipt name as a padded band (2px 10px, 3px radius), also on keyboard focus.
 - **Fold:** a receipt body folds by its grid rows (1fr to 0fr) over 260ms on the ease-out curve; the fold chevron rotates -90 degrees over 200ms.

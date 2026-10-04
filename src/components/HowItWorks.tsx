@@ -31,25 +31,35 @@ const tips = [
     of a row starts the next item, so you can type a whole receipt without the mouse.
   </>,
   <>
-    Type part of a name and press <kbd>Enter</kbd> to pick them (“om” for Omar).
+    Type part of a name and press <kbd>Enter</kbd> to pick them (“om” for Omar), or use <kbd>↑</kbd> <kbd>↓</kbd> to
+    choose from the suggestions.
   </>,
   <>“Everyone on this receipt” covers everyone named on the receipt, even people added later.</>,
+  <>Add several people at once by typing their names with spaces or commas: “Maya Omar” or “Maya, Omar”.</>,
+  <>Click someone's name in Who owes what to see what they had, receipt by receipt.</>,
+  <>The ⋯ beside someone's amount copies the amount or their breakdown as an image, renames them, or removes them.</>,
   <>
-    <kbd>Esc</kbd> closes the row you're editing. Empty rows disappear.
+    <kbd>Enter</kbd> on a new receipt's name saves it and starts the first item.
+  </>,
+  <>
+    <kbd>Esc</kbd> closes the row you're editing. Empty rows disappear. In the people box, it clears what's typed
+    first.
   </>,
   <>
     <kbd>Backspace</kbd> in an empty people box removes the last person.
   </>,
-  <>Add several people at once by typing their full names with spaces or commas: “Maya Omar” or “Maya, Omar”.</>,
   <>
-    <kbd>↑</kbd> <kbd>↓</kbd> choose from the suggestions.
+    Tab to a line and press <kbd>Enter</kbd> or <kbd>Space</kbd> to open it, its name selected so typing replaces
+    it.
   </>,
   <>
     Drag the handle to the left of a line to move it up or down, or Tab to the line and
     press <kbd>Alt</kbd> + <kbd>↑</kbd> <kbd>↓</kbd>.
   </>,
-  <>The arrow next to a receipt's name folds its items away, leaving the name and total.</>,
-  <>Click an item under “needs attention” in Totals to jump to it.</>,
+  <>Click an item under “needs attention” to jump to it.</>,
+  <>The arrow next to a receipt's name folds its items away, leaving the name, total, and who was on it.</>,
+  <>Save PDF record, on the envelope, keeps a dated copy of every receipt and who owes what.</>,
+  <>Save downloads everything as a file; Load opens it again, on this computer or another.</>,
 ]
 
 // Always shown at the bottom of the page, quiet on the desk so it never competes with the receipts
